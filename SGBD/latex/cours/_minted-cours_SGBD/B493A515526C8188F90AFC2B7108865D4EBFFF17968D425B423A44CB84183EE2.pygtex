@@ -1,0 +1,6 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{err}{\PYGZob{}}\PYG{k}{CREATE}\PYG{o}{|}\PYG{k}{REPLACE}\PYG{err}{\PYGZcb{}} \PYG{k}{VIEW} \PYG{o}{\PYGZlt{}}\PYG{n}{nomVue}\PYG{o}{\PYGZgt{}}
+\PYG{k}{AS} \PYG{o}{\PYGZlt{}}\PYG{n}{SFW}\PYG{p}{...}\PYG{o}{\PYGZgt{}}
+\PYG{p}{[}\PYG{k}{WITH} \PYG{k}{CHECK} \PYG{k}{OPTION}\PYG{p}{]}
+\PYG{p}{[}\PYG{k}{WITH} \PYG{k}{READ} \PYG{k}{ONLY}\PYG{p}{]}
+\end{Verbatim}

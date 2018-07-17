@@ -1,0 +1,3 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{ALTER} \PYG{k}{TABLE} \PYG{o}{\PYGZlt{}}\PYG{n}{nomTable}\PYG{o}{\PYGZgt{}} \PYG{k}{ADD} \PYG{o}{\PYGZlt{}}\PYG{n}{DefAttribut}\PYG{o}{\PYGZgt{}}
+\end{Verbatim}

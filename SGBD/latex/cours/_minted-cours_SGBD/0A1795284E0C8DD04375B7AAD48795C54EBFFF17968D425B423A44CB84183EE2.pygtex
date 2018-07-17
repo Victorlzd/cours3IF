@@ -1,0 +1,4 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{INSERT} \PYG{k}{INTO} \PYG{o}{\PYGZlt{}}\PYG{k}{table}\PYG{o}{\PYGZgt{}}
+\PYG{k}{VALUES} \PYG{p}{(}\PYG{n}{V1}\PYG{p}{,} \PYG{n}{V2}\PYG{p}{,} \PYG{p}{...,} \PYG{n}{Vn}\PYG{p}{);}
+\end{Verbatim}

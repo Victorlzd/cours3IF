@@ -1,0 +1,10 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{CASE} \PYG{o}{\PYGZlt{}}\PYG{k}{variable}\PYG{o}{\PYGZgt{}}
+\PYG{k}{WHEN} \PYG{o}{\PYGZlt{}}\PYG{n}{valeur}\PYG{o}{\PYGZgt{}} \PYG{k}{THEN} \PYG{o}{\PYGZlt{}}\PYG{k}{operation}\PYG{o}{\PYGZgt{}}\PYG{p}{;}
+\PYG{k}{WHEN} \PYG{o}{\PYGZlt{}}\PYG{n}{valeur}\PYG{o}{\PYGZgt{}} \PYG{k}{THEN}
+    \PYG{k}{BEGIN}
+        \PYG{o}{\PYGZlt{}}\PYG{n}{seqOp}\PYG{o}{\PYGZgt{}}\PYG{p}{;}
+    \PYG{k}{END}
+\PYG{k}{ELSE} \PYG{p}{...}
+\PYG{k}{END} \PYG{k}{CASE}\PYG{p}{;}
+\end{Verbatim}

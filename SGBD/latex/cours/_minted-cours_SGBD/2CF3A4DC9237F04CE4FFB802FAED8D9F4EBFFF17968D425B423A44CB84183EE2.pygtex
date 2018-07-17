@@ -1,0 +1,10 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{CREATE} \PYG{k}{TABLE} \PYG{n}{Licencie} \PYG{p}{(}
+    \PYG{n}{Nom} \PYG{n}{varchar2}\PYG{p}{(}\PYG{l+m+mi}{15}\PYG{p}{),}
+    \PYG{n}{Prenom} \PYG{n}{varchar2}\PYG{p}{(}\PYG{l+m+mi}{15}\PYG{p}{),}
+    \PYG{n}{DateNais} \PYG{n+nb}{date}\PYG{p}{,}
+    \PYG{n}{Genre} \PYG{n+nb}{char}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{),}
+    \PYG{n}{Numlic} \PYG{n+nb}{number}\PYG{p}{(}\PYG{l+m+mi}{5}\PYG{p}{),}
+    \PYG{n}{Niveau} \PYG{n+nb}{varchar}\PYG{p}{(}\PYG{l+m+mi}{12}\PYG{p}{),}
+\PYG{p}{);}
+\end{Verbatim}

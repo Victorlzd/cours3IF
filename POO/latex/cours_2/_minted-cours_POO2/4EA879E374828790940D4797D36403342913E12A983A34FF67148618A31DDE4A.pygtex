@@ -1,0 +1,7 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{template} \PYG{o}{\PYGZlt{}} \PYG{o}{\PYGZgt{}}
+\PYG{n}{Point} \PYG{n}{Minimum} \PYG{o}{\PYGZlt{}} \PYG{n}{Point} \PYG{o}{\PYGZgt{}} \PYG{p}{(}\PYG{k}{const} \PYG{n}{Point} \PYG{o}{\PYGZam{}} \PYG{n}{p1}\PYG{p}{,} \PYG{k}{const} \PYG{n}{Point} \PYG{o}{\PYGZam{}} \PYG{n}{p2}\PYG{p}{)}
+\PYG{p}{\PYGZob{}}
+	\PYG{p}{...}
+\PYG{p}{\PYGZcb{}}
+\end{Verbatim}

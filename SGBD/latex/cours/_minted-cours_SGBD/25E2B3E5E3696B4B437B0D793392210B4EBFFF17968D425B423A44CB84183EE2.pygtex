@@ -1,0 +1,4 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{DELETE} \PYG{k}{FROM} \PYG{o}{\PYGZlt{}}\PYG{k}{table}\PYG{o}{\PYGZgt{}}
+\PYG{k}{WHERE} \PYG{o}{\PYGZlt{}}\PYG{n}{condition}\PYG{o}{\PYGZgt{}}
+\end{Verbatim}

@@ -1,0 +1,392 @@
+\documentclass[10pt,a4paper,twoside]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[francais]{babel}
+\usepackage{mathtools, bm}
+\usepackage{amssymb, bm}
+\usepackage[T1]{fontenc}
+\author{Victor Lezaud}
+\title{Cours Traitement du signal}
+\begin{document}
+
+\maketitle
+\renewcommand{\contentsname}{Sommaire}
+\tableofcontents
+
+\newpage
+\section{Introduction}
+\subsection{Qu'est ce qu'un signal ?}
+Un signal est une grandeur Y qui varie en fonction d'une autre X.
+
+\subsection{Qu'apporte le traitement de ces signaux ?}
+D'une façon générale, le traitement du signal sert à :
+\begin{itemize}
+\item Synthétiser les signaux voulus
+\item Analyser les signaux existants
+\item Améliorer certains signaux
+\item Extraire les parties intéressantes
+\item Transformer certains signaux
+\end{itemize}
+
+\subsection{Décomposition d'un signal}
+Un signal peut être décomposé :
+\begin{itemize}
+\item en valeurs en fonctions du temps, ou même en échantillons
+\item en un ensemble de fréquences superposées
+\end{itemize}
+
+\subsection{Représentation des signaux}
+Un signal peut-être représenté de deux manières :
+\begin{itemize}
+\item Représentation temporelle ou spatiale
+\item Représentation fréquentielle (analyseur de spectre)
+\end{itemize}
+La représentation fréquentielle décrit mieux le signal que la version temporelle. Elle permet de visualiser les modifications que le signal subit. Permet de réaliser les traitements les plus courants. Tous les signaux physiquement réalisables ont une représentation fréquentielle (en somme de fonctions sinusoïdales...).
+
+\section{Les Séries de Fourier}
+\subsection{Introduction}
+La décomposition en Série de Fourier permet d'exprimer une fonction f comme la somme d'autres fonctions $\Psi_{n}$, considéré comme des fonctions de base.
+
+\subsection{Fonctions orthogonales}
+Deux fonctions $f$ et $g$ (à valeurs scalaires) sont orthogonales si et seulement si $<f,g>=0$. Les bases orthogonales et orthonormés sont définies comme pour les vecteurs.
+
+\subsection{Exemple de bases orthogonales}
+L'ensemble $B=\{sin(n\omega_{0}t),cos(n\omega_{0}t)\} \forall n \in \mathbb{N}$, est une base orthogonales des fonctions physiquement réalisables de période $T_{0}=\frac{2\pi}{\omega_{0}}$. De même pour l'ensemble $B'=\{e^{in\omega_{0}t}\} \forall n \in \mathbb{N}$
+
+\subsection{Décomposition en série de Fourier}
+Soit $f_{T_{0}}$ une fonction périodique de période $T_{0}$. On peut la décomposer en une somme d'exponentielles complexes. 
+\[f_{T_{0}}(t)=\sum_{n=-\infty}^{+\infty}F(n)\cdot e^{in\omega_{0}t}\ avec \omega_{0} = \frac{2\pi}{\omega_{0}}\]
+\[F(n)=\frac{1}{T_{0}} \int_{a}^{a+T_{0}} f_{T_{0}}(t)\cdot e^{-in\omega_{0}t}\]
+Les équations ci-dessus sont les équations de synthèse et d'analyse. Les $F(n)$ sont les coefficients de Fourier de $f_{T_{0}}$
+
+\subsection{Propriétés}
+On considère $f_{T_{0}}$ périodique de période $T_{0}$ avec :
+$$f_{T_{0}} \Leftrightarrow F(n) = A(n)+i\cdot B(n) = |F(n)|\cdot e^{i\cdot \theta(n)}$$
+On obtient les propriétés suivante :\\
+$f_{T_{0}}(t)$ est réelle ssi $\overline{F(n)} = F(-n)$\\
+$f_{T_{0}}(t)$ est réelle ssi $A(n)$ est paire et $B(n)$ est impaire\\
+$f_{T_{0}}(t)$ est réelle ssi $|F(n)|$ est paire et $\theta(n)$ est impaire\\
+$f_{T_{0}}(t)$ est réelle paire ssi $F(n)$ est réelle paire\\
+$f_{T_{0}}(t)$ est réelle impaire ssi $F(n)$ est imaginaire pure impaire\\
+On définit $f_{paire}$ par $f_{paire} = \frac{1}{2}[f(t)+f(-t)]$ et $f_{impaire}$ par $f_{impaire} = \frac{1}{2}[f(t)-f(-t)]$, dans ce cas :\\
+$f_{T_{0}}(t)$ est réelle ssi $f_{paire} \Leftrightarrow A(n)$ et $f_{impaire}(t) \Leftrightarrow i \dot B(n)$\\
+
+\subsection{Théorème de Parseval}
+$$\frac{1}{T_{0}} \int_{a}^{a+T_{0}}|f_{T_{0}}|^{2}dt=\sum_{n=-\infty}^{\infty}|F(n)|^{2}=<f_{T_{0}},f_{T_{0}}>$$
+
+\subsection{Convergence et existence de la série de Fourier}
+Toute fonction périodique $f_{T_{0}}$, ne possède pas une décomposition en série de Fourier. Il faut que les $F(n)$ soient finis et que la série déduite converge pour tout t.
+
+\subsection{Critère de Carré-Intégralité}
+Une fonction périodique $f_{T_{0}}$ est dite carré-intégrable si :
+$$<f_{T_{0}}, f_{T_{0}}> = \frac{1}{T_{0}} \int_{a}^{a+T_{0}}|f_{T_{0}}(t)|^{2} dt < +\infty$$
+Si $f_{T_{0}}$ est carré-intégrable\\
+Alors $F(n)=\frac{1}{T_{0}} \int_{a}^{a+T_{0}}f_{T_{0}} \cdot e^{-in\omega_{0}t}dt$ existe (est fini).
+La fonction $\Phi(t)$ définie par :
+$$\Phi(t) = \sum_{n=-\infty}^{+\infty} F(n)\cdot e^{in\omega_{0}t}$$
+Elle est égale à $f_{T_{0}}$ sauf pour un ensemble de valeur discret de valeurs.\\
+Toute fonction périodique de période physiquement réalisable vérifie ce critère.
+
+\subsection{Théorème de Fourier}
+Soit $f_{T_{0}}$ un signal périodique possédant une décomposition en série de Fourier. Cette série de Fourier converge vers le signal de départ $f_{T_{0}}$. En un point $t_{0}$ de discontinuité la série de Fourier converge vers :
+$$\frac{1}{2}(f_{T_{0}}(t_{0}^{+})+f_{T_{0}}(t_{0}^{-}))$$
+
+\subsection{Vitesse de convergence}
+Si $f_{T_{0}}$ est une fonction périodique dont les premières dérivées sont continues mais que la dérivée (m+1) ne l'est pas,\\
+Alors pour n grand on a :
+$$|F(n)| \leq \frac{K}{|n|^{m+2}}$$
+Si $f_{T_{0}}$ n'est pas continue, $|F(n)|$ décroît selon $\frac{K}{|n|^{m+2}}$
+
+\section{La transformée de Fourier}
+\subsection{Introduction}
+La décomposition en Série de Fourier permet de décomposer une fonction périodique en une somme de fonctions exponentielles complexes. Que se passe-t-il pour les fonctions non-périodiques ? Il faut généraliser la décomposition en série de Fourier. Cela conduit à définir la Transformée de Fourier.
+
+\subsection{Généralisation des Séries de Fourier}
+Une fonction non-périodique peut-être vu comme une fonction périodique de période infinie. L'équation d'analyse :\\
+$F(n) = \frac{1}{T_{0}} \int_{a}^{a+T_{0}}f_{_{0}}(t) \cdot e^{-in\omega_{0}t} dt$ devient :\\
+$F(\omega) = \int_{-\infty}{+\infty} f(t)\cdot e^{-i\omega t}dt$\\
+ou avec $\omega = 2\pi f$, $S(f)=\int_{-\infty}^{+\infty}s(t)\cdot e^{-2\pi ift} dt$
+De même, l'équation de synthèse :
+$f_{T_{0}}=\sum_{n=+\infty}^{+\infty} F(n)\cdot e^{in\omega_{0}t}$ devient:\\
+$f(t)= \frac{1}{2\pi} \int_{-\infty}{+\infty}F(\omega) \cdot e^{i\omega t}d\omega$
+ou avec $\omega = 2\pi f$, $s(f)=\int_{-\infty}^{+\infty}S(f) \cdot e^{2\pi ift} df$
+
+\subsection{La transformée de Fourier}
+Soir s un signal quelconque (périodique ou non) et S sa TF (Transformée de Fourier).
+\begin{equation}
+s(t)=\frac{1}{2\pi} \int_{-\infty}^{+\infty}S(\omega) \cdot e^{i\omega t} d\omega\ ou\ s(t)=\int_{-\infty}{+\infty}S(f)\cdot e^{2\pi ift}df
+\end{equation}
+\begin{equation}
+S(\omega) = \int_{-\infty}^{+\infty}s(t)\cdot e^{-i\omega t}dt\ ou\ S(f) = \int_{-\infty}^{+\infty}s(t)\cdot e^{-2\pi ift}dt
+\end{equation}
+L'équation (1) est l'équation de synthèse ou TF inverse.\\
+L'équation (2) est l'équation d'analyse ou TF direct.
+
+\subsection{Propriétés}
+Les propriétés de la transformée de Fourier sont les mêmes que celles de la Série de Fourier.
+
+\subsection{Formule de Parseval / Plancherel}
+\subsubsection{Formule de Parseval}
+Soit s un signal périodique possédant une transformée de Fourier S. On a alors:
+$$E=\int_{-\infty}^{+\infty}|s(t)|^{2}dt = \frac{1}{2\pi} \int_{-\infty}^{+\infty}|S(\omega)|^{2}d\omega$$
+\subsubsection{Formule de Plancherel}
+Soit r et s deux signaux et R et S leurs transformées de Fourier. On a alors :
+$$\int_{-\infty}^{+\infty}r(t)\cdot \overline{s(t)} dt = \frac{1}{2\pi} \int_{-\infty}^{+\infty}R(\omega) \cdot \overline{S(\omega)} d\omega$$
+
+\subsection{Convergence et existence des intégrales de Fourier}
+Comme pour les séries
+
+\subsection{Critère de Carré-Intégralité}
+Un signal s est dit carré intégrable si $\int_{-\infty}^{+\infty}|s(t)|^{2}dt < +\infty$\\
+Si s est carré-intégrable, alors\\
+$S(\omega) = \int_{\infty}^{+\infty}s(t) \cdot e^{-i\omega }dt$ existe (est finie).\\
+Tous les signaux physiquement réalisables vérifient ce critère.
+
+\subsection{Théorème de Fourier}
+Comme pour les séries
+
+\subsection{Vitesse de convergence}
+Idem
+
+\subsection{Propriétés générales}
+\begin{itemize}
+\item Linéarité : $c_{1}\cdot s_{1}(t)+c_{2}\cdot s_{2}(t) \Leftrightarrow c_{1}\cdot S_{1}(\omega)+c_{2}\cdot S_{2}(\omega)$
+\item Dualité : si $s(t) \Leftrightarrow S(\omega)$ alors $S(t) \Leftrightarrow 2\pi \cdot s(-\omega)$
+\item Translation temporelle : $s(t-\tau) \Leftrightarrow e^{-i\omega\tau}S(\omega)$
+\item Translation fréquentielle : $s(t)\cdot e^{i\Omega t} \Leftrightarrow S(\omega - \Omega)$
+\item Echelles réciproques : $s(\alpha t) \Leftrightarrow \frac{1}{|\alpha|}S(\frac{\omega}{\alpha})$ donc $s(-t) \Leftrightarrow S(-\omega)$
+\item Calcul de surface : $\int_{-\infty}^{+\infty} s(t)dt = S(0)$ et $\int_{-\infty}^{+\infty} S(\omega) d\omega = 2\pi \cdot s(0)$
+\end{itemize}
+
+\section{Fonctions et Distributions}
+\subsection{Quelques fonctions classiques}
+\subsubsection{Impulsion rectangulaire}
+$$s(t)=Rect_{\tau}(t) \Leftrightarrow S(\omega= ) \tau\cdot sinc(\omega\tau/2)$$
+Remarque : $\int_{-\infty}^{+\infty}sinc(x)dx = \pi$
+
+\subsubsection{Exponentielle décroissante (partie positive)}
+$s(t)=e^{-\beta t}$ si $t>0$ et $s(t)=0$ si $t<0$ et $s(0)=\frac{1}{2} \Leftrightarrow S(\omega)=\frac{1}{\beta+i\omega}=\frac{\beta-i\omega}{\beta^{2}+\omega^{2}}$\\
+$|S(\omega)| = \frac{1}{\sqrt{\beta^{2}+\omega^{2}}}$\\
+$Arg(S(\omega))=arctg(\frac{-\omega}{\beta}$
+
+\subsection{Les distributions}
+La notion de distribution généralise la notion de fonction
+\subsubsection{Le DIRAC $\delta$}
+$\delta$ est défini par :
+\begin{itemize}
+\item $\delta(t)=0$ pour $t\neq0$
+\item $\delta(t)=?$ pour $t=0$
+\item $\int_{-\infty}^{+\infty}\delta(t)\cdot dt=1$
+\end{itemize}
+$\delta$ n'est pas une fonction au sens classique.
+
+\subsubsection{Propriétés du DIRAC $\delta$}
+\begin{itemize}
+\item Multiplication d'une fonction par $\delta(t)$ (échantillonnage) : $f(t)\cdot \delta(t)=f(0)\cdot \delta(t)$
+\item Intégration : $\int_{-\infty}^{+\infty}f(t)\cdot \delta(t)dt = f(0)$
+\item Transformée de Fourier : $\delta(t) \Leftrightarrow \int_{-\infty}^{+\infty}\delta(t)\cdot e^{-i\omega t}dt=1$
+\item Localisation : $\delta(t-t_{0})$ est un Dirac localisé en $t=t_{0}$
+\item Multiplication d'une fonction par $\delta(t-\tau)$ (échantillonnage) : $f(t)\cdot \delta(t-\tau)=f(\tau)\cdot \delta(t-\tau)$
+\item Transformée de Fourier : $\delta(t-\tau) \Leftrightarrow \int_{-\infty}^{+\infty}\delta(t-\tau)\cdot e^{-i\omega t}dt=e^{-i\omega t}$
+\item Transformée de Fourier inverse : $\delta(t)=\frac{1}{2\pi}\int_{-\infty}^{+\infty}1 \cdot e^{i\omega t}$
+\end{itemize}
+
+\subsection{Autres fonctions}
+\begin{tabular}{|c|c|}
+\hline 
+Fonction & Transformée de Fourier \\ 
+\hline 
+constante C &  $2\pi\cdot C\cdot \delta(\omega)$ \\ 
+\hline 
+Echelon unité & $\frac{1}{i\omega}+\pi \cdot \delta(\omega)$\\
+\hline
+$e^{i\omega_{0}t}$ & $2\pi \cdot \delta(\omega-\omega_{0})$\\
+\hline
+$cos(\omega_{0}t)$ & $\pi[\delta(\omega+\omega_{0})+\delta(\omega-\omega_{0})]$\\
+\hline
+$sin(\omega_{0}t)$ & $i\pi[\delta(\omega+\omega_{0})-\delta(\omega-\omega_{0})]$\\
+\hline
+\end{tabular} 
+
+\subsection{Les fonctions périodiques}
+Une fonction périodique $f_{p}$ est une fonction "éternelle", qui n'est donc pas carré-intégrable. En revanche, si $f_{p}$ peut se décomposer en série de Fourier, on a :
+$$f_{p}(t) = \sum_{n=-\infty}^{+\infty} F_{p}\cdot e^{in\omega_{0}t}$$
+et donc par linéarité :
+$$f_{p}(t) \Leftrightarrow \sum_{n=-\infty}^{+\infty} F_{p}\cdot \delta(\omega-n\omega_{0})$$
+
+\section{Transformée de Fourier et Dérivation}
+\subsection{Théorème principal}
+On note D, l'opérateur de dérivation par rapport à une variable $D\equiv\frac{d}{dt}$
+\paragraph{Théorème :} Si $s(t) \Leftrightarrow S(\omega)$ alors :
+\begin{itemize}
+\item $D\cdot s(t) \Leftrightarrow i\omega\cdot S(\omega)$
+\item $D^{n}\cdot s(t) \Leftrightarrow (i\omega)^{n}\cdot S(\omega)$
+\item $P(D)\cdot s(t) \Leftrightarrow P(i\omega)\cdot S(\omega)$
+\end{itemize}
+
+\subsection{Dérivée d'une fonction continue}
+Une fonction non continue en $t=t_{0}$ donnera, par dérivation, une fonction contenant un Dirac pour $t=t_{0}$, et de poids p égal au saut de la fonction en $t=t_{0}$
+
+\subsection{Le doublet}
+Le doublet est le nom que l'on donne à la dérivée du Dirac $\delta(\omega)$. L'application du théorème donne directement :
+$$\delta(t) \Leftrightarrow 1\ \ \ donc\ \ \ D\cdot \delta(t)\Leftrightarrow i\omega$$
+
+\subsection{Les dérivations successives}
+L'utilisation de la relation entre dérivation et transformée de Fourier permet de calculer des transformées de Fourier sans utiliser l'équation d'analyse. Pour calculer la transformée de Fourier $F(\omega)$ de $f(t)$, on procédera donc ainsi :
+\begin{itemize}
+\item On se ramène à une fonction $f_{d}(t)$ dont on connaît la transformée de Fourier $F_{d}(\omega)$
+\item On remonte à la fonction de départ $f(t)$ (par intégration) en appliquant le théorème sur $F_{d}(\omega)$
+\end{itemize}
+
+\section{Analyse dans le domaine fréquentiel}
+\subsection{Systèmes linéaire - stationnaires - continus}
+\subsubsection{Linéaire}
+$\forall e_{1}(t), e_{2}(t)$ deux entrées\\
+$\forall a_{1}, a_{2}$, deux valeurs complexes\\
+$$S(a_{1}\cdot e_{1}(t)+a_{2}\cdot e_{2}(t)) = a_{1} \cdot S(e_{1}(t))+a_{2} \cdot S(e_{2}(t))$$
+
+\subsubsection{Stationnaire}
+$\forall e(t), \forall \tau \in \mathbb{R}$\\
+Si $S(e(t))=s(t)$ alors $S(e(t-\tau))=s(t-\tau)$
+
+\subsubsection{Continu}
+Pour toute suite d'entrée $e_{n}(t)$, on a :
+$$S(\lim\limits_{n\rightarrow+\infty}e_{n}(t))=\lim\limits_{n\rightarrow+\infty}S(e_{n}(t))$$
+
+\subsubsection{Définition}
+\paragraph{Un filtre linéaire } est un système $S$ linéaire, stationnaire et continu.
+
+\paragraph{Causalité :} un filtre linéaire est causal lorsque,\\
+si $e(t)=0$ pour $t<0$ alors $s(t)=S(e(t))=0$ pour $t<0$
+
+\subsection{Réponse d'un filtre linéaire à un signal}
+L'équation différentielle à coefficients constants :
+$$P_{1}(D)\cdot y(t) = P_{2}(D)\cdot x(t)$$
+peut se ré-écrire sous la forme :
+$$Y(\omega) = \frac{P_{2}(i\omega)}{P_{1}(i\omega)}\cdot X(\omega) = H(\omega)\cdot X(\omega)$$
+On peut donc obtenir $y(t)$ par :
+\begin{itemize}
+\item Calcul de $X(\omega)$, la TF de $x(t)$
+\item Calcul de $Y(\omega)$, la TF par $H(\omega)\cdot X(\omega)$
+\item Calcul de $y(t)$ par TF inverse de $Y(\omega)$
+\end{itemize}
+
+\paragraph{Définition :} $H(\omega)$ est la fonction de transfert ou réponse fréquentielle du filtre linéaire S, caractérisé par l'équation:
+$$P_{1}(D)\cdot y(t) = P_{2}(D)\cdot x(t)$$
+\begin{itemize}
+\item $H(\omega)$ est une fonction du domaine fréquentiel
+\item $H(\omega)$ caractérise complètement le filtre linéaire S
+\end{itemize}
+L'utilisation de l'équation de synthèse (TF inverse) donne :
+$$y(t)=\frac{1}{2\pi} \int_{-\infty}^{+\infty}H(\omega)\cdot X(\omega)\cdot e^{i\omega t} d\omega$$
+
+\paragraph{Résultat Important} Pour un filtre linéaire de fonction de transfert (ou réponse fréquentielle) $H(\omega)$, on a :
+\begin{itemize}
+\item à l'entrée : $x(t)=\frac{1}{2\pi}\int_{-\infty}^{+\infty}X(\omega)\cdot e^{i\omega t}d\omega$
+\item à la sortie : $y(t)=\frac{1}{2\pi}\int_{-\infty}^{+\infty}H(\omega)\cdot X(\omega)\cdot e^{i\omega t}d\omega$
+\end{itemize}
+
+\paragraph{Conséquence :} Un filtre linéaire agit sur le signal entrant $e(t)$ en modifiant l'amplitude et la phase de toutes ses fréquences selon la loi de définie par $H(\omega)$, ce qui donnera la sortie $s(t)$. Adapter $H(\omega)$ permet de modifier (presque) comme on veut une entrée donnée pour avoir la sortie voulue.
+
+\subsection{Exemples de réponses}
+\subsubsection{Théorème fondamental}
+Pour une entrée exponentielle complexe de pulsation $\omega_{0}$ la réponse d'un filtre linéaire de fonction de transfert $H(\omega)$ est une exponentielle complexe de même pulsation $\omega_{0}$. L'amplitude et la phase sont éventuellement différentes selon la valeur de $H(\omega_{0})$.
+
+\subsubsection{Théorème}
+La réponse d'un filtre linéaire de fonction de transfert $H(\omega)$ à une fonction périodique $x_{p}(t)$ en entrée est une fonction périodique $y_{p}(t)$ en sortie, avec :
+$$x_{p}(t)=\sum_{n=-\infty}^{+\infty} X_{p}(n)\cdot e^{in\omega_{0}t}$$
+$$y_{p}(t)=\sum_{n=-\infty}^{+\infty} H(n\cdot\omega_{0})\cdot X_{p}(n)\cdot e^{in\omega_{0}t}$$
+
+\section{Analyse dans le domaine temporel}
+\subsection{La réponse impulsionnelle}
+\begin{tabular}{c|ccc}
+En fréquence & $X(\omega)$ & $H(\omega)$ & $Y(\omega)=H(\omega)\cdot X(\omega)$ \\ 
+\hline 
+Dans le temps & $x(t)$ & $h(t)$ & $y(t)$ \\ 
+\end{tabular} 
+
+\paragraph{Un cas particulier :} Si l'entrée est un Dirac unité, alors $X(\omega) = 1$. $Y(\omega)=H(\omega)\cdot X(\omega) = H(\omega)$ et donc $h(t)=y(t)$
+
+\paragraph{Définition :} La fonction $h(t)$ est la réponse d'un filtre linéaire $S$ de réponse fréquentielle $H(\omega)$, lorsque l'entrée est une impulsion Dirac unité. La fonction $h(t)$ est la réponse impulsionnelle du filtre $S$.
+
+\subsection{Le produit de convolution}
+On sait que :
+\begin{itemize}
+\item $Y(\omega) = H(\omega)\cdot X(\omega)$
+\item $y(t) = \frac{1}{2\pi} \int_{-\infty}^{+\infty} H(\omega)\cdot X(\omega)\cdot e^{i\omega t} d\omega$
+\end{itemize}
+Que vaut $y(t)$ en fonction de $h(t)$ et $x(t)$ ? Cette fonction $C$, telle que $y(t)=C(h(t),x(t))$ est le produit de convolution.
+
+\subsubsection{Définition}
+Le produit de convolution est noté $\otimes$ et se définit mathématiquement par la formule suivante :
+$$h(t)\otimes x(t)=\int_{-\infty}^{+\infty}h(\tau)\cdot x(t-\tau)d\tau$$
+Le résultat de cette fonction du temps.
+
+\subsubsection{Théorème de Plancherel}
+La transformée de Fourier du produit de convolution de deux fonction est le produit simple des transformées de Fourier de ces deux fonctions.
+$$x(t) \otimes h(t) \Leftrightarrow X(\omega)\cdot H(\omega)$$
+La transformée de Fourier du produit simple de deux fonctions est le produit de consvolution des transformées de Fourier de ces deux fonctions (à $\frac{\pi}{2}$ près pour l'expression en $\omega$)
+$$x(t)\cdot h(t) \Leftrightarrow \frac{1}{2\pi}X(\omega) \otimes H(\omega)$$
+$$x(t)\cdot h(t) \Leftrightarrow X(f) \otimes H(f)$$
+
+\subsubsection{Propriétés du produit de convolution}
+\paragraph{Commutatif :}
+$$(x\otimes y)(t)=x(t)\otimes y(t)=y(t)\otimes x(t)=(y\otimes x)(t)$$
+\paragraph{Associatif :}
+$$((x\otimes y)\otimes z)(t)=(x(t)\otimes y(t))\otimes z(t)=x(t)\otimes (y(t)\otimes z(t))=(x\otimes(y\otimes z))(t)$$
+\paragraph{Elément neutre :} L'impulsion Dirac unité est l'élément neutre du produit de convolution.
+\paragraph{Dérivation :}
+$$\frac{d^{n}}{dt^{n}}(t)=[\frac{d^{k}}{dt^{k}}x(t)]\otimes [\frac{d^{n-k}}{dt^{n-k}}y(y)]$$
+
+\paragraph{Evaluation pratique de $h(t)$ :} Pour un filtre linéaire S, de réponse impulsionnelle $h(t)$, d'entrée $x(t)$ et de sortie $y(t)$, on a :$h(t)=y(t)$ pour $x(t)=échelon\ unité$
+
+\section{Echantillonnage et alliasing}
+\subsection{Echantillonnage temporel}
+\subsubsection{Définition}
+On suppose les échantillons pris toutes les $T_{e}$ secondes :
+\begin{itemize}
+\item $T_{e}$ est la période d'échantillonnage
+\item $f_{e} = \frac{1}{T_{e}}$ est le fréquence d'échantillonnage
+\item $\omega_{e} = 2\pi f_{e} = \frac{2\pi}{T_{e}}$ est la pulsation d'échantillonnage
+\end{itemize}
+
+\subsubsection{Modèle théorique}
+L'échantillonnage de $x(t)$ correspond à la multiplication de $x(t)$ par un peigne de Dirac $\delta_{T}(t)$
+$$x_{e}(t)=x(t)\cdot \sum_{n=-\infty}^{+\infty}\delta(t-n\cdot T_{e})=\sum_{n=-\infty}^{+\infty}x(n\cdot T_{e})\cdot \delta(t-n\cdot T_{e})$$
+
+\subsection{Conséquences de l'échantillonnage}
+Les conséquences de l'échantillonnage se constatent sur la transformée de Fourier $X_{e}(\omega)$ du signal échantillonné $x_{e}(t)$, de deux façons possibles
+\subsubsection{Décalage temporel}
+$$\delta(t-n\cdot T_{e}) \Leftrightarrow e^{-in\omega T_{e}}$$
+$$ x_{e}(t) \Leftrightarrow X_{e}(\omega)=\sum_{n=-\infty}^{+\infty}x(n\cdot T_{e})\cdot e^{-i\omega nT_{e}}$$
+\subsubsection{Transformée de Fourier de la multiplication}
+Cette multiplication temporelle devient un produit de convolution en fréquences
+$$x(t) \Leftrightarrow X(\omega)\ \ \ \ \delta_{T}(t) \Leftrightarrow \delta_{\Omega}(\omega)=\omega_{e}\sum_{n=-\infty}^{+\infty}\delta(\omega-n\omega_{e})$$
+Donc le produit de convolution s'écrit:
+$$X_{e}(\omega) = \frac{1}{2\pi} \int_{-\infty}^{+\infty}X(\theta)[\omega_{e}\sum_{n=-\infty}^{+\infty}\delta(\omega-n\omega_{e}-\theta)]d\theta$$
+Ce qui donne après les calculs :
+$$X_{e}(\omega)=\frac{1}{T_{e}}\sum_{n=-\infty}^{+\infty}X(\omega-n\omega_{e})$$
+
+\subsubsection{Interprétation}
+$X_{e}(\omega)$ est la répétition périodique de copies du spectre $X(\omega)$ du signal non-échantillonné d'origine. On retrouve ces copies de $X(\omega)$ tous les $\omega_{e}$ et multipliées par $f_{e}$.\\
+$X_{e}(\omega)$ est est une fonction périodique de période $\omega_{e}$
+
+\subsection{Echantillonnage et reconstitution}
+\paragraph{Théorème de Shannon :} Soit $x(t)$ un signal de spectre $X(\omega)$ à bende limitée, c'est-à-dire dont les fréquences sont nulles au delà d'une fréquence maximum. La plus grande fréquence contenue dans $x(t)$ est notée $\pm f_{max}$ (ou $\pm\omega_{max}$).\\
+Le signal $x(t)$ peut être complètement défini et reconstruit par une séquence d'échantillons saisis à une fréquence $f_{e}$ si et seulement si :
+$$f_{e} > 2f_{max}$$
+On appelle cette fréquence minimale fréquence critique ou fréquence de Nyquist.
+
+\subsection{Analyse du processus de reconstruction}
+Pour reconstruire le signal d'origine, on réalise un filtrage passe-bas du signal échantillonné, à la fréquence $\frac{f_{e}}{2}$. Mathématiquement, cela revient à multiplier le spectre $X_{e}(f)$ par $Rect_{fe}(f)$.
+
+
+\subsection{Echantillonnage fréquentiel}
+L'échantillonnage temporel donne un spectre périodique. L'échantillonnage fréquentiel donne une fonction temporelle périodique. L'échantillonnage fréquentiel, c'est la multiplication du spectre $X(\omega)$ par un peigne de Dirac en fréquence :
+$$\delta_{\Omega}(\omega) = \omega_{e}\sum_{n=-\infty}^{+\infty}\delta(\omega-n\omega_{e})$$
+Ce qui donne après calculs
+$$x_{e}(t)=\sum_{n=-\infty}^{+\infty}x(t-nT_{e})\ avec\ \omega_{e}=\frac{2\pi}{T_{e}}$$
+
+\paragraph{Théorème de Shannon :} Soit $x(t)$ un signal limité dans le temps à $|t|<T_{max}$. On échantillonne sa transformée de Fourier $X(f)$ périodiquement, tous les $f_{e}$, pour produire $X_{e}(f)$.\\
+La transformée de Fourier inverse de $X_{e}(f)$ sera une répétition périodique de $x(t)$, avec une période $T_{e}$, et il n'y aura pas d'aliasing temporel si et seulement si:
+$$T_{e} > 2T_{max}$$
+\end{document}

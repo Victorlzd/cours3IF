@@ -1,0 +1,6 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{INSERT} \PYG{k}{INTO} \PYG{o}{\PYGZlt{}}\PYG{k}{table}\PYG{o}{\PYGZgt{}}
+     \PYG{k}{SELECT}
+     \PYG{k}{FROM}
+     \PYG{k}{WHERE}
+\end{Verbatim}

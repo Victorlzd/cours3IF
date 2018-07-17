@@ -1,0 +1,15 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{class} \PYG{n+nc}{Width}
+\PYG{p}{\PYGZob{}}
+	\PYG{k}{public}\PYG{o}{:}
+		\PYG{k}{explicit} \PYG{n}{Width}\PYG{p}{(} \PYG{k+kt}{int} \PYG{n}{x} \PYG{p}{)} \PYG{o}{:} \PYG{n}{largeur} \PYG{p}{(} \PYG{n}{x} \PYG{p}{)} \PYG{p}{\PYGZob{}} \PYG{p}{\PYGZcb{}}
+		\PYG{k+kr}{inline} \PYG{k}{friend} \PYG{n}{ostream} \PYG{o}{\PYGZam{}} \PYG{k}{operator} \PYG{o}{\PYGZlt{}\PYGZlt{}}
+		      \PYG{p}{(} \PYG{n}{ostream} \PYG{o}{\PYGZam{}} \PYG{n}{os}\PYG{p}{,} \PYG{k}{const} \PYG{n}{Width} \PYG{o}{\PYGZam{}} \PYG{n}{manip}\PYG{p}{)}
+		\PYG{p}{\PYGZob{}}
+			\PYG{n}{os}\PYG{p}{.}\PYG{n}{width}\PYG{p}{(}\PYG{n}{largeur}\PYG{p}{);}
+			\PYG{k}{return} \PYG{n}{os}\PYG{p}{;}
+		\PYG{p}{\PYGZcb{}}
+	\PYG{k}{private}\PYG{o}{:}
+		\PYG{k+kt}{int} \PYG{n}{largeur}\PYG{p}{;}
+\PYG{p}{\PYGZcb{}}
+\end{Verbatim}

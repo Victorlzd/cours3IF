@@ -1,0 +1,4 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{CREATE} \PYG{n}{TABLESPACE} \PYG{n}{users2}
+\PYG{n}{DATAFILE} \PYG{l+s+s1}{\PYGZsq{}data3.dat\PYGZsq{}}
+\end{Verbatim}

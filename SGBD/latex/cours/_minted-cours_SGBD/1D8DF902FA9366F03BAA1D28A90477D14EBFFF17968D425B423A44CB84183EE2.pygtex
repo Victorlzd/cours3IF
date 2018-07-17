@@ -1,0 +1,13 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{WITH} \PYG{n}{pointsParticipants}\PYG{p}{(}\PYG{n}{NumLic}\PYG{p}{,} \PYG{n}{Spts}\PYG{p}{)} \PYG{k}{as} \PYG{p}{(}
+    \PYG{k}{SELECT} \PYG{n}{NumLic}\PYG{p}{,} \PYG{k}{SUM}\PYG{p}{(}\PYG{n}{Points}\PYG{p}{)}
+    \PYG{k}{FROM} \PYG{n}{PoitnMatch} \PYG{n}{P}\PYG{p}{,} \PYG{n}{Licencie} \PYG{n}{L}
+    \PYG{k}{WHERE} \PYG{n}{P}\PYG{p}{.}\PYG{n}{NumLic} \PYG{o}{=} \PYG{n}{L}\PYG{p}{.}\PYG{n}{NumLic} \PYG{k}{AND} \PYG{n}{P}\PYG{p}{.}\PYG{n}{IdC} \PYG{o}{=} \PYG{l+m+mi}{1}
+    \PYG{k}{GROUP} \PYG{k}{BY} \PYG{n}{L}\PYG{p}{.}\PYG{n}{NumLic}
+\PYG{p}{)}
+
+\PYG{k}{SELECT} \PYG{n}{NumLic}\PYG{p}{,} \PYG{n}{Spts}
+\PYG{k}{FROM} \PYG{n}{pointsParticipants}
+\PYG{k}{WHERE} \PYG{n}{Spts} \PYG{o}{=} \PYG{p}{(}\PYG{k}{SELECT} \PYG{k}{MAX}\PYG{p}{(}\PYG{n}{Spts}\PYG{p}{)}
+              \PYG{k}{FROM} \PYG{n}{pointsParticipants}\PYG{p}{)}
+\end{Verbatim}

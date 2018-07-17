@@ -1,0 +1,26 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{SELECT} \PYG{n}{Prenom}\PYG{p}{,} \PYG{n}{Nom}
+\PYG{k}{FROM} \PYG{n}{Licencie}
+\PYG{k}{WHERE} \PYG{k}{EXISTS} \PYG{p}{(}\PYG{k}{SELECT} \PYG{o}{*}
+              \PYG{k}{FROM} \PYG{n}{Matchs}
+              \PYG{k}{WHERE} \PYG{n}{Licencie}\PYG{p}{.}\PYG{n}{NumLic} \PYG{o}{=} \PYG{k}{Match}\PYG{p}{.}\PYG{n}{Gagnant}\PYG{p}{)}
+
+\PYG{k}{SELECT} \PYG{n}{Prenom}\PYG{p}{,} \PYG{n}{Nom}
+\PYG{k}{FROM} \PYG{n}{Licencie}
+\PYG{k}{WHERE} \PYG{n}{NumLic} \PYG{k}{IN} \PYG{p}{(}\PYG{k}{SELECT} \PYG{n}{Gagnant}
+                 \PYG{k}{FROM} \PYG{n}{Matchs}\PYG{p}{)}
+
+\PYG{k}{SELECT} \PYG{n}{Prenom}\PYG{p}{,} \PYG{n}{Nom}
+\PYG{k}{FROM} \PYG{n}{Licencie}
+\PYG{k}{WHERE} \PYG{n}{NumLic} \PYG{o}{=} \PYG{k}{ANY} \PYG{p}{(}\PYG{k}{SELECT} \PYG{n}{Gagnant}
+                    \PYG{k}{FROM} \PYG{n}{Matchs}\PYG{p}{)}
+
+\PYG{k}{SELECT} \PYG{n}{Prenom}\PYG{p}{,} \PYG{n}{Nom}
+\PYG{k}{FROM} \PYG{n}{Licencie}
+\PYG{k}{WHERE} \PYG{n}{NumLic} \PYG{o}{=} \PYG{k}{ALL} \PYG{p}{(}\PYG{k}{SELECT} \PYG{n}{Gagnant}
+                    \PYG{k}{FROM} \PYG{n}{Matchs}
+                    \PYG{k}{WHERE} \PYG{n}{EXIST} \PYG{p}{(}\PYG{k}{SELECT} \PYG{o}{*}
+                                 \PYG{k}{FROM} \PYG{n}{Matchs}
+                                 \PYG{k}{WHERE} \PYG{n}{Licencie}\PYG{p}{.}\PYG{n}{NumLic}\PYG{o}{=}\PYG{n}{Lic1}
+                                 \PYG{k}{OR} \PYG{n}{Licencie}\PYG{p}{.}\PYG{n}{NumLic}\PYG{o}{=}\PYG{n}{Lic2}\PYG{p}{)}
+\end{Verbatim}

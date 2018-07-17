@@ -1,0 +1,21 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{n}{WHILE} \PYG{o}{\PYGZlt{}}\PYG{n}{condition}\PYG{o}{\PYGZgt{}}
+\PYG{n}{LOOP}
+    \PYG{p}{...}
+\PYG{n}{ENDLOOP}\PYG{p}{;}
+
+\PYG{k}{FOR} \PYG{o}{\PYGZlt{}}\PYG{n}{varDeBoucle}\PYG{o}{\PYGZgt{}} \PYG{k}{IN} \PYG{p}{[}\PYG{n}{REVERSE}\PYG{p}{]} \PYG{o}{\PYGZlt{}}\PYG{n}{borneInf}\PYG{o}{\PYGZgt{}}\PYG{p}{..}\PYG{o}{\PYGZlt{}}\PYG{n}{borneSup}\PYG{o}{\PYGZgt{}}
+\PYG{n}{LOOP}
+     \PYG{p}{...}
+\PYG{k}{END} \PYG{n}{LOOP}
+
+\PYG{k}{DECLARE}
+   \PYG{k}{CURSOR} \PYG{o}{\PYGZlt{}}\PYG{n}{nomCurseur}\PYG{o}{\PYGZgt{}} \PYG{k}{IS} \PYG{n}{SFW}\PYG{p}{...;}
+   \PYG{p}{...}
+\PYG{k}{BEGIN}
+   \PYG{p}{...}
+   \PYG{k}{FOR} \PYG{o}{\PYGZlt{}}\PYG{n}{var}\PYG{o}{\PYGZgt{}} \PYG{k}{IN} \PYG{o}{\PYGZlt{}}\PYG{n}{nomCurseur}\PYG{o}{\PYGZgt{}}
+   \PYG{n}{LOOP}
+       \PYG{p}{...}
+   \PYG{k}{END} \PYG{n}{LOOP}\PYG{p}{;}
+\end{Verbatim}

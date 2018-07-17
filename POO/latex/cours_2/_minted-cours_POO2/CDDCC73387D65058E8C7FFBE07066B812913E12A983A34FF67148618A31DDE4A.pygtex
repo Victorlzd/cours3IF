@@ -1,0 +1,10 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k+kt}{void} \PYG{n+nf}{f} \PYG{p}{(}\PYG{k+kt}{int} \PYG{n}{x}\PYG{p}{)\PYGZob{}\PYGZcb{}}
+\PYG{k+kt}{void} \PYG{n+nf}{f} \PYG{p}{(}\PYG{k}{const} \PYG{k+kt}{int} \PYG{n}{x}\PYG{p}{)\PYGZob{}\PYGZcb{}} \PYG{c+c1}{// ERREUR : le const ne permet}
+                       \PYG{c+c1}{//  pas de faire la différence}
+\PYG{k+kt}{void} \PYG{n+nf}{f} \PYG{p}{(}\PYG{k+kt}{int}\PYG{o}{*} \PYG{n}{x}\PYG{p}{)\PYGZob{}\PYGZcb{}}
+\PYG{k+kt}{void} \PYG{n+nf}{f} \PYG{p}{(}\PYG{k}{const} \PYG{k+kt}{int}\PYG{o}{*} \PYG{n}{x}\PYG{p}{)\PYGZob{}\PYGZcb{}} \PYG{c+c1}{// CORRECTE : le const permet}
+                       \PYG{c+c1}{// de faire la diff avec les pt}
+\PYG{k+kt}{void} \PYG{n+nf}{f} \PYG{p}{(}\PYG{k+kt}{int} \PYG{o}{\PYGZam{}} \PYG{n}{x}\PYG{p}{)\PYGZob{}\PYGZcb{}}
+\PYG{k+kt}{void} \PYG{n+nf}{f} \PYG{p}{(}\PYG{k}{const} \PYG{k+kt}{int} \PYG{o}{\PYGZam{}} \PYG{n}{x}\PYG{p}{)\PYGZob{}\PYGZcb{}} \PYG{c+c1}{// CORRECTE : comme les pointeurs}
+\end{Verbatim}

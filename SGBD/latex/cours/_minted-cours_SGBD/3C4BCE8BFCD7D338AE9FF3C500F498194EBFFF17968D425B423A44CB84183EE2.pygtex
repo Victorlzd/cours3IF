@@ -1,0 +1,3 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{ALTER} \PYG{k}{TABLE} \PYG{o}{\PYGZlt{}}\PYG{n}{nomTable}\PYG{o}{\PYGZgt{}} \PYG{k}{RENAME} \PYG{k}{COLUMN} \PYG{o}{\PYGZlt{}}\PYG{n}{nomActuel}\PYG{o}{\PYGZgt{}} \PYG{k}{TO} \PYG{o}{\PYGZlt{}}\PYG{n}{nouveauNom}\PYG{o}{\PYGZgt{}}
+\end{Verbatim}

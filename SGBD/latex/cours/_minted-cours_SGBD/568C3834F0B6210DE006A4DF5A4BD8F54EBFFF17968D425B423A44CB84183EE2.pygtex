@@ -1,0 +1,10 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{n}{IF} \PYG{p}{(}\PYG{o}{\PYGZlt{}}\PYG{n}{condition}\PYG{o}{\PYGZgt{}}\PYG{p}{)}
+\PYG{k}{THEN}
+    \PYG{o}{\PYGZlt{}}\PYG{n}{instructions}\PYG{o}{\PYGZgt{}}\PYG{p}{;}
+\PYG{p}{[}\PYG{n}{ELSIF} \PYG{p}{(}\PYG{o}{\PYGZlt{}}\PYG{n}{condition}\PYG{p}{)}
+    \PYG{o}{\PYGZlt{}}\PYG{n}{instructions}\PYG{o}{\PYGZgt{}}\PYG{p}{;]}
+\PYG{p}{[}\PYG{k}{ELSE}
+    \PYG{o}{\PYGZlt{}}\PYG{n}{instructions}\PYG{o}{\PYGZgt{}}\PYG{p}{;]}
+\PYG{k}{END} \PYG{n}{IF}\PYG{p}{;}
+\end{Verbatim}

@@ -1,0 +1,14 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{DECLARE}
+     \PYG{n}{types}
+     \PYG{n}{variables}
+     \PYG{n}{constantes}
+     \PYG{n}{curseurs}
+     \PYG{n}{exceptions} \PYG{n}{utilisateurs}\PYG{p}{]}
+\PYG{k}{BEGIN} \PYG{p}{[}\PYG{o}{\PYGZlt{}}\PYG{n}{NomBloc}\PYG{o}{\PYGZgt{}}\PYG{p}{]}
+     \PYG{n}{instructions} \PYG{n}{PL}\PYG{o}{/}\PYG{k}{SQL}
+     \PYG{n}{possibilit}\PYG{err}{é} \PYG{n}{de} \PYG{n}{blocs} \PYG{n}{imbriqu}\PYG{err}{é}\PYG{n}{s}
+\PYG{p}{[}\PYG{k}{EXCEPTION}
+     \PYG{n}{traitement} \PYG{n}{des} \PYG{n}{exceptions}\PYG{p}{]}
+\PYG{k}{END} \PYG{p}{[}\PYG{o}{\PYGZlt{}}\PYG{n}{NomBloc}\PYG{o}{\PYGZgt{}}\PYG{p}{];}
+\end{Verbatim}

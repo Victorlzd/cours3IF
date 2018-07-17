@@ -1,0 +1,14 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{DECLARE}
+    \PYG{o}{\PYGZlt{}}\PYG{n}{MonException}\PYG{o}{\PYGZgt{}} \PYG{k}{EXCEPTION}\PYG{p}{;}
+
+\PYG{k}{BEGIN}
+    \PYG{p}{...}
+    \PYG{n}{RAISE} \PYG{o}{\PYGZlt{}}\PYG{n}{MonException}\PYG{o}{\PYGZgt{}}\PYG{p}{;}
+    \PYG{p}{...}
+\PYG{k}{EXCEPTION}
+    \PYG{k}{WHEN} \PYG{o}{\PYGZlt{}}\PYG{n}{MonException}\PYG{o}{\PYGZgt{}} \PYG{k}{THEN} \PYG{p}{...}
+    \PYG{p}{...}
+    \PYG{k}{WHEN} \PYG{n}{OTHERS} \PYG{p}{...}
+\PYG{k}{END}\PYG{p}{;}
+\end{Verbatim}

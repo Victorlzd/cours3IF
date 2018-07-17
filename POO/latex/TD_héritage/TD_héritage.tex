@@ -1,0 +1,302 @@
+\documentclass[10pt,a4paper,twoside]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[francais]{babel}
+\usepackage[T1]{fontenc}
+\title{TD Héritage - POO}
+\author{Victor Lezaud}
+\begin{document}
+
+\maketitle
+\renewcommand{\contentsname}{Sommaire}
+\tableofcontents
+
+\newpage
+
+\section{Objet dynamique et virtual}
+\subsection{Présentation du programme}
+Le programme contient une classe Personne avec un attribut nom de type string et une classe Etudiant avec un attribut anne de type annee, qui hérite de Personne. Chaque classe doit seulement pouvoir être affichée. Le programme de test est le suivant :
+\begin{verbatim}
+#include "Personne.h"
+#include "Etudiant.h"
+
+static void afficher(const Personne * pt)
+{
+    pt->Afficher();
+}
+
+int main()
+{
+    Personne * pp;
+    
+    pp = new Personne("Marie");
+    afficher(pp);
+    delete pp;
+    
+    pp = new Etudiant("Mathieu", 4);
+    afficher(pp);
+    delete pp;
+    
+    return 0;
+}
+\end{verbatim}
+
+
+\subsection{Définition des classes}
+\subsubsection{Personne}
+\begin{verbatim}
+#include <iostream>
+
+class Personne
+{
+    public:
+        Personne(String unNom) : nom(unNom){}
+        virtual ~Personne(){}
+        // Afficher va dépendre des questions
+		
+    private:
+        String nom;
+}       
+\end{verbatim}
+
+\subsubsection{Etudiant}
+\begin{verbatim}
+#include <iostream>
+
+class Etudiant : public Personne
+{
+    public:
+        Etudiant(String unNom, int uneAnnee) : Personne(unNom),
+                 annee(uneAnnee){}
+        virtual ~Etudiant(){}
+        // Afficher va dépendre des questions
+		
+    private:
+        int annee;
+}       
+\end{verbatim}
+
+\subsection{Questions}
+\subsubsection{virtual}
+\paragraph{Méthodes classique :}Dans cette question on implémente les méthodes Afficher sans le mot-clé virtual dans les deux classes:
+\begin{itemize}
+\item Personne : \verb= void Afficher(){cout<<nom<<endl)=
+\item Etudiant : \verb= void Afficher(){cout<<annee<<endl)=
+\end{itemize}
+Dans ce cas-là le compilateur va créer des une liaison statique vers la méthode \verb=Personne::Afficher()= lors de l'appel \verb=pt->Afficher();= dans la fonction ordinaire \verb=afficher()=.\\
+Ainsi le programme va appeler la méthode de la classe mère dans tous les cas et affichera :
+\begin{verbatim}
+Marie
+Mathieu
+\end{verbatim}
+
+\paragraph{virtual dans Personne :}Dans cette question on ajoute le mot-clé virtual dans la classe Personne.
+\begin{itemize}
+\item Personne : \verb= virtual void Afficher(){cout<<nom<<endl)=
+\item Etudiant : \verb= void Afficher(){cout<<annee<<endl)=
+\end{itemize}
+Dans ce cas-là, à l'appel de la méthode \verb=Personne::Afficher()=, le compilateur va créer une liaison dynamique car il va trouver le mot-clé \verb=virtual=.\\
+La méthode appelée va donc dépendre de l'exécution du programme. Dans le cas de notre test il va d'abord appeler \\
+ \verb=Personne::Aficher()= puis \verb=Etudiant::Afficher()= et affichera :
+\begin{verbatim}
+Marie
+4
+\end{verbatim}
+
+\paragraph{virtual dans Etudiant :} Dans cette question on met le mot-clé virtual dans la classe Etudiant uniquement.
+\begin{itemize}
+\item Personne : \verb= void Afficher(){cout<<nom<<endl)=
+\item Etudiant : \verb= virtual void Afficher(){cout<<annee<<endl)=
+\end{itemize}
+On revient dans le premier cas car la liaison est faite avec la méthode\\
+ \verb=Personne::Afficher()= qui n'est ici plus virtuelle.\\
+La méthode appelée sera donc toujours \verb=Personne::Afficher()= et le test affichera:
+\begin{verbatim}
+Marie
+Mathieu
+\end{verbatim}
+
+\paragraph{virtual dans les deux :}Dans cette question on met le mot-clé virtual dans les deux classes.
+\begin{itemize}
+\item Personne : \verb= virtual void Afficher(){cout<<nom<<endl)=
+\item Etudiant : \verb= virtual void Afficher(){cout<<annee<<endl)=
+\end{itemize}
+On revient au deuxième cas avec la liaison dynamique parce qu'on retrouve le mot-clé virtual devant la méthode \\ \verb=Personne::Afficher()=.\\
+Le programme de test va donc appeler \verb=Personne::Afficher()= puis\\
+ \verb=Etudiant::Afficher()=
+\begin{verbatim}
+Marie
+4
+\end{verbatim}
+
+\subsubsection{Tout afficher}
+\paragraph{Problème :} Comment afficher l'ensemble des caractéristiques de l'objet dans chaque cas, sans ajouter de nouvelle méthode au classes?
+\paragraph{Résolution :} Il faut appeler la méthode de Personne dans la méthode de Etudiant. On redéfinie donc la méthode \verb=Etudiant::Afficher()= de la façon suivante :
+\begin{verbatim}
+void Etudiant::Afficher() : Personne::Afficher()
+{cout<<annee<<endl;}
+\end{verbatim}
+
+\paragraph{virtual ?} Bien sûr la méthode \verb=Personne::Afficher()= doit encore être virtuelle!!
+
+\section{Construction \& Destruction}
+\subsection{Présentation du programme}
+On cherche à compter le nombre de création et de destruction des instances d'une classe et de ses descendants. On prendra une classe Comptage et un descendant FilsComptage. Les classes possèdent un constructeur par défaut, un constructeur de copie et un destructeur. Chaque objet doit avoir un numéro d'instance afin de faciliter le suivi.\\
+Le programme principal écrit en fin d'exécution la valeur de la différence entre le nombre de création et de destruction, que l'on appellera \verb=nbRestant=.
+
+\subsection{Définition des classes}
+\subsubsection{Comptage}
+\paragraph{Comptage.h}
+\begin{verbatim}
+class Comptage
+{
+    public:
+        static void AfficheNbRestant;
+        
+        Comptage();
+        Comptage(const & Comptage) ;
+        virtual ~Comptage();
+        
+    protected:
+        int id;
+        static int nbRestant;
+        static int nbTotal;
+}
+\end{verbatim}
+
+\paragraph{Comptage.cpp}
+\begin{verbatim}
+Comptage::nbRestant = 0;
+Comptage::nbTotal = 0;
+
+static void Comptage::AfficheNbRestant()
+{
+    cout<<"nbRestant = "<<nbRestant<<endl;
+}
+
+Comptage::Comptage()
+{
+    ++nbTotal;
+    ++nbRestant;
+    id = nbTotal;
+    cout<<"Creation de l'objet Comptage 
+           numéro "<<id<<endl;
+}
+
+Comptage::Comptage(const & Comptage)
+{
+    ++nbTotal;
+    ++nbRestant;
+    id = nbTotal;
+    cout<<"Creation par copie de l'objet Comptage 
+           numéro "<<id<<endl;
+}
+
+Comptage::~Comptage()
+{
+    cout<<"Destruction de l'objet Comptage 
+           numéro "<<id<<endl;
+    --nbRestant;
+}
+\end{verbatim}
+
+
+\subsubsection{FilsDeComptage}
+\paragraph{FilsDeComptage.h}
+\begin{verbatim}
+class FilsDeComptage : public Comptage
+{
+    public:
+        FilsDeComptage();
+        FilsDeComptage(const & FilsDeComptage) ;
+        virtual ~FilsDeComptage();
+    protected:
+        static nbTotalFils;
+        int idFils;
+    
+}
+\end{verbatim}
+
+\paragraph{FilsDeComptage.cpp}
+\begin{verbatim}
+FilsDeComptage::nbTotalFils = 0;
+
+FilsDeComptage::FilsDeComptage() 
+                : Comptage()
+{
+    ++nbTotalFils;
+    id = nbTotalFils;
+    cout<<"Creation de l'objet FilsDeComptage 
+           numéro "<<idFils<<endl;
+}
+
+FilsDeComptage::FilsDeComptage(const & FilsDeComptage)
+                : Comptage(FilsDeComptage)
+{
+    ++nbTotalFils;
+    id = nbTotalFils;
+    cout<<"Creation par copie de l'objet FilsDeComptage 
+           numéro "<<idFils<<endl;
+}
+
+FilsDeComptage::~FilsDeComptage()
+{
+    cout<<"Destruction de l'objet FilsDeComptage 
+           numéro "<<idFils<<endl;
+}
+\end{verbatim}
+
+\subsection{Question}
+\subsubsection{Variables de classe}
+\paragraph{Comment est géré le nombre restant ?} Le nombre restant est stockée dans une variable de classe soit une variable accessible et partagée par l’ensemble des instances de la classe. Elle est donc incrémenté par chaque instance à la construction et décrémentée à la destruction.
+
+\paragraph{Et pour id et idFils ?} Ils sont définit à partir d'une variable de classe qui compte les constructions (celle-ci ne doit pas être décrémentée pour assurer l'absence de doublons dans la valeur \verb=id= et \verb=idFils=).
+
+\subsubsection{Série de tests}
+Pour chacun des tests suivant on donnera le resultat de l'exécution sachant que le programme principal appelle la procédure test avant d'afficher le nombre restant.
+\begin{verbatim}
+----Test 0
+static void test()
+{
+    Comptage c1;
+}
+----Resultat :
+Création de l'objet Comptage numéro 1
+Destruction de l'objet Comptage numéro 1
+nbRestant = 0
+----Fin Test 0
+
+----Test 1
+static void test()
+{
+    Comptage c1;
+    Comptage c2(c1);
+}
+----Resultat :
+Création de l'objet Comptage numéro 1
+Création par copie de l'objet Comptage numéro 2
+Destruction de l'objet Comptage numéro 2
+Destruction de l'objet Comptage numéro 1
+nbRestant = 0
+----Fin Test 1
+
+----Test 2
+static void test()
+{
+    Comptage c1;
+    Comptage c2(c1);
+}
+----Resultat :
+Création de l'objet Comptage numéro 1
+Création de l'objet FilsDeComptage numéro 1
+Création par copie de l'objet Comptage numéro 2
+Création par copie de l'objet FilsDeComptage numéro 2
+Destruction de l'objet FilsDeComptage numéro 2
+Destruction de l'objet Comptage numéro 2
+Destruction de l'objet FilsDeComptage numéro 1
+Destruction de l'objet Comptage numéro 1
+nbRestant = 0
+----Fin Test 2
+\end{verbatim}
+
+
+\end{document}

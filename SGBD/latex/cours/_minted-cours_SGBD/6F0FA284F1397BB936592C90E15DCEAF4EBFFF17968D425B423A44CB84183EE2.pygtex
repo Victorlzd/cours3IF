@@ -1,0 +1,3 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{DROP} \PYG{k}{TRIGGER} \PYG{o}{\PYGZlt{}}\PYG{n}{NomDeclencheur}\PYG{o}{\PYGZgt{}}\PYG{p}{;}
+\end{Verbatim}

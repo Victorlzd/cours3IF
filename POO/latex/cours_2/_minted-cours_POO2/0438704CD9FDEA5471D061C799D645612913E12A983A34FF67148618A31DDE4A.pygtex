@@ -1,0 +1,4 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{template} \PYG{o}{\PYGZlt{}}\PYG{n}{parametres\PYGZus{}template}\PYG{o}{\PYGZgt{}}
+\PYG{n}{type} \PYG{n}{nomFonction} \PYG{p}{(}\PYG{n}{parametres\PYGZus{}fonction}\PYG{p}{);}
+\end{Verbatim}

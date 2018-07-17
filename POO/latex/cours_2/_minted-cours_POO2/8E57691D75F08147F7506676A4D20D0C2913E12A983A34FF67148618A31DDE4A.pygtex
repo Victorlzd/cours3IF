@@ -1,0 +1,10 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{class} \PYG{n+nc}{type}\PYG{p}{\PYGZob{}}
+\PYG{p}{...}
+   \PYG{n}{type} \PYG{k}{operator} \PYG{o}{+=} \PYG{p}{(}\PYG{n}{type} \PYG{n}{op2}\PYG{p}{);} \PYG{c+c1}{// déclaration de la surcharge}
+\PYG{p}{...}
+\PYG{p}{\PYGZcb{}}
+\PYG{c+c1}{// les deux lignes ci\PYGZhy{}dessous sont équivalentes :}
+\PYG{n}{x}\PYG{p}{.}\PYG{k}{operator} \PYG{o}{+=} \PYG{p}{(}\PYG{n}{y}\PYG{p}{);}
+\PYG{n}{x} \PYG{o}{+=} \PYG{n}{y}\PYG{p}{;}
+\end{Verbatim}

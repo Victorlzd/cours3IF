@@ -1,0 +1,9 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c+c1}{// Appel de fonction}
+\PYG{n}{nomManipulateur} \PYG{p}{(} \PYG{n}{nomFlux} \PYG{p}{);}
+\PYG{n}{endl} \PYG{p}{(} \PYG{n}{cout} \PYG{p}{);}
+
+\PYG{c+c1}{// Utilisation de la surcharge de \PYGZlt{}\PYGZlt{} ou \PYGZgt{}\PYGZgt{}}
+\PYG{n}{nomFlux} \PYG{o}{\PYGZlt{}\PYGZlt{}} \PYG{n}{nomManipulateur}\PYG{p}{;}
+\PYG{n}{cout} \PYG{o}{\PYGZlt{}\PYGZlt{}} \PYG{n}{endl}\PYG{p}{;}
+\end{Verbatim}

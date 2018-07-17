@@ -1,0 +1,5 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{SELECT} \PYG{p}{[}\PYG{k}{DISTINCT} \PYG{o}{\PYGZlt{}}\PYG{n}{attr}\PYG{o}{\PYGZgt{}}\PYG{p}{[,} \PYG{o}{\PYGZlt{}}\PYG{n}{attri}\PYG{o}{\PYGZgt{}}\PYG{p}{]}\PYG{o}{*}
+\PYG{k}{FROM} \PYG{o}{\PYGZlt{}}\PYG{k}{table}\PYG{o}{\PYGZgt{}}\PYG{p}{[[,,}\PYG{k}{CROSS} \PYG{k}{JOIN}\PYG{p}{,} \PYG{k}{NATURAL} \PYG{k}{JOIN}\PYG{p}{]} \PYG{o}{\PYGZlt{}}\PYG{n}{tablei}\PYG{o}{\PYGZgt{}}\PYG{p}{]}\PYG{o}{*}
+\PYG{p}{[}\PYG{k}{WHERE} \PYG{o}{\PYGZlt{}}\PYG{n}{condition}\PYG{o}{\PYGZgt{}} \PYG{p}{[}\PYG{o}{\PYGZlt{}}\PYG{n}{operateur}\PYG{o}{\PYGZgt{}} \PYG{o}{\PYGZlt{}}\PYG{n}{condition}\PYG{o}{\PYGZgt{}}\PYG{p}{]}\PYG{o}{*}\PYG{p}{]}
+\end{Verbatim}

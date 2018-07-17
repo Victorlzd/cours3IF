@@ -1,0 +1,4 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{CREATE} \PYG{p}{[}\PYG{n}{BITMAP}\PYG{p}{]} \PYG{k}{INDEX} \PYG{o}{\PYGZlt{}}\PYG{n}{nomIndex}\PYG{o}{\PYGZgt{}} \PYG{k}{ON}
+\PYG{o}{\PYGZlt{}}\PYG{n}{nomTable}\PYG{o}{\PYGZgt{}} \PYG{p}{(}\PYG{o}{\PYGZlt{}}\PYG{n}{attribut}\PYG{o}{\PYGZgt{}}\PYG{p}{[,}\PYG{o}{\PYGZlt{}}\PYG{n}{attribut}\PYG{p}{]}\PYG{o}{*}\PYG{p}{)}
+\end{Verbatim}

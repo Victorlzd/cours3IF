@@ -1,0 +1,11 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{SELECT} \PYG{n}{L}\PYG{p}{.}\PYG{n}{NumLic}\PYG{p}{,} \PYG{k}{SUM}\PYG{p}{(}\PYG{n}{Points}\PYG{p}{)}
+\PYG{k}{FROM} \PYG{n}{PointMatch} \PYG{n}{P}\PYG{p}{,} \PYG{n}{Licencie} \PYG{n}{L}
+\PYG{k}{WHERE} \PYG{n}{P}\PYG{p}{.}\PYG{n}{NumLic} \PYG{o}{=} \PYG{n}{L}\PYG{p}{.}\PYG{n}{NumLic} \PYG{k}{AND} \PYG{n}{P}\PYG{p}{.}\PYG{n}{IdC} \PYG{o}{=} \PYG{l+m+mi}{1}
+\PYG{k}{GROUP} \PYG{k}{BY} \PYG{n}{L}\PYG{p}{.}\PYG{n}{NumLic}
+\PYG{k}{HAVING} \PYG{k}{SUM}\PYG{p}{(}\PYG{n}{POINTS}\PYG{p}{)} \PYG{o}{=} \PYG{p}{(}\PYG{k}{SELECT} \PYG{k}{MAX}\PYG{p}{(}\PYG{k}{SUM}\PYG{p}{(}\PYG{n}{Points}\PYG{p}{))}
+                     \PYG{k}{FROM} \PYG{n}{PointMatch} \PYG{n}{P}\PYG{p}{,} \PYG{n}{Licencie} \PYG{n}{L}
+                     \PYG{k}{WHERE} \PYG{n}{P}\PYG{p}{.}\PYG{n}{NumLic} \PYG{o}{=} \PYG{n}{L}\PYG{p}{.}\PYG{n}{NumLic}
+                          \PYG{k}{AND} \PYG{n}{P}\PYG{p}{.}\PYG{n}{IdC} \PYG{o}{=} \PYG{l+m+mi}{1}
+                     \PYG{k}{GROUP} \PYG{k}{BY} \PYG{n}{L}\PYG{p}{.}\PYG{n}{NumLic}\PYG{p}{);}
+\end{Verbatim}

@@ -1,0 +1,20 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c+c1}{// Interface de la classe \PYGZlt{}C1\PYGZgt{} (fichier C1.h)}
+\PYG{c+cp}{\PYGZsh{}define C1\PYGZus{}H}
+\PYG{k}{class} \PYG{n+nc}{C2}\PYG{p}{;}
+\PYG{k}{class} \PYG{n+nc}{C1}
+\PYG{p}{\PYGZob{}}
+	\PYG{k}{public} \PYG{o}{:}
+		\PYG{c+c1}{// amitié de la fonction non\PYGZhy{}membre operator \PYGZlt{}\PYGZlt{}}
+		\PYG{k}{friend} \PYG{n}{std}\PYG{o}{::}\PYG{n}{ostream} \PYG{o}{\PYGZam{}} \PYG{k}{operator} \PYG{o}{\PYGZlt{}\PYGZlt{}} \PYG{p}{(}\PYG{n}{std}\PYG{o}{::}\PYG{n}{ostream} \PYG{o}{\PYGZam{}} \PYG{n}{out}\PYG{p}{,} \PYG{k}{const} \PYG{n}{C1} \PYG{o}{\PYGZam{}} \PYG{n}{o}\PYG{p}{);}
+
+		\PYG{c+c1}{// amitié de la méthode m de la classe C2}
+		\PYG{k}{friend} \PYG{k}{const} \PYG{k+kt}{char} \PYG{o}{*} \PYG{n}{C2}\PYG{o}{::}\PYG{n}{m}\PYG{p}{(}\PYG{k}{const} \PYG{n}{C1} \PYG{o}{\PYGZam{}} \PYG{n}{o}\PYG{p}{);}
+
+		\PYG{c+c1}{// amitié d\PYGZsq{}une classe C3}
+		\PYG{k}{friend} \PYG{k}{class} \PYG{n+nc}{C3}\PYG{p}{;}
+
+	\PYG{k}{private} \PYG{o}{:}
+		\PYG{k+kt}{int} \PYG{n}{x}\PYG{p}{;}
+\PYG{p}{\PYGZcb{}}
+\end{Verbatim}

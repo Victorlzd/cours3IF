@@ -1,0 +1,9 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{SELECT} \PYG{n}{Nom}\PYG{p}{,} \PYG{n}{Prenom}\PYG{p}{,} \PYG{n}{NumLic} \PYG{k}{INTO} \PYG{n}{Nom\PYGZdl{}}\PYG{p}{,} \PYG{n}{Prenom\PYGZdl{}}\PYG{p}{,} \PYG{n}{NumLic\PYGZdl{}}
+\PYG{k}{FROM} \PYG{n}{Inscrition}
+\PYG{k}{WHERE} \PYG{n}{NumLic} \PYG{o}{=} \PYG{l+m+mi}{8}\PYG{p}{;}
+
+\PYG{k}{SELECT} \PYG{o}{*} \PYG{k}{INTO} \PYG{n}{RecordMembre}
+\PYG{k}{FROM} \PYG{n}{Inscription}
+\PYG{k}{WHERE} \PYG{n}{NumLic} \PYG{o}{=} \PYG{l+m+mi}{8}\PYG{p}{;}
+\end{Verbatim}

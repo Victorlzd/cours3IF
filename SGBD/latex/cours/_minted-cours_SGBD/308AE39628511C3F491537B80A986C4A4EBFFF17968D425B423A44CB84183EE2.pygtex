@@ -1,0 +1,5 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{UPDATE} \PYG{o}{\PYGZlt{}}\PYG{k}{table}\PYG{o}{\PYGZgt{}}
+\PYG{k}{SET} \PYG{o}{\PYGZlt{}}\PYG{n}{attr}\PYG{o}{\PYGZgt{}} \PYG{o}{=} \PYG{err}{\PYGZob{}}\PYG{o}{\PYGZlt{}}\PYG{n}{espression}\PYG{o}{\PYGZgt{}|}\PYG{k}{DEFAULT}\PYG{err}{\PYGZcb{}} \PYG{p}{[...]}\PYG{o}{*}
+\PYG{p}{[}\PYG{k}{WHERE} \PYG{o}{\PYGZlt{}}\PYG{n}{condition}\PYG{o}{\PYGZgt{}}\PYG{p}{]}
+\end{Verbatim}

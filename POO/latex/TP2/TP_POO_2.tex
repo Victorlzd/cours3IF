@@ -1,0 +1,367 @@
+\documentclass[10pt,a4paper,twoside]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[francais]{babel}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+
+\usepackage{geometry}
+\geometry{hmargin=3cm,vmargin=4cm}
+
+\author{Florant Clément - Lezaud Victor - Zamora Benjamin}
+\title{TP POO 2 - Pointeurs et Polymorphisme}
+\begin{document}
+
+\maketitle
+\renewcommand{\contentsname}{Sommaire}
+\tableofcontents
+
+\newpage
+\section{Hiérarchie de classe}
+\subsection{Diagramme}
+\includegraphics[scale=0.6]{classe2.jpg} \\
+\includegraphics[scale=0.5]{classe1.jpg} 
+
+\subsection{Justification}
+\subsubsection{Trajet - TrajetSimple - TrajetCompose}
+TrajetSimple et TrajetCompose sont des sortes de Trajet, les classes héritent donc publiquement de Trajet. La classe abstraite Trajet ne sert qu'à définir une interface, toutes ses méthode sonts virtuelles pures et elle ne possède pas d'attributs. C'est pour cela que les classes TrajetSimple et TrajetCompose redéfinissent ces méthodes en accord avec les attributs qui leurs sont propres
+
+\subsubsection{Catalogue}
+Le Catalogue est l'objet principal du programme, ses méthodes définissent les services proposés par le programme (Ajouter, RechercheSimple et RechercheAvance).
+
+\subsubsection{Collection}
+La Collection sert de conteneur pour les Trajet de Catalogue et TrajetCompose. Elle est ici implémentée avec un tableau dynamique de pointeur de trajet. Comme on utilise la Collection à chaque fois que l'on veut stocker plusieurs Trajet elle doit offrir beaucoup de services d'où ce grand nombre méthodes.\\
+Il est très important que la Colletion stocke des pointeurs sur Trajets afin de pouvoir user du polymorphisme ce qui est nécessaire pour ce programme.
+
+\newpage
+\section{Spécification}
+\subsection{Classe Trajet}
+\subsubsection{Présentation}
+La classe Trajet symbolise un trajet quelconque. C'est une classe abstraite.
+
+\subsubsection{Attributs}
+La classe n'a pas d'attributs.
+
+\subsubsection{Méthodes}
+\begin{itemize}
+\item La construction sera interdite (Constructeurs déclarés protected).
+\item \verb$virtual char * GetDepart(void) const = 0$ : renvoie le nom de la ville de départ. La méthode est virtuelle pure.
+\item \verb$virtual char * GetArrivee(void) const = 0$ : renvoie le nom de la ville d'arrivée. La méthode est virtuelle pure.
+\item \verb$virtual Trajet * Copie(void) const = 0$ : Renvoie un pointeur sur une copie de l'objet allouée dynamiquement.
+\item \verb$virtual void Afficher(void) const = 0$ : permet d'afficher en console les informations liées à l'objet. La méthode est virtuelle pure.
+\end{itemize}
+
+
+\subsection{Classe TrajetSimple}
+\subsubsection{Présentation}
+La classe TrajetSimple symbolise un trajet direct d'une ville de départ à une ville d'arrivée en utilisant un moyen de transport précis. Un TrajetSimple est une sorte de Trajet, cette classe hérite donc publiquement de la classe Trajet.
+
+\subsubsection{Enumeration MoyenTransport}
+\paragraph{Présentation :} 
+La classe TrajetSimple possède une énumération MoyenTransport qui décrit les différents moyens de transport disponible.
+\paragraph{Valeur :} 
+L'énumération peut prendre les valeurs suivantes:
+\begin{itemize}
+\item AUTO
+\item BATEAU
+\item AVION
+\item TRAIN
+\end{itemize}
+\paragraph{Fonction associée :} 
+L'affichage des TrajetSimple nécessite une fonction qui affiche une chaîne de caractère décrivant le moyen de transport avec la signature suivante, et qui affiche simplement le nom du MoyenTransport sans espaces ni retour à la ligne :\\
+\verb=void AfficherMoyenTransport(MoyenTransport moyenTransport)=
+
+\subsubsection{Attributs}
+\begin{itemize}
+\item \verb=MoyenTransport moyenTransport= : variable de l'énumération MoyenTransport qui stocke le moyen de transport utilisé par le trajet
+\item \verb=depart= : variable stockant la ville de départ
+\item \verb=arrivee= : variable stockant la ville d'arrivée
+\end{itemize}
+\subsubsection{Méthodes}
+\begin{itemize}
+\item Le constructeur par défaut sera interdit (Constructeur par défaut déclaré protected).
+\item \verb=TrajetSimple(const char* villeDepart, const char* =\\
+\verb=villeArrivee, Vehicule transport)= : Constructeur de la classe
+\item \verb=TrajetSimple(const TrajetSimple & copie)= : Constructeur de copie de la classe
+
+\end{itemize}
+
+\subsection{Classe TrajetCompose}
+\subsubsection{Présentation}
+La classe TrajetCompose symbolise un trajet ayant des étapes. Il contient donc une Collection de Trajet. Un TrajetCompose est une sorte de Trajet, cette classe hérite donc publiquement de la classe Trajet.
+\subsubsection{Attributs}
+\begin{itemize}
+\item \verb=Collection collection=: contient la liste des Trajets qui compose ce TrajetCompose
+\end{itemize}
+\subsubsection{Méthodes}
+\begin{itemize}
+\item Le constructeur par défaut sera interdit (Constructeur par défaut déclaré protected).
+\item \verb$TrajetCompose(const Collection & collec)$ : Constructeur de la classe
+\item \verb=TrajetCompose(const TrajetCompose & copie)= : Constructeur de copie de la classe
+\end{itemize}
+
+\subsection{Catalogue}
+\subsubsection{Présentation}
+La classe Catalogue symbolise un ensemble de trajet, dans lequel on peut rechercher l'ensemble des trajets permettant d'aller d'une ville A à une ville B (avec ou sans combinaison de trajet).
+\subsubsection{Attributs}
+\begin{itemize}
+\item \verb=Collection collection= : contient l'ensemble des trajets présents dans le catalogue
+\end{itemize}
+\subsubsection{Méthodes}
+\begin{itemize}
+\item \verb$Catalogue()$ : Constructeur de la classe
+\item \verb=void Ajouter(Trajet & unTrajet)= : Permet d'ajouter un trajet au catalogue
+\item \verb=void RechercheSimple(const char* villeDepart,=  \\
+\verb=const char* villeArrivee) const=: Recherche et affiche l'ensemble des trajets permettant d'aller de villeDepart à villeArrivee sans combinaisons
+\item \verb=void RechercheAvance(const char* villeDepart,= \\
+\verb=const char* villeArrivee) const=: Recherche et affiche l'ensemble des trajets permettant d'aller de villeDepart à villeArrivee avec combinaisons. On ne réalisera pas deux fois le même trajet dans une solution (même ville de départ, même ville d'arrivée)
+\item \verb=void Afficher(void) const= : permet d'afficher en console les informations liées à l'objet. 
+\end{itemize}
+
+\subsection{Classe Collection}
+\subsubsection{Présentation}
+La classe collection contient une liste ordonnée de Trajet*. Aujourd'hui nous l'implémentons avec un tableau dynamique.
+
+\subsubsection{Attributs}
+\begin{itemize}
+\item \verb=Trajet** tab= : contient l'ensemble des trajets présents dans la collection
+\item \verb=int tailleAct= : contient le nombre de trajet présents dans la collection
+\item \verb=int tailleMax= : contient le nombre de case allouées en mémoire pour la collection
+\end{itemize}
+
+\subsubsection{Méthodes}
+\begin{itemize}
+\item \verb$Collection(unsigned int taille = 1)$= : Constructeur de la classe alloue un tableau de la taille donnée en paramètre. Sert aussi de constructeur par défaut.
+\item \verb=Collection(const Collection & collection)= : Constructeur de copie de la classe
+\item \verb=void Ajouter(Trajet & trajet)= : Ajoute un trajet à la collection. Le trajet est ajouté en fin de tableau.
+\item \verb=void Ajouter(const Collection & autre)= : Ajoute à la collection l'ensemble des trajet de l'autre collection
+\item \verb=Trajet * GetTrajet(unsigned int index) const= : Renvoie le trajet stocké à la position donnée en paramètre.
+\item \verb=Trajet * GetLastTrajet(void) const= : Renvoie un pointeur vers le dernier trajet
+\item \verb=unsigned int GetTailleActuelle(void) const= : Renvoie la taille actuelle de la collection
+\item \verb=bool EstVide() const= : Renvoie true si le catalogue est vide
+\item \verb=bool EstDansLaCollection(const char* depart, const char* arrivee) const= : Renvoie true si il existe un trajet allant de depart a arrivee dans la collection
+\item \verb=void Afficher() const= : Affiche la liste des trajets présents dans la collection
+\item \verb=void AfficherAvance(const char * arrivee) const= : Permet d'afficher la collection comme un résultat de recherche avancée
+\end{itemize}
+
+\subsection{Programme Principal}
+\subsubsection{Présentation}
+Le programme principal crée un catalogue puis il affiche en boucle un menu offrant à l'utilisateur les options suivantes :
+\begin{itemize}
+\item Ajouter un trajet au catalogue.
+\item Effectuer une recherche de trajet (recherche simple)
+\item Effectuer une recherche de trajet (recherche avancée)
+\item Fermer le programme 
+\end{itemize}
+
+\subsubsection{Fonctionnement}
+\paragraph{Menu Principal :} Le choix de l'utilisateur sera fait en entrant le numéro associé à l'option qu'il souhaite. Le programme devra donc effectuer la requête de l'utilisateur avant de ré-afficher le menu principal.
+\paragraph{Ajout de trajet :} Pour l'ajout de trajet, l'utilisateur doit d'abord choisir entre un trajet direct ou un trajet avec étape. 
+\begin{itemize}
+\item Trajet direct : Pour l'ajout d'un trajet direct l'utilisateur n'a qu'à entrer la ville de départ, la ville d'arrivée et le moyen de transport.
+\item Trajet avec étape : Pour un trajet avec étape on réalise l'ajout d'un trajet direct puis on demande si l'utilisateur souhaite ajouter une autre étape. On recommence l'opération jusqu'à ce que l'utilisateur ne souhaite plus ajouter d'étape.
+\end{itemize}
+
+\paragraph{Recherche de Trajet :} L'utilisateur rentre la ville de départ puis la ville d'arrivée. Le programme affiche l'ensemble des trajets répondants à la requête. Il y a deux versions de la recherche : simple et avancée.
+\paragraph{Fermer le programme :} Le programme sors de la boucle, libère toute la mémoire allouée et se ferme.
+
+\subsubsection{Affichage}
+\paragraph{Menu Principal :}
+\begin{verbatim}
+----------- Menu Principal -----------
+1. Ajouter un trajet au catalogue
+2. Effectuer une recherche de trajet (recherche simple)
+3. Effectuer une recherche de trajet (recherche avancée)
+0. Sortir du programme
+---Votre choix : <entrée au clavier>
+\end{verbatim}
+
+\paragraph{Ajout de trajet}
+\begin{verbatim}
+----------- Ajout de Trajet -----------
+Ville de départ : <entrée au clavier>
+Ville d'arrivée : <entrée au clavier>
+Moyen de Transport:
+1. Auto
+2. Bateau
+3. Train
+4. Avion
+---Votre choix: <entrée au clavier>
+--- Voulez-cous ajoutez une étape ? (O/N)
+--- Votre choix : <entrée au clavier>
+----------- Fin Ajout de Trajet -----------
+\end{verbatim}
+
+\paragraph{Recherche de Trajet :}
+\begin{verbatim}
+----------- Début Recherche de Trajet -----------
+Ville de départ : <entrée au clavier>
+Ville d'arrivée : <entrée au clavier>
+---------- Résultat de la recherche  ----------
+Nombre de réponse : <nb réponse>
+-------Trajet numéro <i> :
+Affichage trajet i
+
+---------- Fin Recherche de Trajet ----------
+\end{verbatim}
+
+
+\newpage
+\section{Structure de données}
+\includegraphics[scale=0.7]{dessin_memoire_TP_POO_2.jpg} 
+%\includegraphics[scale=0.5]{dessin_memoire_TP_POO_2.jpg} 
+
+\newpage
+\section{Problèmes rencontrés}
+\subsection{Gestion de la mémoire}
+\subsubsection{Présentation du problème}
+Lorsque nous avons commencé à implémenter la construction d'un TrajetCompose à l'aide d'une collection nous avons eu des problèmes de gestion de la mémoire. Le constructeur par copie de la collection réalisait une copie des valeurs des pointeurs contenus dans la collection. De cette manière la destruction de la collection passée en paramètre ou celle du TrajetCompose libérait la zone de mémoire utilisée par l'autre. L'exécution menait donc à une segmentation fault.
+
+\subsubsection{Solutions possibles}
+Nous avons réfléchis à deux solutions possibles:
+\paragraph{Attribut pointeur sur Collection :} Une façon de régler le problème serait de modifier le type de l'attribut de la classe TrajetCompose en pointeur sur Collection et passer au constructeur un pointeur sur Collection et non plus une référence. Ainsi la Collection ne serait plus dupliquée
+\paragraph{Copie en profondeur de la Collection :} Une autre solution est de copier en profondeur la Collection. Il s'agit donc de ne plus copier l'adresse contenus dans les pointeurs mais bien de dupliquer les objets pointés par les pointeurs. Ainsi la destruction d'une Collection n'aura plus aucun effet sur les objets de l'autre.
+\paragraph{Solution choisie :} Nous avons décidé d'implémenter la deuxième solution car elle nous permettait de conserver l'ensemble de notre code réaliser jusque là (les méthodes d'ajout de trajet par l'utilisateur, le constructeur de copie de TrajetCompose, etc...).
+
+\subsubsection{Difficulté de la solution}
+\paragraph{Description de la difficulté :} La complexité de cette solution réside dans l'utilisation du polymorphisme par l'objet Collection lequel possède des pointeurs sur Trajet qui pointent sur des TrajetSimple et des TrajetCompose. Or nous ne devons pas perdre d'information.
+
+\paragraph{Solution :} La solution à ce problème passe par une liaison dynamique grâce a mot clé virtual. En effet on doit réaliser un traitement différent en fonction de la classe de l'objet, laquelle est inconnue avant l'exécution. On déclare donc une méthode virtuelle pure dans Trajet, nommée Copie, puis on la définit dans TrajetSimple et TrajetCompose. La méthode Copie crée avec une allocation dynamique une copie de l'objet appelant la méthode et renvoie un pointeur vers le nouvel objet.
+
+\subsection{Algorithmie}
+
+\subsubsection{Présentation du problème}
+\paragraph{Méthode concernée :} La recherche avancée est de loin la partie la complexe du programme algorithmiquement. Nous n'avons eu aucun problème de structures de données car la classe collection était parfaitement utilisable pour réaliser cette algorithme. Le problème est plutôt lié à l'aspect récursif de la méthode.
+\paragraph{Description du problème :} En effet lors d'un appel de la méthode récursive on trouve plusieurs objets Trajet qui permettent de continuer, donc cet appel va appeler plusieurs fois la méthode or nous avions une collection stockant les objets Trajet utilisés. La méthode ajoutait donc des objets Trajet en trop lorsque plusieurs Trajet partaient d'une même ville
+\paragraph{Exemple de test :} Avec un catalogue contenant les trajets suivants :
+\begin{itemize}
+\item de A vers B
+\item de B vers C
+\item de B vers D
+\item de C vers E
+\item de D vers E
+\end{itemize}
+La recherche avencée de A vers E nous donnait :
+\begin{itemize}
+\item voyage 1:
+\begin{itemize}
+\item A vers B
+\item B vers C
+\item C vers E
+\end{itemize}
+\item voyage 2:
+\begin{itemize}
+\item A vers B
+\item B vers C
+\item B vers D
+\item D vers E
+\end{itemize}
+\end{itemize}
+
+\subsubsection{Algorithme solution}
+\begin{verbatim}
+void Catalogue::Recursion(const char* depart, const char* arrivee,
+                          Collection TrajetsEmpruntes, Collection & result) const
+{
+    unsigned int i;
+    for (i = 0; i < collection.GetTailleActuelle(); ++i)
+    {
+        Trajet* trajet = collection.GetTrajet(i);
+        
+        int compDepart = strcmp(depart, trajet->GetDepart());
+        bool dejaEmprunte = TrajetsEmpruntes.EstDansLaCollection
+                (trajet->GetDepart(), trajet->GetArrivee());
+        
+        // pour chaque trajet on teste si la ville de depart est bien depart
+        // et on verifie que l'on ne l'ai pas deja emprunte
+        
+        if (compDepart == 0 && !dejaEmprunte)
+        {
+            Collection nvxTrajetsEmpruntes(TrajetsEmpruntes);
+            nvxTrajetsEmpruntes.Ajouter(trajet->Copie());
+            // On crée une copie de la Collection puis on ajoute le trajet courant
+            
+            int compArrivee = strcmp(arrivee, trajet->GetArrivee());
+            
+            if (compArrivee == 0)
+            {
+                // si on est arrive on ajoute les trajets a la collection result
+                result.Ajouter(nvxTrajetsEmpruntes);
+            }
+            else
+            {
+                // sinon on appelle a nouveau la methode
+                Recursion(trajet->GetArrivee(), arrivee,
+                          nvxTrajetsEmpruntes,result);
+            }
+        }
+    }
+}
+\end{verbatim}
+
+La solution au problème exposée ci-dessus réside dans l'ajout d'une variable nvxTrajetsEmpruntes locale au bloc \verb$if(compDepart == 0 && !dejaEmprunte)$ ainsi on a bien une Collection différente pour chacun des Trajet.
+
+\section{Piste d'amélioration}
+\subsection{Optimisation}
+Actuellement le programme réalise beaucoup de copie, d'allocation et de suppression notamment à cause de nombreux passage de Collection par valeur. Un piste d'amélioration serait de réduire ces copies et de remplacer des passages par valeurs par des passages par référence ou pointeur. Cela permettrait de rendre le programme plus rapide et moins gourmand en mémoire par moment.
+
+\subsection{Stabilité}
+Le programme est très peu robuste par rapport à ce que donne l'utilisateur en entrée : s'il ne respecte un format d'entrée spécifique le programme ne fonctionne plus. Avec les ajouts du cours POO2 sur les flux nous pourrions régler ce problème et rendre ainsi le programme plus stable.
+
+\subsection{Ergonomie}
+L'affichage en console n'est pas toujours très ergonomique et pas très esthétique. Ce point pourrait également être amélioré notamment grâce aux ajouts du cours POO2 sur les flux.
+
+\newpage
+\section{Code source}
+
+\subsection{Module Trajet}
+\subsubsection{Trajet.h}
+\input{Trajet.h}
+
+\newpage
+\subsection{Trajet.cpp}
+\input{Trajet.cpp.tex}
+
+\newpage
+\subsection{Module TrajetSimple}
+\subsubsection{TrajetSimple.h}
+\input{TrajetSimple.h.tex}
+
+\newpage
+\subsubsection{TrajetSimple.cpp}
+\input{TrajetSimple.cpp.tex}
+
+\newpage
+\subsection{Module TrajetCompose}
+\subsubsection{TrajetCompose.h}
+\input{TrajetCompose.h.tex}
+
+\newpage
+\subsubsection{TrajetCompose.cpp}
+\input{TrajetCompose.cpp}
+
+\newpage
+\subsection{Module Catalogue}
+\subsubsection{Catalogue.h}
+\input{Catalogue.h}
+
+\newpage
+\subsection{Catalogue.cpp}
+\input{Catalogue.cpp}
+
+\newpage
+\subsection{Module Colllection}
+\subsubsection{Collection.h}
+\input{Collection.h}
+
+\newpage
+\subsection{Collection.cpp}
+\input{Collection.cpp}
+
+\newpage
+\subsection{Fichier main.cpp}
+\input{main.cpp}
+
+\newpage
+\subsection{Fichier makefile}
+\input{makefile}
+\end{document}\grid

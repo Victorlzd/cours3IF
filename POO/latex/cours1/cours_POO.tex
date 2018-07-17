@@ -1,0 +1,224 @@
+\documentclass[10pt,a4paper,twoside]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[francais]{babel}
+\usepackage[T1]{fontenc}
+\author{Victor Lezaud}
+\title{POO et Maranzana - 3IF}
+\begin{document}
+
+\maketitle
+\renewcommand{\contentsname}{Sommaire}
+\tableofcontents
+
+\newpage
+\section{Programmation Orienté Objet}
+\subsection{Classes et Objets}
+\subsubsection{Qu'est-ce qu'un objet?}
+En programmation on peut considérer un objet comme une forme de boîte noire avec des boutons sur l'extérieur. On ne sait rien sur ce que l'y a à l'intérieur mais on peut l'utiliser grâce aux commandes qui sont à l'extérieur. Un objet possède des données, nommées attributs qui définissent ce que c'est (couleur d'un véhicule) et des méthodes qui définissent ses comportements (comment ce véhicule se déplace).
+
+\subsubsection{Qu'est-ce qu'une classe?}
+La classe est le plan qui permet de construire la boite noire qu'est l'objet, elle définit sa composition, son fonctionnement et son interface extérieure. On crée donc un objet à partir d'une classe, on dit aussi qu'un objet est une instance d'une classe. C'est la classe qui définit les attributs et méthodes de l'objet. En programmation une classe est un type.
+
+\subsection{Encapsulation des données}
+\subsubsection{Qu'est-ce?}
+Le principe d'encapsulation des données oblige le programmeur à limiter l'accès aux données présentes dans les objets. Il faut donc essayer au maximum que les données d'un objet ne puissent être modifiés que par l'objet lui-même. C'est de la que vient l'aspect boite noire de la description ci-dessus. Le but de l'informatique étant le traitement automatisé de données il est évident que l'on va vouloir modifier les données d'un objet. Mais cela ne doit se faire qu'au travers l'appel de méthodes qui sont don les commandes extérieures dans notre image. 
+
+\subsubsection{Pourquoi?}
+Le principe d'encapsulation permet de sécuriser les données et donc le fonctionnement d'un objet. En effet cela permet au programmeur de maîtriser où sont modifiées les données et comment elles le sont. Cela permet ensuite à un programmeur d'assurer le bon fonctionnement de sa classe et donc de la partager avec d'autres en ne leur donnant que la description des méthodes, de ce qu'elles font uniquement.
+
+\subsection{Héritage}
+\subsubsection{Principe}
+En POO, les classes permettent d'implémenter dans le code des concepts tels qu'un ensemble ou un animal. Dans une application nous allons souvent utiliser des concepts très proches les uns des autres, par exemple dans un jeu vidéo le personnage du joueur est très proche de ceux contrôlés par l'IA. Ils vont donc partager une bonne partis de leur données et de leurs comportements, vu qu'ils sont tous deux une sorte de personnage.Nous allons donc devoir réécrire le même code à plein d'endroits différents et non seulement ce sera une perte de temps mais en plus la modification sera extrêmement pénible. La solution est de définir une classe mère personnage qui contiendra le comportement et les données communs aux deux classes filles. 
+
+\subsubsection{Concrètement}
+Lorsque l'on codera on créera une relation d'héritage chaque fois qu'on pourra dire que X est une sorte de Y. Y sera la classe dite mère et X la classe dite fille. X héritera donc de tout ce qui caractérise Y. L'héritage impose une règle majeure au programmeur : tout ce qui est fait avec Y doit pouvoir être fait avec X. Cela paraît simple mais peut vite devenir très compliqué!
+
+\subsubsection{Qui peut contenir qui}
+\paragraph{La règle:} Dans une relation d'héritage : X est une sorte de Y. On peut stocker un objet X dans une variable de type Y, mais on ne peut stocker un objet Y dans une variable X.
+
+\paragraph{Pourquoi:} Comme on l'a dit dans l'héritage X possède toutes les caractéristiques de Y et tout ce qui est fait avec Y peut-être fait avec X. Stocker un objet X dans une variable Y ne pose donc aucun problème. Par contre X peut avoir des méthodes qu'Y n'a pas, on ne peut donc pas stocker d'objet Y dans une variable X car l'appel de certaines méthodes de X ne pourrait être supportés par l'objet Y.
+
+\subsection{Polymorphisme}
+\subsubsection{Principe}
+Grâce au polymorphisme, des éléments d'un type général identique peuvent se comporter différemment en fonction de leur implémentation. Autrement dit, une même opération peut se comporter différemment pour différentes classes issues d'une même arborescence d'héritage
+
+\subsubsection{En plus simple}
+Encore une fois on reprends l'exemple X est une sorte de Y. Imaginons que l'on appelle une méthode Afficher de Y à partir d'une variable de ce type. Si la variable contient un objet issu de Y, aucun problème. Si la vairable contient un objet issu de X: 
+\begin{itemize}
+\item Sans polymorphisme: l'objet s'affiche comme un objet issu de Y et on perde de l'information.
+\item Avec polymorphisme: l'objet se comporte bien comme un objet issu de X et on ne perd aucune information.
+\end{itemize}
+
+\subsubsection{Utilité}
+Le polymorphisme est l'un des outils les plus utilisés en POO. Imaginons que nous voulion réaliser un moteur 3D. Il faudra effectuer un rendu de l'ensemble des objets présent dans la scène mais chaque objet va avoir son propre comportement et donc sa propre méthode de rendu. Il est impensable d'avoir une variable pour chaque objet présent sur la scène, ou même d'avoir une collection pour chaque type d'objet présent. On va donc se servir de l'héritage et du polymorphisme en définissant un type Objet3D dont tous les autres vont hérités et on va appelé la méthode rendu pour chaque élément de la collection d'Objet3D. Le bon fonctionnement est assuré par le polymorphisme.
+
+\subsection{Statique / Dynamique}
+\subsubsection{Allocation dynamique}
+Une allocation est dynamique lorsque l'on ne peut pas déterminer la taille de l'espace qui doit être alloué avant l'exécution du programme. Dans ce cas le compilateur ne peut pas réaliser d'allocation statique. Cela arrive pour des tableaux dont la taille est définie par une variable ou la construction d'objets.\\
+Dans la cas d'une allocation dynamique le compilateur ne peut plus gérer la libération de l'espace mémoire de façon statique, il revient donc au programmeur d'expliciter quand il faut libérer la mémoire.\\
+On utilise l'opérateur \verb=new= pour l'allocation dynamique et l'opérateur \verb=delete= pour libérer la mémoire.
+
+\subsubsection{Liaison dynamique}
+Quand on ne peut définir avant l'exécution quelle est la méthode qui sera appelé (à cause du polymorphisme) le compilateur établit un lien non plus statique mais dynamique.\\
+En C++ les liens dynamiques ne peuvent exister que dans le cadre de méthodes déclarées \verb=virtual=.
+
+\section{Vocabulaire}
+Quelques précisions sur certains détails de vocabulaire chers à Maranzana
+\subsection{Fonctions}
+\subsubsection{Fonction et Procédure}
+Une fonction telle que celle du C est dite "fonction ordinaire exportée" ou "fonction ordinaire non exportée" si elle est \verb=static=. \\
+Une fonction déclarée dans une classe est nommée "méthode" ou "méthode de classe si elle est \verb=static=. Toute fonction de type \verb=void= et nommée "procédure".
+
+\subsubsection{Paramètre formels et effectifs}
+\paragraph{Paramètre formel:} est défini à la déclaration de la fonction. Le paramètre formel n'est lié qu'à la fonction et aucunement à son utilisation.
+
+\paragraph{Paramètre effectif:} est la valeur donnée lors de l'appel de la fonction. Chaque paramètre effectif correspond à un paramètre formel de la fonction appelée.
+
+\subsection{Pointeurs}
+Soit ptr un pointeur et tab un tableau :
+\begin{itemize}
+\item *ptr est "L’accès à la valeur pointée par ptr"
+\item tab[i] est "L'accès à la i\up{ème} valeur après la valeur pointée par tab" 
+\end{itemize}
+
+\section{Mémoire}
+\subsection{La pile}
+Les cases mémoires de la pile correspondent aux cases alloués de façon statique. C'est le cas le plus général. Toutes les variables qui sont déclarés ont une partie de la mémoire qui leur est alloué, cette partie de la mémoire est automatiquement libéré quand on sort du bloc de code où la variable est déclarée. D'où la notion de pile car la case libérée est toujours la dernière à avoir été allouée.
+
+\subsection{Le tas}
+Le tas contient les cases mémoires allouées dynamiquement soit avec l'opérateur \verb=new=. On y retrouve donc des tableaux ou des objets reliées à un pointeur. Ces cases ne sont jamais libérées par le compilateur, il revient donc au programmeur de libérer lui-même les cases allouées dans le tas avec l'opérateur \verb=delete=.\\
+Tout opérateur \verb=new= doit avoir un \verb=delete= associé et inversement, afin que toute la mémoire soit libérée.
+
+\subsection{Les constantes}
+Il existe une troisième "zone" de la mémoire, gérée intégralement par le langage, qui contient l'ensemble des constantes du programme.
+
+\section{Compilation}
+\subsection{Déroulement de la compilation}
+Le passage du C++ à l'exécutable comporte deux grandes étapes la compilation et l'édition des liens
+
+\subsubsection{Compilation}
+La compilation transforme le code C++ en binaire translatable. La compilation transforme un fichier .cpp en fichier .o. Il faut une compilation pour chaque fichier .cpp. Les fichiers .h n'ont aucune influence sur le nombre de compilation.
+
+\subsubsection{Edition des liens}
+L'édition des liens est l'étape qui crée l'exécutable à partir des binaires translatables. Elle fait le lien entre les fonctions utilisés dans d'autres fichiers que celui où elles sont définies. Il y a toujours une et une seule édition des liens!!
+
+\subsection{Make et makefile}
+Le fonctionnement de la commande make est définit par le fichier makefile, elle permet de créer une version à jour de l'exécutable.\\
+Voici un exemple de makefile usant de variables et de pattern.
+
+\begin{verbatim}
+#Modele de fichier makefile
+
+RM=rm
+ECHO=echo
+COMP=g++
+EDL=g++
+RMFLAGS=-f
+ECHOFLAGS=
+COMPFLAGS=
+EDLFLAGS=
+INT=
+REAL=$(INT:.h=.cpp)
+OBJ=$(REAL:.cpp=.o)
+EXE=a.out
+CLEAN=efface
+
+.PHONY:$(CLEAN)
+
+$(EXE): $(OBJ)
+	$(ECHO) $(ECHOFLAGS) "EDL de demo"
+	$(EDL) -o $(EXE) $(OBJ)
+
+%.o: %.cpp %.h
+	$(ECHO) $(ECHOFLAGS) "compil de <$<>"
+	$(COMPIL) $(COMPFLAGS) -c $<
+
+$(CLEAN):
+	$(RM) $(RMFLAGS) $(EXE) $(OBJ)
+\end{verbatim}
+
+\newpage
+\section{Guide de style}
+\subsection{Présentation}
+\begin{itemize}
+\item Pour des problèmes d'impression et de facilité de lecture dans une fenêtre, limiter la longueur des lignes à 80 caractères.
+\item Ne pas s'acharner à écrire du code très court (illisible), mais ne pas le décomposer sans fin non plus et ne pas introduire de code inutile.
+\item entre code élaboré et rustique, choisir la compréhensibilité et la simplicité.
+\item Placer les \# des directives du préprocesseur en première colonne afin qu'ils soient nettement visibles (pas d'indentation).
+\item Déclarer une seule variable par ligne.
+\item Ne truffez pas vos expressions de parenthèses inutiles qui finissent par polluer et le rendre illisible
+\item Dans les conditions et les boucles toujours placer les accolades même si elles ne sont pas nécessaires.
+\item N'écrire qu'une seule instruction par ligne
+\item Mettre les imbrications des instructions en valeur par indentation et aligner les ouvertures et fermetures de blocs
+\item Signaler les instructions \verb)for) qui ne comportent pas de bloc.
+\end{itemize}
+\subsection{Commentaire}
+\begin{itemize}
+\item Expliquer les passages de l'algorithme au code ne présentant pas un caractère évident. Un commentaire doit expliquer et non dupliquer.
+\item La mise en page doit faciliter la lecture du code et des commentaires associés. Les commentaires noyés dans le code sont de moindre intérêt.
+\item Lorsque le \#endif (ou le \#else) est éloigné du \#if, préciser la correspondance par un commentaire.
+\end{itemize}
+\subsection{Mise au point et test}
+\begin{itemize}
+\item Tester séparément chaque partie du programme en réalisant si besoin un programme de test dédié
+\item Essayer d’éviter les cas particuliers qui nécessitent des jeux de tests plus long
+\end{itemize}
+\subsection{Constantes et macro-définition}
+\begin{itemize}
+\item Pour définir les constantes, préférer au préprocesseur (\#define) les formes const et enum dont la portée est plus facile à contrôler.
+\item Ne pas utiliser les macros-définitions et les remplacer par des fonctions.
+\item Définir les consternantes ayant un rapport entre elles dans un enum
+\item Limiter la portée des constantes au nécessaire
+\item Définir les constantes par des littéraux
+\end{itemize}
+\subsection{Nom}
+\begin{itemize}
+\item Toutes les variables doivent porter un nom rappelant leur signification. Il n'est pas utile que le nom rappelle le type.
+\item Ne pas donner à un objet le même nom qu'un autre objet du même espace de nommage.
+\item Ne pas commencer de nom par un blanc souligné ("\_")
+\item Dans les noms composés de plusieurs mots, mettre une majuscule en tête de chaque mot.
+\item Ecrire les noms de constantes et les valeurs de type énumérés en majuscules
+\item Commencer les noms des objets publics par une majuscule et les autres par une minuscule
+\item Réserver les variables d'une seule lettre pour de simples indices de boucles ou des variables temporaires.
+\end{itemize}
+\subsection{Expression}
+\begin{itemize}
+\item Proscrire les expression trop complexes.
+\item Ne pas écrire d'expressions dont le résultat dépend de l'ordre dans lequel elle sera évaluée (\verb$rang[i++]=i;$)
+\item Exploiter l'ordre d'évaluation des expressions pour éviter les évaluations inutiles ou interdites
+\item Calculer la taille des zones allouées avec sizeof
+\end{itemize}
+\subsection{Formes algorithmiques}
+\begin{itemize}
+\item Pour une boucle infinie, ne pas écrire \verb=while(true)= mais plutôt \verb=for(;;;)=
+\item Placer un \verb=break= à la fin de chaque \verb=case=. Commenter une absence volontaire
+\item Dans le cas d'une sélection portant sur une variable de type énuméré, traiter explicitement tous les cas.
+\end{itemize}
+\subsection{Classe}
+\begin{itemize}
+\item Distinguer dans chaque classe la partie interface (.h) qui est exportée de la partie réalisation (.cpp) qui est privée
+\item Construire de petites classes bien ciblées et à la sémantique cohérente plutôt qu'une grande classe qui fait tout.
+\item Chaque constructeur doit initialiser tous les attributs de l'objet.
+\item Le constructeur doit allouer lui-même tous les attributs de l'objet.
+\item Une classe dont un attribut est alloué dynamiquement dans le constructeur doit avoir un constructeur de copie et doit définir l'opérateur d'affectation.
+\item Le destructeur doit libérer toutes les zones allouées dans le constructeur.
+\item La destruction de tous les objets créés est impérative pour que la place mémoire soit récupérée. Pour s'en assurer, on pourra compter les créations et les destructions de toutes les instances de la classe et ses descendantes.
+\item Ne pas déclarer d'attribut public.
+\item Ne pas initialiser d'attribut par l'intermédiaire d'un autre attribut
+\item Ne pas fournir systématiquement les mutateurs (set()), cela viole le principe d'encapsulation
+\item Définir un constructeur de copie erroné lorsque son utilisation est illicite (déclaration sans définition). De même pour l'opérateur d'affectation
+\item Pour l’opérateur d'affectation attention aux écriture \verb$x=x;$.
+\item L'en-tête de chaque méthode publique contient une description de ce que fait la méthode. Ne pas dire comment elle le fait
+\end{itemize}
+\subsection{Héritage}
+\begin{itemize}
+\item Il faut toujours déclarer un destructeur \verb=virtual=.
+\item Pour avoir une classe abstraite sans méthode virtuelle pure il faut déclarer les constructeurs en \verb=protected=.
+\end{itemize}
+\subsection{Tableaux}
+\begin{itemize}
+\item Pour comparer deux chaines il faut comparer les contenus et non les adresses.
+\item Utiliser \verb=delete []= pour les tableaux
+\end{itemize}
+
+\end{document}

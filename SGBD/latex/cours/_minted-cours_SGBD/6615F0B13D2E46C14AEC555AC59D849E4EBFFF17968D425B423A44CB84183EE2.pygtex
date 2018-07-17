@@ -1,0 +1,28 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{CREATE} \PYG{k}{OR} \PYG{k}{REPLACE} \PYG{n}{PACKAGE} \PYG{o}{\PYGZlt{}}\PYG{n}{NomPck}\PYG{o}{\PYGZgt{}}
+\PYG{k}{IS}
+    \PYG{o}{\PYGZlt{}}\PYG{n}{NomVar}\PYG{o}{\PYGZgt{}} \PYG{o}{\PYGZlt{}}\PYG{k}{Type}\PYG{o}{\PYGZgt{}}\PYG{p}{;}
+    \PYG{k}{FUNCTION} \PYG{o}{\PYGZlt{}}\PYG{n}{NomFct}\PYG{o}{\PYGZgt{}}\PYG{p}{[(}\PYG{o}{\PYGZlt{}}\PYG{n}{nomParam}\PYG{o}{\PYGZgt{}} \PYG{err}{\PYGZob{}}\PYG{k}{IN}\PYG{o}{|}\PYG{k}{OUT}\PYG{o}{|}\PYG{k}{IN} \PYG{k}{OUT}\PYG{err}{\PYGZcb{}}
+                 \PYG{o}{\PYGZlt{}}\PYG{k}{Type}\PYG{o}{\PYGZgt{}} \PYG{p}{[}\PYG{n}{NOCOPY}\PYG{p}{])]} \PYG{k}{RETURN} \PYG{o}{\PYGZlt{}}\PYG{k}{Type}\PYG{o}{\PYGZgt{}}\PYG{p}{;}
+    \PYG{k}{PROCEDURE} \PYG{o}{\PYGZlt{}}\PYG{n}{NomProc}\PYG{o}{\PYGZgt{}} \PYG{p}{[(}\PYG{o}{\PYGZlt{}}\PYG{n}{nomParam}\PYG{o}{\PYGZgt{}} \PYG{err}{\PYGZob{}}\PYG{k}{IN}\PYG{o}{|}\PYG{k}{OUT}\PYG{o}{|}\PYG{k}{IN} \PYG{k}{OUT}\PYG{err}{\PYGZcb{}}
+                 \PYG{o}{\PYGZlt{}}\PYG{k}{Type}\PYG{o}{\PYGZgt{}} \PYG{p}{[}\PYG{n}{NOCOPY}\PYG{p}{])]}
+\PYG{k}{END} \PYG{o}{\PYGZlt{}}\PYG{n}{NomPck}\PYG{o}{\PYGZgt{}}
+
+
+\PYG{k}{CREATE} \PYG{k}{OR} \PYG{k}{REPLACE} \PYG{n}{PACKAGE} \PYG{n}{BODY} \PYG{o}{\PYGZlt{}}\PYG{n}{NomPck}\PYG{o}{\PYGZgt{}}
+\PYG{k}{IS}
+    \PYG{o}{\PYGZlt{}}\PYG{n}{NomVar}\PYG{o}{\PYGZgt{}} \PYG{o}{\PYGZlt{}}\PYG{k}{Type}\PYG{o}{\PYGZgt{}}\PYG{p}{;}
+
+    \PYG{k}{FUNCTION} \PYG{o}{\PYGZlt{}}\PYG{n}{NomFct}\PYG{o}{\PYGZgt{}}\PYG{p}{[(}\PYG{o}{\PYGZlt{}}\PYG{n}{nomParam}\PYG{o}{\PYGZgt{}} \PYG{err}{\PYGZob{}}\PYG{k}{IN}\PYG{o}{|}\PYG{k}{OUT}\PYG{o}{|}\PYG{k}{IN} \PYG{k}{OUT}\PYG{err}{\PYGZcb{}}
+                 \PYG{o}{\PYGZlt{}}\PYG{k}{Type}\PYG{o}{\PYGZgt{}} \PYG{p}{[}\PYG{n}{NOCOPY}\PYG{p}{])]} \PYG{k}{RETURN} \PYG{o}{\PYGZlt{}}\PYG{k}{Type}\PYG{o}{\PYGZgt{}}
+    \PYG{k}{IS}
+         \PYG{p}{...}
+    \PYG{k}{END} \PYG{o}{\PYGZlt{}}\PYG{n}{NomFct}\PYG{o}{\PYGZgt{}}
+
+    \PYG{k}{PROCEDURE} \PYG{o}{\PYGZlt{}}\PYG{n}{NomProc}\PYG{o}{\PYGZgt{}} \PYG{p}{[(}\PYG{o}{\PYGZlt{}}\PYG{n}{nomParam}\PYG{o}{\PYGZgt{}} \PYG{err}{\PYGZob{}}\PYG{k}{IN}\PYG{o}{|}\PYG{k}{OUT}\PYG{o}{|}\PYG{k}{IN} \PYG{k}{OUT}\PYG{err}{\PYGZcb{}}
+                 \PYG{o}{\PYGZlt{}}\PYG{k}{Type}\PYG{o}{\PYGZgt{}} \PYG{p}{[}\PYG{n}{NOCOPY}\PYG{p}{])]}
+    \PYG{k}{IS}
+         \PYG{p}{...}
+    \PYG{k}{END} \PYG{o}{\PYGZlt{}}\PYG{n}{NomProc}\PYG{o}{\PYGZgt{}}
+\PYG{k}{END} \PYG{o}{\PYGZlt{}}\PYG{n}{NomPck}\PYG{o}{\PYGZgt{}}
+\end{Verbatim}

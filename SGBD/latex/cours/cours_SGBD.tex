@@ -1,0 +1,1360 @@
+\documentclass[10pt,a4paper,twoside]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[francais]{babel}
+\usepackage{minted}
+\usepackage[T1]{fontenc}
+\author{Victor Lezaud}
+\title{Système de Gestion de Base de Données - 3IF}
+
+\begin{document}
+\maketitle
+\renewcommand{\contentsname}{Sommaire}
+\tableofcontents
+
+\newpage
+
+\part{SQL}
+%\section*{Exemple pour le cours}
+%\begin{itemize}
+%\item Licencie(Nom, Prénom, DateNais, Genre, NumLic, Niveau)
+%\item Competition(IdC, Nom, DateDeb, DateFin, Lieu)
+%\item Inscription(IdC, NumLic, prix)
+%\item Tableau(NumT, IdC, Genre, Niveau)
+%\item Match(NumM, NumT, IdC, Lic1, Lic2, Gagnant)
+%\end{itemize}
+
+\section{Gestion des tables}
+La gestion des schémas de base de données se fait en SQL via les trois opérations ci-dessous:
+\begin{itemize}
+\item Définition du schéma d'une relation \verb= CREATE TABLE=
+\item Modification du schéma de relation \verb= ALTER TABLE=
+\item Suppression d'une relation et de son schéma \verb= DROP TABLE=
+\end{itemize}
+
+\subsection{CREATE TABLE}
+\subsubsection{Définition des attributs d'une table} 
+On liste les attributs avec la syntaxe suivante\verb= <nom> <type>,= entre les parenthèses de l'opération\verb= CREATE TABLE=.
+\begin{minted}{SQL}
+CREATE TABLE Licencie (
+    Nom varchar2(15),
+    Prenom varchar2(15),
+    DateNais date,
+    Genre char(1),
+    Numlic number(5),
+    Niveau varchar(12),
+);
+\end{minted}
+
+\subsubsection{Créer une table avec une requête} 
+Il est aussi possible de créer la table à partir d'une requête SFW avec la syntaxe suivante:
+\begin{minted}{SQL}
+CREATE TABLE <table>
+AS
+    SELECT
+    FROM
+    WHERE
+\end{minted}
+
+
+\subsubsection{Contrainte} 
+La force de SQL dans la définition de schéma de données réside dans la déclaration de différant type de contrainte qui permettent de restreindre les modifications des tables afin que celles-ci respectent toujours les dépendances fonctionnelles et une certaine logique (age > 0 par exemple). Nous allons voir comment déclarer ces contraintes.
+
+\paragraph{La clé primaire} est une des clés de la table (voir cours MdD) qui a été choisi en fonction de son usage et de sa taille. Exemple : \verb= NumLic= est un excellent choix de clé primaire.
+
+\paragraph{Déclaration d'une clé primaire :} 
+\begin{minted}{SQL}
+[Constraint <NomContrainte>] PRIMARY KEY (<attr1>[,<attr2>]*)
+
+CREATE TABLE Licencie (
+    [...]
+    Constraint ClePrimaire PRIMARY KEY (NumLic)
+);
+\end{minted}
+
+\paragraph{Déclaration d'une clé étrangère :} Pour la définition voir cours MdD. Exemple d'implémentation: l'attribut NumLic de la table Inscription est une clé étrangère référençant l'attribut NumLic de la table Licencie.
+\begin{minted}{SQL}
+[Constraint <NomContrainte>] FOREIGN KEY (<attr1>[,<attr2>]*)
+                REFERENCES <table>(<attr1>[,<attr2>]*)
+
+CREATE TABLE Inscription (
+    [...]
+    Constraint CleEtrangere FOREIGN KEY (NumLic) 
+    REFERENCES Licencie(NumLic)
+);
+\end{minted}
+
+\paragraph{Autres contraintes :}
+\begin{itemize}
+\item \verb=NOT NULL:= L'attribut doit être renseigné.
+\item \verb=UNIQUE  := L'ensemble d'attributs n'a que des valeurs uniques. 
+\item \verb=CHECK   := Contrôle des valeurs que peut prendre l’attribut. 
+\item \verb=DEFAULT := L’attribut prend la valeur par défaut s’il n’est pas initialisé explicitement (mal placé : plus une technique d’initialisation qu’une contrainte)
+\end{itemize}
+Deux méthodes d'implémentation :
+\begin{itemize}
+\item \verb=<AttributeName> <Type> [CONSTRAINT <nom>] CHECK (<condition>):=
+\item \verb=[CONSTRAINT <nom>] CHECK (<condition>)= 
+\end{itemize}
+
+
+\subsection{DROP TABLE}
+\subsubsection{Instruction DROP TABLE} 
+DROP TABLE permet de supprimer une table ainsi que son schéma. Mais qu'en est-il des contraintes?? En effet la contrainte de clé étrangère notamment crée des contraintes entre les tables.
+\begin{minted}{SQL}
+DROP TABLE <nomTable>[,<nomTable>]*;
+\end{minted}
+
+\subsubsection{ON CASCADE} 
+ON CASCADE permet de régler le comportement de la base de données lors de la suppression de table concernant cette contrainte. Pour les clés étrangères par exemples, un attribut d'une table primaire référence un attribut d'une table secondaire. La suppression de la table primaire implique donc une modification de la table secondaire.\\
+ Il existe \verb=ON DELETE CASCADE= qui supprime les tuples contenant la valeur supprimé dans la table primaire et \verb=ON DELETE SET NULL= met la valeur à \verb=NULL=.
+ 
+\begin{minted}{SQL}
+[Constraint <NomContrainte>] FOREIGN KEY (<attr1>[,<attr2>]*)
+REFERENCES <table>(<attr1>[,<attr2>]*) ON DELETE {SET NULL|CASCADE}
+
+CREATE TABLE Inscription (
+    [...]
+    Constraint CleEtrangere FOREIGN KEY (NumLic) 
+    REFERENCES Licencie(NumLic) ON DELETE {SET NULL|CASCADE}
+);
+\end{minted}
+
+\subsubsection{CASCADE CONSTRAINTS} 
+CASCADE CONSTRAINTS permet de tout simplement supprimer les contraintes qui peuvent être invalidées par la suppression de la table
+\begin{minted}{SQL}
+DROP TABLE <nomTable>[,<nomTable>]* [CASCADE CONSTRAINTS];
+\end{minted}
+
+\subsubsection{PURGE} 
+PURGE libère instantanément l’espace de stockage occupé par la table. 
+\begin{minted}{SQL}
+DROP TABLE <nomTable>[,<nomTable>]* [CASCADE CONSTRAINTS] [PURGE];
+\end{minted}
+
+\subsection{ALTER TABLE}
+\subsubsection{ADD} 
+Ajoute un nouvel attribut
+\begin{minted}{SQL}
+ALTER TABLE <nomTable> ADD <DefAttribut>
+\end{minted}
+
+\subsubsection{DROP COLUMN} 
+Supprime un attribut
+\begin{minted}{SQL}
+ALTER TABLE <nomTable> DROP COLUMN <DefAttribut>
+\end{minted}
+
+\subsubsection{RENAME COLUMN} 
+Redéfinie le nom d'une colonne
+\begin{minted}{SQL}
+ALTER TABLE <nomTable> RENAME COLUMN <nomActuel> TO <nouveauNom> 
+\end{minted}
+
+\subsubsection{ADD CONSTRAINT :} 
+Ajoute une contrainte à la table
+\begin{minted}{SQL}
+ALTER TABLE <nomTable> ADD CONSTRAINT <DefContrainte> 
+\end{minted}
+
+\subsubsection{DROP CONSTRAINT} 
+Supprime une constraint
+\begin{minted}{SQL}
+ALTER TABLE <nomTable> DROP CONSTRAINT <NomContrainte>
+\end{minted}
+
+\section{Gestion des tuples}
+
+\subsection{Insertion de tuples}
+Il existe trois manières d'insérer des tuples dans une table. On commence toujours par \verb= INSERT INTO <table>=
+
+\subsubsection{Technique de base} 
+On ajoute le tuple avec les attributs dans le même ordre que la définition de la table.
+\begin{minted}{SQL}
+INSERT INTO <table>
+VALUES (V1, V2, ..., Vn);
+\end{minted}
+
+\subsubsection{En modifiant l'ordre} 
+Comme la première sauf qu'on précise d'abord l'ordre dans lequel on donne les attributs
+\begin{minted}{SQL}
+INSERT INTO <table> (Attr3, Attr1, ... Attrn) 
+VALUES (V3, V1, ..., Vn);
+\end{minted}
+
+\subsubsection{A partir d'une requête SFW :} 
+On récupère directement les résultats d'une requête pour les insérer dans la table
+\begin{minted}{SQL}
+INSERT INTO <table> 
+     SELECT
+     FROM
+     WHERE
+\end{minted}
+
+\subsubsection{Suppression de tuples}
+On peut supprimer les tuples d'une table avec la syntaxe ci-dessous. Il faut faire attention à garder la cohérence de toute la base de données quand on supprime des données!!
+\begin{minted}{SQL}
+DELETE FROM <table>
+WHERE <condition>
+\end{minted}
+
+\subsubsection{Modification de tuples}
+De même on peut modifier la valeur de certains attributs.
+\begin{minted}{SQL}
+UPDATE <table>
+SET <attr> = {<espression>|DEFAULT} [...]*
+[WHERE <condition>]
+\end{minted}
+
+\subsection{Gestion de transaction}
+\subsubsection{Une transaction} 
+Une transaction est une étape de travail, c'est la liste des modifications qui ont été apportées depuis la fin de la précédente.
+
+\subsubsection{Fin de transaction} 
+Tant que la transaction n'est pas finie les modifications de tuples ne sont pas apportés à la Base de Données mais seulement à la session de travail. Il y a deux mot-clés pour terminer une transaction :
+\begin{itemize}
+\item \verb=COMMIT= : valide le travail qui a été effectué et apporte les modifications à la base de données
+\item \verb=ROLLBACK= : annule tout ce qui a été dans cette transaction
+\end{itemize} 
+
+\subsubsection{Sauvegardes} 
+Il est possible de créer des points de retour \verb=SAVEPOINT <id>=, afin de revenir en arrière avec un \verb=ROLLBACK TO <id>=
+
+\section{Requête d'Interrogation}
+\subsection{La base : SFW}
+\subsubsection{SELECT} 
+Comme son nom l'indique permet de sélectionner les attributs à afficher pour chaque tuple. Cela correspond à la projection en algèbre relationnelle et à la déclaration des variables libres en calcul. Le mot-clé \verb= DISTINCT= permet de supprimer les doublons dans la sélection.
+
+\subsubsection{FROM} 
+Spécifie les tables sur lesquelles porte la requête. Cela correspond à la base de données donnée en deuxième argument de la fonction $ans(Q,d)$ du calcul relationnel. \verb= CROSS JOIN=, \verb= NATURAL JOINN= et \verb=JOIN <table> USING(<attr>)= permettent de réaliser le produit cartésien ou la jointure naturelle des tables directement dans le from.
+
+\paragraph{WHERE} permet de spécifier les conditions devant être vérifiées par les tuples. Permet de réaliser les jointures et les sélections de l'algèbre. On peut placer dans le where autant de condition logiques que l'on veut séparées par les opérateurs logique AND OR et NOT. L'ordre n'a jamais d'importance dans le where.
+
+\begin{minted}{SQL}
+SELECT [DISTINCT <attr>[, <attri>]*
+FROM <table>[[,,CROSS JOIN, NATURAL JOIN] <tablei>]*
+[WHERE <condition> [<operateur> <condition>]*]
+\end{minted}
+
+\subsection{Opérations ensemblistes}
+Les opérations ensembliste \verb= UNION, MINUS, INTERSECT= sont utilisables en SQL. Par leur nature ces opérations supprime les doublons. Seule exception possible \verb= UNION ALL=.
+\begin{minted}{SQL}
+SELECT ...
+FROM ...
+WHERE ...
+UNION / MINUS / INTERSECT
+SELECT ...
+FROM ...
+WHERE ...
+\end{minted}
+
+\subsection{Requêtes imbriquées}
+\subsubsection{Principe} 
+Les requêtes renvoient des tables en tout point similaires à celles de la base de données il est donc parfaitement possible d'utiliser le résultat d'une requête comme une table de relation de la base. Une requête renvoyant une unique valeur peut-être utilisée comme une constante littérale. Un exemple d'utilisation est tout simplement les opérateur ensembliste juste au-dessus. \\
+
+\subsubsection{Mots-clé utiles} 
+On peut utiliser dans la clause WHERE un certain nombre de mots-clés particulièrement utiles avec les requêtes imbriquées. De plus avec ces mots-clés on peut faire apparaître les attributs de la requête principale dans la secondaire
+\begin{itemize}
+\item \verb=Exists= vérifie s'il existe un tuple dans une autre table vérifiant une condition
+\item \verb=IN= ou \verb=NOT IN= vérifie si un attribut a une valeur présente dans une autre table
+\item \verb=ANY= équivalent à \verb= IN=
+\item \verb=ALL= vérifie si une condition est vraie pour l'ensemble des tuples d'une table.
+\end{itemize}
+
+\subsubsection{Exemples} 
+Ces différents mots-clés sont très proche en réalité. Avec les trois premiers on va rechercher les noms et prénoms des joueurs ayant gagné au moins un match, et pour ALL de ceux qui ont gagné tous leurs matchs.
+\begin{minted}{SQL}
+SELECT Prenom, Nom
+FROM Licencie
+WHERE EXISTS (SELECT *
+              FROM Matchs
+              WHERE Licencie.NumLic = Match.Gagnant)
+              
+SELECT Prenom, Nom
+FROM Licencie
+WHERE NumLic IN (SELECT Gagnant
+                 FROM Matchs)
+              
+SELECT Prenom, Nom
+FROM Licencie
+WHERE NumLic = ANY (SELECT Gagnant
+                    FROM Matchs)
+              
+SELECT Prenom, Nom
+FROM Licencie
+WHERE NumLic = ALL (SELECT Gagnant
+                    FROM Matchs
+                    WHERE EXIST (SELECT *
+                                 FROM Matchs
+                                 WHERE Licencie.NumLic=Lic1
+                                 OR Licencie.NumLic=Lic2)
+\end{minted}
+
+\subsection{Agrégation des résultats}
+\subsubsection{Opérateur d'agrégation :} Certains opérateurs tels que SUM, AVG, MIN, MAX, COUNT, etc... renvoient des valeurs qui sont calculés à partir d'un certain nombre de tuples. De base l'opération se fait sur l'ensemble de la table mais il est possible de définir des groupes de tuples avec les commandes GROUP BY et HAVING.
+
+\subsubsection{GROUP BY ... [HAVING ...] :} \verb=GROUP BY= permet de créer des groupes de tuples ayant une même valeur pour un ensemble et \verb=HAVING <condition>= permet de sélectionner les groupes vérifiant une condition.
+
+\subsubsection{Exemple :} On recherche le nombre moyen de match gagné par les joueurs ayant gagné au moins 3 matchs.
+\begin{minted}{SQL}
+SELECT Gagnant, AVG(COUNT(*))
+FROM Match
+GROUP BY Gagnant
+HAVING COUNT(*)>3
+\end{minted}
+
+\subsection{WITH statique : création de table}
+\subsubsection{WITH} 
+Est un mot-clé de SQL qui permet de créer une table uniquement le temps d'une requête afin de simplifier  et d'alléger l'écriture des requêtes, surtout quand on plusieurs utilise des requêtes imbriqués semblables
+
+\subsubsection{Exemple} 
+Recherche des participants dont la somme des points est égal au maximum de points obtenus par au moins candidat sur la compétition 1.
+\begin{minted}{SQL}
+SELECT L.NumLic, SUM(Points)
+FROM PointMatch P, Licencie L
+WHERE P.NumLic = L.NumLic AND P.IdC = 1
+GROUP BY L.NumLic
+HAVING SUM(POINTS) = (SELECT MAX(SUM(Points))
+                     FROM PointMatch P, Licencie L
+                     WHERE P.NumLic = L.NumLic
+                          AND P.IdC = 1
+                     GROUP BY L.NumLic);
+\end{minted}
+Avec \verb=WITH= :
+\begin{minted}{SQL}
+WITH pointsParticipants(NumLic, Spts) as (
+    SELECT NumLic, SUM(Points)
+    FROM PoitnMatch P, Licencie L
+    WHERE P.NumLic = L.NumLic AND P.IdC = 1
+    GROUP BY L.NumLic
+)
+
+SELECT NumLic, Spts
+FROM pointsParticipants
+WHERE Spts = (SELECT MAX(Spts)
+              FROM pointsParticipants)
+\end{minted}
+
+\subsubsection{Efficacité :} 
+Ici la table pointsParticipants n'est calculée qu'une seule fois (lors du WITH) contre deux dans l'exemple précédent, l'utilisation du WITH améliore donc l'efficacité de la requête.
+
+\subsection{WITH récursif}
+\subsubsection{Problème} 
+On souhaite à partir d'une table ParentsEnfants(Parents, Enfants) trouver l'ensemble des descendants de Jean. Le problème est que l'on ne sait pour l'instant que faire l'union de l'ensemble des enfants avec celui des petits-enfants des arrières-petits-enfants etc... Mais Le nombre de génération pris en compte est défini lors de la requête alors si on ne connaît pas la table cela devient problématique.
+
+\subsubsection{Le WITH récursif} 
+On a vu juste au-dessus que l'on peut créer des tables lors des requêtes avec le mot-clé WITH. Il est possible de l'utiliser de manière récursive. Il faut donc faire attention aux cycles: la requête doit absolument avoir un nombre fini de réponses!!
+
+\subsubsection{Solution du problème}
+\begin{minted}{SQL}
+WITH Descendants(p, d) as (
+     SELECT Parents ad p, Enfants as d
+     FROM ParentsEnfants as PE
+     UNION ALL
+     SELECT D.p, PE.Enfants as d
+     FROM Descendants as D, ParentsEnfants as PE
+     WHERE D.d = PE.Parents
+)
+
+SELECT *
+FROM Descendants
+WHERE p='Jean'
+\end{minted}
+
+Tout d'abord la table Descendants copie la table ParentsEnfants puis on prend chaque tuple où un d dans descendants apparaît comme parent dans ParentsEnfants et on ajoute le tuple associant chaque ancêtre du parent avec l'enfant. 
+
+\subsection{Requête hiérarchique}
+\subsubsection{Autre Solution} 
+La requête hiérarchique est une autre des solutions au problème précédent. Comme son nom l'indique elle permet de parcourir la table en descendant dans un ordre précisé par un lien hiérarchique entre deux attributs tel qu'un lien de parenté. Dans notre exemple on va chercher les enfants de la génération n+1 en cherchant les tuples ou la génération n apparaît comme parent.
+
+\subsubsection{Syntaxe :} 
+\begin{minted}{SQL}
+START WITH <attr1> = cte
+CONNECT BY PRIOR <attr1>=<attr2>
+\end{minted}
+Cela réalise l'algo suivant:
+\begin{enumerate}
+\item sélectionner les tuples où attr1=cte
+\item récupérer l'ensemble des valeurs de attr2 dans les tuples de l'étape précédente
+\item sélectionner les tuples où attr1 appartient à l'ensemble des valeurs de attr2 de l'étape précédente
+\item récupérer l'ensemble des valeurs de attr2 dans les tuples de l'étape précédente, si l'ensemble est nul arrêter sinon retourner en 3
+\end{enumerate}
+Le reste de la requête s'applique à l'ensemble des tuples qui ont été sélectionnés au cours de l'algorithme.
+
+\subsection{Les vues}
+Une vue correspond à une requête nommée. On peut donc l'utiliser comme une nouvelle table. C'est la requête et non la table qui stockée, en utilisant une vue.
+
+\begin{minted}{SQL}
+{CREATE|REPLACE} VIEW <nomVue>
+AS <SFW...>
+[WITH CHECK OPTION]
+[WITH READ ONLY]
+\end{minted}
+
+\newpage
+\part{Procedural Language / SQL}
+\section{Pourquoi faire ?}
+Le PL/SQL permet de créer des procédures automatisés capables de:
+\begin{itemize}
+\item vérifier des contraintes d'intégrité entre les tables lors de la saisie
+\item modifier la base de données (passer les noms en majuscules, augmenter les prix de 10\%)
+\item réaliser une maintenance de la base de données
+\end{itemize}
+
+
+\section{Bloc}
+Le PL/SQL s'organise en bloc de la manière suivante:
+\begin{minted}{SQL}
+DECLARE
+     types
+     variables
+     constantes
+     curseurs
+     exceptions utilisateurs]
+BEGIN [<NomBloc>]
+     instructions PL/SQL
+     possibilité de blocs imbriqués
+[EXCEPTION
+     traitement des exceptions]
+END [<NomBloc>];
+\end{minted}
+
+\subsection{Declaration}
+\paragraph{Types et déclaration de variables:} On retrouve tous les types de SQL. Il existe deux type supplémentaires : les records qui sont des tuples et les curseurs qui permettent de parcourir les tuples du résultat d'une requête. \\
+Déclaration
+\begin{itemize}
+\item \verb$<nomVar> [CONSTANT] <nomType> [:= <valeur>];$
+\item \verb=<nomVar> <nomAttr>%TYPE;=
+\item Record : \verb=TYPE <nomType> IS RECORD(<nomAttr> <typeAttr>, ...);=\\
+Puis \verb=<nomVar> <nomType>=
+\item Record : \verb=<nomVar> <nomTable>%ROWTYPE;=
+\item Curseur : \verb=CURSOR <nomCurseur> IS <SFW...>=
+\end{itemize}
+
+\subsection{Affectation}
+ Il existe deux méthodes pour affecter une valeur à une variable. L'affectation classique : \verb$<nomVar> := <expression>;$ ou par requête SQL. Cette dernière permet de stocker le résultat d'une requête dans une ou plusieurs variables. Attention: la requête doit avoir un seul tuple résultat!! Voici deux exemples de la syntaxe. 
+\begin{minted}{SQL}
+SELECT Nom, Prenom, NumLic INTO Nom$, Prenom$, NumLic$
+FROM Inscrition
+WHERE NumLic = 8;
+
+SELECT * INTO RecordMembre
+FROM Inscription
+WHERE NumLic = 8;
+\end{minted}
+
+\subsection{Condition et Boucle}
+\subsubsection{Blocs IF et CASE :} Fonctionne comme le if et le switch des autres langages
+
+\begin{minted}{SQL}
+IF (<condition>)
+THEN
+    <instructions>;
+[ELSIF (<condition)
+    <instructions>;]
+[ELSE
+    <instructions>;]
+END IF;
+\end{minted}
+
+\begin{minted}{SQL}
+CASE <variable>
+WHEN <valeur> THEN <operation>;
+WHEN <valeur> THEN
+    BEGIN
+        <seqOp>;
+    END
+ELSE ...
+END CASE;
+\end{minted}
+
+\subsubsection{While et For :} Exactement comme les autres langages. Possible de parcourir une requête avec les curseurs
+\begin{minted}{SQL}
+WHILE <condition>
+LOOP
+    ...
+ENDLOOP;
+
+FOR <varDeBoucle> IN [REVERSE] <borneInf>..<borneSup>
+LOOP
+     ...
+END LOOP
+
+DECLARE
+   CURSOR <nomCurseur> IS SFW...;
+   ...
+BEGIN
+   ...
+   FOR <var> IN <nomCurseur>
+   LOOP
+       ...
+   END LOOP;
+\end{minted}
+
+\subsection{Traitement des exceptions}
+\subsubsection{Gestion d'exception}
+\begin{minted}{SQL}
+DECLARE
+    <MonException> EXCEPTION;
+    
+BEGIN
+    ...
+    RAISE <MonException>;
+    ...
+EXCEPTION
+    WHEN <MonException> THEN ...
+    ...
+    WHEN OTHERS ...
+END;
+\end{minted}
+
+Pour le cas particulier des erreur on utilise :
+\begin{minted}{SQL}
+RAISE_APPLICATION_ERROR(<code>,<Message>);
+\end{minted}
+
+\subsubsection{Erreurs standards} SQL possède un grand nombre d'erreurs standards. On peut utiliser \verb=SQLCODE= pour obtenir le code de l'erreur et \verb=SQLERRM= pour obtenir le message de l'erreur
+
+\subsubsection{Stocker le message dans une table}
+\begin{minted}{SQL}
+CREATE TABLE audit_table(code NUMBER, message VARCHAR2(64), date TIMESTAMP)
+
+DECLARE
+     ...
+BEGIN
+     ...
+EXCEPTION
+     WHEN OTHERS THEN
+          code := SQLCODE;
+          msg := SQLERRM;
+          INSERT INTO audit_table
+          VALUES(code, msg, SYSTIMESTAMP)
+END
+\end{minted}
+
+\section{Bloc nommés}
+Il existe trois types de bloc nommés :
+\begin{itemize}
+\item Procédure
+\item Fonction
+\item Package
+\end{itemize}
+
+\subsection{Procédure}
+\subsubsection{Définition} 
+Une procédure est un bloc nommé possédant un certain nombre d'argument et pouvant être appelé autre part dans le code.
+
+\subsubsection{Création/Modification :}
+\begin{minted}{SQL}
+CREATE OR REPLACE PROCEDURE <NomProc> 
+   [(<nomParam> {IN|OUT|IN OUT} <Type> [NOCOPY])]
+IS
+    [DECLARATION]
+BEGIN
+    [CORPS]
+END;
+\end{minted}
+
+\subsubsection{Utilisation}
+\verb=<NomProc>(<parametres>)=
+
+\subsubsection{Suppression}
+\verb=DROP PROCEDURE <NomProc>=
+
+\subsection{Fonction}
+\subsubsection{Une fonction} 
+Une fonction est une procédure qui renvoie une valeur à la fin de son exécution
+
+\subsubsection{Création/Modification :}
+\begin{minted}{SQL}
+CREATE OR REPLACE FUNCTION <NomFct> 
+   [(<nomParam> {IN|OUT|IN OUT} <Type> [NOCOPY])] RETURN <Type>
+IS
+    [DECLARATION]
+BEGIN
+    [CORPS]
+    RETURN(<valeur>)
+END;
+\end{minted}
+
+\subsubsection{Utilisation}
+\verb$[<variable> :=] <NomFct>(<parametres>)$
+
+\subsubsection{Suppression}
+\verb=DROP FUNCTION <NomProc>=
+
+
+\subsection{Package}
+\subsubsection{Définition} 
+Un package est un regroupement de fonctions et de procédures. Cela permet de regrouper les procédures et fonctions qui sont fonctionnent ensemble. Un package est composé d'une interface (équivalent à un .h en C/C++) et d'un corps (équivalent au .c/.cpp).
+
+\subsubsection{Syntaxe :}
+\begin{minted}{SQL}
+CREATE OR REPLACE PACKAGE <NomPck>
+IS
+    <NomVar> <Type>;
+    FUNCTION <NomFct>[(<nomParam> {IN|OUT|IN OUT}
+                 <Type> [NOCOPY])] RETURN <Type>;
+    PROCEDURE <NomProc> [(<nomParam> {IN|OUT|IN OUT} 
+                 <Type> [NOCOPY])]
+END <NomPck>
+
+
+CREATE OR REPLACE PACKAGE BODY <NomPck>
+IS
+    <NomVar> <Type>;
+    
+    FUNCTION <NomFct>[(<nomParam> {IN|OUT|IN OUT}
+                 <Type> [NOCOPY])] RETURN <Type> 
+    IS
+         ...
+    END <NomFct>
+    
+    PROCEDURE <NomProc> [(<nomParam> {IN|OUT|IN OUT} 
+                 <Type> [NOCOPY])]
+    IS
+         ...
+    END <NomProc>
+END <NomPck>
+\end{minted}
+
+\section{Triggers}
+\subsection{Principe}
+\subsubsection{Définition} 
+Un trigger est un morceau de code PL/SQL qui est appelé lorsque les tuples d'une table sont modifiés.  Cela permet par exemple de vérifier des contraintes d'intégrité entre plusieurs tables distinctes.
+
+\subsubsection{Caractéristiques d'un trigger}
+\begin{itemize}
+\item Possède un nom et du code PL/SQL
+\item Déclenché par un événement (INSERT, UPDATE, DELETE)
+\item Réalisé avant ou après cet événement
+\item Surveille une seule table
+\item N'est pas modifiable, mais supprimable ou désactivable
+\end{itemize}
+
+\subsubsection{Possibilité d'un trigger} 
+Dans un trigger l'accès à la table surveillée est interdit, on ne peut donc pas effectuer de requête dessus. On ne peut ni utiliser COMMIT et ROLLBACK, ni créer de table dans un trigger. Par contre on a accès aux anciennes et aux nouvelles valeurs des tuples concernés par l'événement grâce à \verb=:OLD.<nomAttribut>= et \verb=:NEW.<nomAttribut>=. On peut connaître la nature de l'événement grâce aux constantes booléennes \verb=INSERTING=,\verb=UPDATING= et \verb=DELETING=
+
+\subsection{Syntaxe}
+\subsubsection{Création}
+\begin{minted}{SQL}
+CREATE OR REPLACE TRIGGER <nomTrigger>
+{BEFORE|AFTER} <evt> [OR <evt>]* ON <NomTable>
+[FOR EACH ROW [WHEN <condition>]]
+    <Bloc PL/SQL>
+\end{minted}
+
+\subsubsection{Activer / Désactiver}
+\begin{minted}{SQL}
+ALTER TRIGGER <NomDeclencheur> {ENABLE|DISABLE};
+
+ALTER TABLE <NomTable> DISABLE ALL TRIGGERS;
+\end{minted}
+
+\subsubsection{Supprimer}
+\begin{minted}{SQL}
+DROP TRIGGER <NomDeclencheur>;
+\end{minted}
+
+\newpage
+\part{Complexité}
+\section{Index}
+\subsection{Principe}
+En base de données, un index est une structure de données permettant d'accéder rapidement à un tuple si l'on connaît certains de ses attributs. L'index est stocké et entretenu par le SGBD. Il fait partie du schéma physique de la base de données. Il simplifie et accélère sélection, jointures, l'agrégation.
+
+\subsection{Différents types d'index}
+\subsubsection{B-Arbres}
+\paragraph{Avantages :}
+\begin{itemize}
+\item Permet d'accélérer les traitements
+\item Peut être utilisé pour des requêtes portant sur des égalités et des inégalités
+\end{itemize}
+\paragraph{Inconvénients :}
+\begin{itemize}
+\item les index peuvent devenir plus volumineux que la table initiale.
+\item Oracle: Attention au null : ne permet pas de faire des recherches sur l’absence ou la présence de null
+\end{itemize}
+
+\subsubsection{BitMap}
+\paragraph{Principe :} pour chaque valeur présente dans la table, indiquer la liste des tuples présentant cette valeur. Encoder les valeurs pour aller plus vite. Encodage le moins volumineux possible.\\
+\paragraph{Avantages :}
+\begin{itemize}
+\item Indexage le moins volumineux possible
+\item Permet de faire des calculs (count(),sum(),avg()) sur les attributs indexés sans prendre en compte les autres valeurs des tuples
+\item Modification plus simple
+\end{itemize}
+\paragraph{Inconvénients :}
+\begin{itemize}
+\item Perd son intérêt avec le nombre de valeurs possibles
+\item Ne fonctionne que sur les égalités
+\end{itemize}
+
+\subsubsection{Hash}
+\paragraph{Avantages :}
+\begin{itemize}
+\item Très performant si la fonction de hachage est bien construite
+\end{itemize}
+\paragraph{Inconvénients :}
+\begin{itemize}
+\item Ne fonctionne que sur les égalités
+\item Nécessite une réorganisation périodique ou hachage dynamique, sinon risque de perte de performances ou de gâchis d'espace
+\end{itemize}
+
+\subsection{Choix de l'indice}
+Il faut trouver un juste équilibre entre performances des requêtes et performances de mise à jour et espace de stockage. Certains SGBD ne permettent l'utilisation pas tous les index. Le B-Arbre est le plus courant.
+
+
+\subsection{Implémentation}
+\subsubsection{Implicite}
+Un index est créé automatiquement sur la clé primaire d'une table.
+
+\subsubsection{Explicite}
+Il est d'usage d'en créer sur chaque clef étrangère pour optimiser les jointures
+
+\begin{minted}{SQL}
+CREATE [BITMAP] INDEX <nomIndex> ON 
+<nomTable> (<attribut>[,<attribut]*)
+\end{minted}
+
+\section{Optimisation de requête}
+%L'optimisation d'une requête passe par 5 étapes:
+%\begin{itemize}
+%\item Analyse lexicale et syntaxique
+%\item Simplifier
+%\item Normaliser
+%\item Restructurer
+%\item Plan d'exécution
+%\end{itemize}
+
+\subsection{Analyse lexicale et syntaxique}
+\begin{itemize}
+\item Vérification de la syntaxe SQL
+\item Vérification des types :
+\begin{itemize}
+\item Présence des attributs et relations dans le schéma
+\item Compatibilité dans les types
+\end{itemize}
+\end{itemize}
+
+\subsection{Simplification}
+On simplifie les conditions de sélection dans le WHERE (cf cours Archi circuit numérique pour l'algèbre booléenne) et on supprime les opérateurs sans effet (DISTINCT sur des attributs UNIQUE).
+
+\subsection{Normalisation}
+On passe les conditions de sélection en forme normale conjonctive soit une conjonction (OU) de disjonction (ET). 
+
+\subsection{Restructurer}
+Dans cette étape on traduit la requête SQL en algèbre relationnelle (cf cous Modélisation de données. Il y a beaucoup d'arbre de requête équivalents, comment choisir le bon arbre? 
+
+\subsection{Plan d'exécution}
+\paragraph{Problème :} Non seulement il y a des arbres équivalents mais pour un arbre il y a plusieurs algorithmes possibles car chaque opération algébrique peut être implémenter de différentes manières. Il s'agit donc de trouver le plus rapide
+
+\paragraph{Le coût d'un noeud} dépend du nombre de données qu'il a à traiter et de l'algorithme utilisé. Il s'agit donc de faire en premier les opérations les plus sélectives. Les sélections et les jointures sont plus efficaces avec des index il peut donc être intéressant de les déplacer en bas de l'arbre.
+
+\paragraph{L'impact des données} ne doit pas être négligé en effet certains algorithme ont une complexité qui varie en fonction des données qui sont les tables (l'efficacité de l'index Bitmap ou Hash par exemple).
+
+\paragraph{Conclusion} Le choix du plan d'exécution est complexe et dépend des données présentes dans la table. Les SGBD stockent donc des statistiquement sur les données des tables pour prendre les meilleurs décisions. Le choix doit être pris rapidement car il serait ridicule que l'optimisation soit plus longue que l'exécution de la requête.
+
+\newpage
+\part{Administration}
+\section{Data Base Administrator}
+Le Data Base Administrator (DBA) doit :
+\begin{itemize}
+\item Installer le SGBD et le paramétrer en lien avec les applications clientes. En mode centralisé, cluster ou largement distribué.
+\item Créer la base de données en faisant les bons choix (taille d'un bloc, emplacements des fichiers sur disque, nombre de fichiers de données, taille des fichiers, multiplexage, espace logique de stockage (tablespace), etc...)
+\item Gérer les comptes utilisateurs
+\item Assurer la cohérence et la sécurité des données
+\item Amélioration des performances lors de l'exploitation
+\item Gestion des mises à jour et des évolutions du SGBD en exploitation
+\end{itemize}
+
+\section{Stockage des informations}
+\subsection{Stockage des données sous Oracle}
+Oracle fonctionne avec deux niveaux de stockage de données :
+\begin{itemize}
+\item niveau physique : les fichiers
+\item niveau logique : permet aux utilisateurs de s'abstraire des fichiers en utilisant les tablespaces.
+\end{itemize}
+La base de données est constituée de fichiers de types différents
+
+\subsection{Niveau Physique : les fichiers}
+\subsubsection{Les fichiers sous Oracle}
+Les fichiers d'Oracle se divisent en deux catégories :
+\begin{itemize}
+\item Les fichiers de configuration de la base
+\item Les fichiers stockant les informations de la base 
+\end{itemize}
+
+\paragraph{Fichiers de configuration :}
+\begin{itemize}
+\item Fichier d'initialisation (paramètres de démarrage de la base)
+\item Fichier de contrôle (nom de la base, date de création, structure physique de la base, emplacement des fichiers, etc...)
+\item Fichier des mots de passe
+\item ...
+\end{itemize}
+
+\paragraph{Fichiers d'information :}
+\begin{itemize}
+\item Fichier de données (table, vues, procédures stockées, ...)
+\item Fichier de reprise redo-log (historique des modifications effectuées sur la base)
+\item Fichier de contrôle (schéma physique de la base de données : tablespace, fichiers, ...)
+\end{itemize}
+
+\subsubsection{Fichier de contrôle}
+Un fichier de contrôle est un fichier binaire. Il décrit le schéma physique de la BD : son nom, les noms et situations des autres fichiers, les informations sur les tablespaces,... Il est mis à jour automatiquement lors de la modification du schéma physique de la BD.
+
+\subsubsection{Fichiers de données}
+Les fichiers de données servent à stocker les données de la BD (tables, vues, procédures, etc...). Ils sont dimensionnés à la création mais leur taille peut évoluer dynamiquement. Il peut y avoir un ou plusieurs fichiers de données.
+
+\subsection{Niveau Logique : les tablespaces}
+\subsubsection{Définition d'un tablespace}
+Pour l'utilisateur un tablespace est assimilable à un espace de stockage, cela lui permet de s'abstraire des fichiers physiques. Oracle fait le lien entre les fichiers physique et les objets du schéma (tables, vues, index, ...) via les tablespaces.
+
+\subsubsection{Utilisation des tablespaces}
+Une BD possède au moins un tablespace, mais il est possible d'en rajouter avec :
+\begin{minted}{SQL}
+CREATE TABLESPACE users2
+DATAFILE 'data3.dat'
+\end{minted}
+Un tablespace n'appartient qu'à une seule BD.
+
+\subsubsection{Tablespaces spécifiques}
+\begin{itemize}
+\item SYSTEM : informations système, table du dictionnaire de données, programmes PL/SQL... C'est le seul tablespace obligatoire
+\item USERS : Pour les objets des utilisateurs
+\item ...
+\end{itemize}
+
+
+\section{Gestion des utilisateurs}
+\subsection{Les utilisateurs}
+\subsubsection{SYS}
+L'utilisateur SYS est toujours présent. Son mot de passe est définit à la création de la table. Il possède tous les droits. Il est propriétaire du dictionnaire, relations, vues dans le schéma SYS.
+
+\subsubsection{SYSTEM}
+De même SYSTEM est toujours préset est son mot de passe est définit à la création de la table. Il possède beaucoup de droits mais moins que SYS.
+
+\subsubsection{Utilisateurs standards}
+On peut définir autant d'utilisateurs que l'on veut à l'aide des instructions :
+\begin{minted}{SQL}
+CREATE USER ...;
+DROP USER ...;
+\end{minted}
+
+\subsection{Les privilèges}
+Lorsqu'un utilisateur est créé il n'a aucun privilège, il faut lui en donner avec le mot-clef \verb=GRANT=.
+
+\subsubsection{Privilèges système}
+Parmi les privilèges système on trouve le droit de :
+\begin{itemize}
+\item modifier la BD
+\item modifier les paramètres systèmes
+\item créer des tables, des index, des vues, des triggers, ...
+\item donner des privilèges
+\item ...
+\end{itemize}
+
+\subsubsection{Privilèges objets}
+Parmi les privilèges objet on trouve le droit de :
+\begin{itemize}
+\item modifier une table
+\item utiliser les mots-clefs \verb=SELECT=, \verb=INSERT=, \verb=DELETE=, \verb=UPDATE=, \verb=EXECUTE=, etc...
+\item ...
+\end{itemize}
+
+\subsection{Les rôles}
+\subsubsection{Définition et syntaxe}
+Un rôle est un ensemble de droits, on peut ensuite donner un rôle à un utilisateur pour lui donner l'ensemble de ces droits avec les syntaxes suivantes :
+\begin{itemize}
+\item Créer un rôle (\verb=CREATE ROLE...=)
+\item Donner/retirer des privilège à un rôle (\verb=GRANT/REVOKE=)
+\item Donner/retirer un rôle à un utilisateur ou à un autre rôle (\verb=GRANT/REVOKE=)
+\end{itemize}
+
+\subsubsection{Conseil d'organisation}
+Pour gérer les droits des utilisateurs on va créer 2 niveaux de rôles :
+\begin{itemize}
+\item Rôle d'application : Chaque tache d'application aura son rôle d'application avec les droits nécessaires
+\item Rôle d'utilisateur : Chaque type d'utilisateur aura son rôle d'utilisateur créer par combinaison des rôles d'application liés aux taches réaliser par ce type d'utilisateur
+\end{itemize}
+Enfin chaque utilisateur aura un unique rôle d'utilisateur. Aucun droit ne sera donné individuellement.
+
+\subsection{Les profils}
+Un profil est un ensemble nommé de limite de ressources comme un nombre max de connexion simultanées ou une limite de validité du mot de passe etc... On gère un profil avec les syntaxes :
+\begin{itemize}
+\item créer un profil \verb=CREATE PROFILE p LIMIT ...=
+\item associer un profil à un utilisateur :
+\begin{itemize}
+\item à la création \verb=CREATE USER ... PROFILE ...=
+\item après \verb=ALTER USER ...=
+\end{itemize}
+\end{itemize}
+
+\newpage
+\part{Transaction et Isolation}
+
+\section{Définition et but d'une transaction}
+\paragraph{Définition :} Une transaction est une séquence qui fait passer une BD d'un état cohérent à un autre état cohérent.
+
+\paragraph{But : } Les transactions servent à maintenir la cohérence des informations.
+
+\paragraph{Dangers :}
+\begin{itemize}
+\item Concurrence
+\begin{itemize}
+\item Perte d'écritures
+\item Introduction d'incohérence
+\end{itemize}
+\item Panne de transaction 
+\begin{itemize}
+\item Erreur en cours d'exécution
+\item Nécessité de défaire les mises à jour déjà effectuées
+\end{itemize}
+\item Panne système
+\begin{itemize}
+\item Perte de mémoire centrale
+\item -> Transactions en cours doivent être refaite
+\end{itemize}
+\item Panne disque
+\begin{itemize}
+\item Perte mémoire de masse
+\item ->Redémarrage à partir d'une sauvegarde
+\end{itemize}
+\end{itemize}
+
+
+\section{Structure d'une transaction}
+\subsection{Début et Fin d'une transaction Oracle}
+\paragraph{Début :} Une transaction débute par n'importe quelle opération SQL ou par la fin de la transaction précédente.
+
+\paragraph{Fin :} La transaction courante est terminé lors d'un COMMIT ou ROLLBACK, de la déconnexion de l'utilisateur, de d'une opération de définition de données ou l'échec du processus.
+
+\subsection{Opérations importantes}
+\subsubsection{Restriction de l'étude}
+On restreint l'étude des transactions aux opérations pouvant poser problèmes : LECTURE et ECRITURE, et les opérations spécifiques : DEBUT, VALIDER et ABANDONNER
+
+\subsubsection{Notations}
+\begin{flushleft}
+On note $r$ la lecture et $w$ l'écriture.\\
+On note $T_{i}$ la transaction $i$.\\
+Ainsi on note $r_{i}(d)$ la lecture d'une donnée $d$ durant la transaction $i$\\
+Et $w_{i}(d)$ l'écriture d'une donnée $d$ durant la transaction $i$
+On peut ajouter la valeur lu ou écrite $x$ avec $r_{i}(d:x)$ et $w_{i}(d:x)$
+\end{flushleft}
+
+\section{Gestionnaire de transaction}
+Le gestionnaire de transaction est une partie du SGBD qui contrôle l'exécution des transactions demandées par les différents utilisateurs et assure les propriétés ACID :
+\begin{itemize}
+\item Atomicité
+\item Cohérence
+\item Isolation
+\item Durabilité
+\end{itemize}
+
+\subsection{Propriétés ACID}
+\subsubsection{Atomicité}
+La transaction est indivisible !! L'ensemble des actions est validé ou annulé tout entier jamais en partie. En cas de validation toutes les opérations doivent être validées. En cas d'annulation toutes les opérations de la transaction sont annulées. L'annulation peut être décidée par l'utilisateur ou le gestionnaire de transaction.
+
+\subsubsection{Cohérence}
+Une transaction doit accéder à une base de données dans un état cohérent et retourner une base de données dans un état cohérent. Cette propriétés doit toujours être vérifiée que la transaction soit validée ou annulée.
+
+\subsubsection{Isolation}
+Le degré d'isolation définit comment les effets d'un transaction sont perçus par les autres et comment elle perçoit les effets des autres.\\
+Tant qu'elle n'a pas été validée les effets d'une transaction ne doivent pas être visibles par les autres et donc une transaction ne doit percevoir les effets que des transactions validées.
+
+\subsubsection{Durabilité}
+Les mises à jours réalisées par une transaction validée doivent persister.\\
+Par exemple en cas de panne, le système garantit que les effets des transactions validées seront toujours présent au redémarrage. Pour les autres il faudra les relancées.
+
+\subsubsection{But des propriétés ACID}
+\begin{itemize}
+\item Gestion des pannes :
+\begin{itemize}
+\item Atomicité (transaction indivisible)
+\item Durabilité (Produit un état persistant)
+\end{itemize}
+\item Gestion de la concurrence :
+\begin{itemize}
+\item Cohérence (Part et produit une BD dans un état cohérent)
+\item Isolation (Effet invisibles des autres avant validation)
+\end{itemize}
+\end{itemize}
+
+
+\subsection{Gestion de la concurrence}
+\subsubsection{Objectifs et Principes}
+\begin{itemize}
+\item Permettre à plusieurs utilisateurs de travailler en même temps
+\item Maintenir un bon niveau de performance (parallélisation des transactions)
+\item Maintenir la cohérence de la BD (Ordre d'exécution des opérations)
+\item simplicité pour l'utilisateur
+\end{itemize}
+
+\subsubsection{Problèmes à éviter}
+\begin{itemize}
+\item Introduction d'incohérences (non respect des contraintes du schéma)
+\item Perte d'écriture (écriture refusée car rendu impossible)
+\item Lecture sale (lecture d'une valeur définie par une transaction annulée plus tard)
+\item Lecture non répétable (lectures successives donnant des résultats différents)
+\item Lectures fantômes (insertion de nouveaux tuples par une transaction qui fausse les calculs d'une autre transaction)
+\end{itemize}
+
+\subsubsection{Eléments théoriques}
+\paragraph{Exécution sérielle}
+\subparagraph{Définition :} Une exécution de transactions est dite sérielle si et seulement si il n'y a aucun entrelacement entre les opérations des transactions
+
+\subparagraph{Théorème : } Comme les transactions maintiennent individuellement la cohérence, si la BD est initialement cohérente, le résultat d'une exécution sérielle est un état cohérent.
+
+\paragraph{Exécution / Ordonnancement}
+\subparagraph{Définition :} une exécution est un ordonnancement des opérations réalisées par un ensemble de transactions.
+
+\subparagraph{Objectifs :} définir ce qu'est une exécution correcte et avoir un système qui s'y conforme.
+
+\paragraph{Exécutions équivalentes}
+\subparagraph{Définition :} Deux exécutions sont équivalentes si et seulement si elles incluent les même transactions et ont le même résultat indépendamment de l'état initial de la BD.
+
+\subparagraph{Utilité : } Permet de trouver des exécutions équivalentes à celle souhaité : exécution sérielle.
+
+\paragraph{Opérations conflictuelles}
+\subparagraph{Définition :} Des opérations sont conflictuelles si elles accèdent aux même données et au moins l'une d'entre elles est une écriture
+
+\paragraph{Exécutions équivalentes vis-à-vis des conflits}
+\subparagraph{Théorème :} deux exécutions d'un ensemble de transactions sont équivalentes si et seulement si:
+\begin{itemize}
+\item l'ordre des opérations de chaque transaction est identique
+\item l'ordre des opérations conflictuelles validées sont identiques
+\end{itemize}
+
+\subparagraph{Théorème :} En partant d'une exécution, permuter deux opérations adjacentes, de transaction différente et non conflictuelles donne une exécution équivalente à la première.
+
+\paragraph{Exécution sériable}
+\subparagraph{Définition :} Une exécution est dite sériable s'il existe une exécution sérielle équivalente vis-à-vis des conflits.
+
+\subparagraph{Attention :} Deux exécutions sérielles du même ensemble de Transactions peut donner des résultats différents.
+
+\subsubsection{Solution par verrouillage}
+
+\paragraph{Contrôle des accès concurrents par verrouillage :} 
+\subparagraph{Principe :} Avant d'effectuer une opération (lire/écrire), une transaction doit en acquérir le contrôle : verrou. Le verrou doit être relâché quand la transaction a finit. En lecture le verrou peut-être partagé, en écriture il doit être exclusif. Lorsqu'une transaction est interdite d'accès à une donnée par un verrou , elle est mise en attente et réactivée quand le verrou est relâché.
+
+\subparagraph{Opérations importantes d'une transaction :} Il faut maintenant considérer dans les transaction les lectures et les écritures mais aussi les poses et les levées de verrous.
+
+\subparagraph{Problème :} D'une part cette solution ne résolve pas tous les problèmes de plus elle ajoute un problème d'interblocage : si deux transactions posent un verrous sur une données dont l'autre a besoin ultérieurement.
+
+\paragraph{Verrouillage en deux phases 2PL}
+\subparagraph{Transaction bien formée :} Pose un verrou partagé sur une donnée avant de la lire. Pose un verrou exclusif sur une donnée avant de l'écrire. Tous les verrous sont libérés à la fin de la transaction.
+
+\subparagraph{Deux règles :}
+\begin{itemize}
+\item Règle 1 : Deux transactions différentes ne peuvent posséder simultanément des verrous en conflit
+\item Règle 2 : Toute transaction qui libère un verrou ne peut plus en acquérir d'autres
+\end{itemize}
+
+\paragraph{Sériabilité : } Toute exécution par un verrouillage à deux phases est sériable.
+
+\paragraph{Verrouillage en deux phases 2PL strict : } En réalité il est difficile de savoir quand on aura plus besoin de nouveaux verrous. On modifie donc la Règle 2 et on supprime l'ensemble des verrous en même temps à la fin de la transaction
+
+\paragraph{Avantage de cette méthode :} Permet d'éviter les pertes de mises à jour, pas de lecture non reproductible, pas de lecture sale. Adapté aux cas où l'on a beaucoup de transaction de courte durée.
+
+\section{Isolation}
+\subsection{Niveaux d'isolation SQL92}
+
+\begin{tabular}{|c|c|c|c|c|}
+\hline 
+ & Read-Uncomm & Read Comm & Repeat read & Serial \\ 
+\hline 
+Lecture sale & x &  &  &  \\ 
+\hline 
+Lecture non répétable & x & x &  &  \\ 
+\hline 
+Lecture Fantome & x & x & x &  \\ 
+\hline 
+\end{tabular} 
+
+\subsection{Niveaux d'isolation sous Oracle}
+
+Oracle propose 3 niveaux d'isolation.
+
+\subsubsection{read commited (par défaut)}
+Chaque requête ne perçoit que les changements qui ont étés commité avant le début de la requête en cours (pas la transaction).
+
+\subsubsection{serializable}
+Ne sont perceptibles que les changements qui avaient étés commités avant le début de la transaction plus les changements de la transaction elle-même.	
+
+\subsubsection{read only (spécifique Oracle)}
+Au sein d'une transaction ne sont perceptibles que les changements qui ont été commités avant que la transaction ne commence et ne permet pas de modifier les données.
+
+\subsection{Spécifier le niveau d'isolation}
+On peut spécifier le niveau d'isolement :
+\begin{itemize}
+\item pour une transaction : \verb=SET TRANSACTION ISOLATION LEVEL ...;=
+\item pour toute une session : \verb$ALTER SESSION SET isolation_level = ...;$
+\end{itemize}
+
+
+\newpage
+\part{Conception d'une BD distribué Top-Down}
+\section{Fragmentation}
+\subsection{Propriétés recherchés}
+\begin{itemize}
+\item On ne perd pas de données 
+\item On peut retrouver les liens entre les données, on peut reconstituer la BD centralisée.
+\item On duplique un minimum de données
+\end{itemize}
+
+\subsection{Critère de fragmentation}
+On souhaite optimiser : l'usage fréquent qui est fait sur les données. La fragmentation est donc faite en fonction des usages. Les usages sont définis par les applications. Deux applications peuvent utiliser fréquemment la même table mais pas les même données.
+
+\subsection{Fragmentation Horizontale Primaire}
+\subsubsection{Trouver les prédicats discriminants}
+La première étape consiste à trouver les prédicats que vérifient les tuples utilisés par une application : on les nomme prédicats discriminants.
+
+\subsubsection{Trouver les prédicats composés}
+Un tuple est nécessairement qualifié par une combinaison des prédicats discriminants (avec les opérateurs AND et NOT). On peut simplifier la liste des combinaisons par impossibilité logique ou due au contraintes d'intégrité de la table. On peut ensuite simplifier les combinaisons (par exemple $x=2\ and\ x\neq 3\ \Leftrightarrow\ x=2$). La liste ainsi obtenus donne les prédicats composé. Tous les tuples vérifient un unique prédicat composé et chaque prédicat composé peut être vérifiés par un tuple de la table.\\
+Les prédicats composés correspondent chacun à un nouveau fragment formé de l'ensemble des tuples vérifiant ce prédicat.
+
+\subsubsection{Vérification}
+A cette étape il convient de vérifier que la fragmentation vérifie l'ensemble des propriétés recherchées.
+
+\subsection{Fragmentation Horizontale Dérivée}
+\subsubsection{Principe}
+Que faire des tables qui référencent la table fragmentée ? Il serait logique que les informations liées restent ensemble lors de la fragmentation. On procède alors à une fragmentation horizontale dérivée.
+
+\subsubsection{Réalisation}
+Soit $A$ une table fragmentée horizontalement et $B$ une table tel que la jointure $A\bowtie B$ est utilisé fréquemment. Soit $A_{i}$ les fragments de $A$, on trouve les fragments $B_{i}$ de $B$ avec le relation suivante :
+$$B_{i} = \pi_{B}(A_{i}\bowtie B)$$
+
+\subsubsection{Propriétés}
+La fragmentation ainsi obtenue :
+\begin{itemize}
+\item est disjointe (si la primaire l'est)
+\item permet la reconstruction
+\end{itemize}
+
+\subsection{Fragmentation verticale}
+La fragmentation verticale est définie par la projection. Elle doit vérifier deux règles :
+\begin{itemize}
+\item La clef appartient à tous les fragments
+\item les autres attributs n'appartiennent à un et un seul fragment
+\end{itemize}
+Ainsi elle est disjointe (hormis la clef) et permet la reconstruction.
+
+\subsection{Fragmentation mixtes}
+Il est possible de combiner les fragmentations horizontales e verticales. On obtient ainsi des fragmentations mixtes. Les propriétés d'une fragmentation mixte correspond à l'intersection des fragmentations qui la composent.
+
+\subsection{Démarche générale}
+\begin{enumerate}
+\item Fragmentations horizontales
+\begin{enumerate}
+\item Fragmentations principales
+\begin{enumerate}
+\item Identification des prédicats discriminants
+\item Construction des prédicats composés
+\end{enumerate}
+\item Fragmentations dérivées
+\end{enumerate}
+\item Fragmentations verticales
+\item Compositions des fragmentations. Attention à l'ordre des fragmentations !!
+\end{enumerate}
+
+\section{Répartition}
+\subsection{Contrainte d'allocation des fragments}
+\begin{itemize}
+\item Un fragment est sur un et un seul site
+\item Optimisation en communication, stockage et performance dépend de :
+\begin{itemize}
+\item BD (tailles des fragments, contraintes d'intégrité)
+\item Application (nb lecture/écriture fragment/site)
+\item Réseau (vitesse communication)
+\item Site (coût unitaire stockage et calcul)
+\end{itemize}
+\end{itemize}
+\subsection{Solution}
+Il n'y a pas de solution absolue. Il faut donc faire une approche heuristique avec des approximations.
+
+\section{Réplication}
+\subsection*{Réplication vs Duplication}
+Lors d'une duplication la gestion des doublons doit être réalisée par les applications. La réplication crée un lien explicite dans le SGBD, le maintien de la cohérence est donc géré par le SGBD et le DBA.
+
+\subsection{Vocabulaire}
+\begin{itemize}
+\item Réplication = processus consistant à copier et maintenir des  objets dans différentes BD
+\item Objet répliqué, réplicat = objet qui existe dans plusieurs BD
+\item Groupe de réplicats = collection de réplicats logiquement liés
+\item Site de réplication = site qui héberge un groupe de réplicat
+\item Site Maître pour le réplicat r = site à partit duquel il est possible de modifier r.
+\end{itemize}
+
+\subsection{Différent types de réplication}
+\begin{itemize}
+\item Pas de réplication
+\begin{itemize}
+\item Stockage sur un site et accès réseau pour les autres
+\item Pb de performance et disponibilité
+\end{itemize}
+\item Réplication 'manuelle'
+\begin{itemize}
+\item Propagation des mises à jour manuellement
+\item Passage par un protocole 2PC (Two Phases Commit) - cher et bloquant
+\end{itemize}
+\item Réplication automatique et transparente
+\begin{itemize}
+\item Mono-Maître
+\item Multi-Maîtres
+\end{itemize}
+\end{itemize}
+
+\subsection{Réplication Mono-Maître}
+Les réplicats ne peuvent être modifiés qu'à partir du site Maître, les autres sites ne servent qu'en lecture
+
+\subsection{Réplication Multi-Maîtres}
+Les réplicats peuvent être modifiés à partir de toutes les sites
+
+\subsection{Cohérence des données}
+Il peut y avoir des conflits entre différentes valeurs pour les réplicats. Certains sont résolus de manière automatique. D'autres attendent une intervention humaine dans la file des erreurs. L'administrateur est responsable de la résolution des conflits manuellement.
+
+\section{Bilan général de l'approche Top-Down}
+\begin{enumerate}
+\item Conception du schéma
+\item Fragmentation en fonction des usages
+\item Placement des fragments en fonctions des usages
+\item Eventuelle réplication en fonction des usages
+\end{enumerate}
+
+\newpage
+\part{Base de données distribuée sous ORACLE}
+
+\section{Connexion à une base de données distante}
+\subsection{Pré-requis}
+Pour accéder à une base de données dustante il faut:
+\begin{itemize}
+\item Qu'elle ait un nom global unique
+\item Que ce nom soit connu par la base locale (rôle de l'administrateur)
+\item Avoir un compte sur la base distante
+\item Utiliser ses informations pour créer un lien de base de données
+\end{itemize}
+
+\subsection{Lien de base de données}
+Un lien est déclaré localement sur une base de données et fait référence à une autre distante. Un lien peut être privé (limité à l'utilisateur qui le déclare) ou public (utilisable par tous). Il existe trois types de connexion :
+\begin{itemize}
+\item connected user link : chaque utilisateur se connecte avec son propre login. Les logins doivent être identiques sur les deux sites.
+\item fixed user link : Les utilisateurs se connectent avec le login définit dans le lien
+\item current user link : dans les procédures stockées
+\end{itemize}
+
+\subsection{En SQL}
+\subsubsection{Création du lien}
+\begin{minted}{SQL}
+CREATE [SHARED] DATABASE LINK nomLien CONNECT TO {user IDENTIFIED
+BY password | CURRENT USER} USING 'nomBD';
+\end{minted}
+
+\subsubsection{Accès aux objets}
+A l'aide du lien on peut accéder et manipuler la base de données distante comme si on y était connecté localement avec le même utilisateur. Il suffit de rajouter le suffixe \verb=@nomLien= après les objets manipulés.
+
+\subsubsection{Fermer ou supprimer un lien}
+\begin{minted}{SQL}
+ALTER SESSION CLOSE DATABASE LINK nomLien;
+
+DROP DATABASE LINK nomLien;
+\end{minted}
+
+\subsection{Transparence de la distribution}
+Pour éviter les écritures trop longues on peut rendre transparent l'utilisation du lien avec :
+\begin{itemize}
+\item une vue locale de la table distante
+\item un synonyme (préférable à une vue de la table entière)
+\end{itemize}
+
+\subsection{Collocated Inline View}
+Dans un environnement distribué les accès à distance peuvent être très couteux, d'autant que le latences réseaux ne sont pas prévisibles. Il faut donc au privilégier l'exécution locale. Pour cela il convient d'utiliser des Collocated Inline Views :
+\begin{itemize}
+\item Collocated = sur le même site
+\item Inline View = Select dans un From
+\end{itemize}
+
+\subsection{Réplication sous ORACLE}
+\subsubsection{Réplication multi-maîtres}
+\begin{itemize}
+\item Chaque site est maître est peut donc le modifier
+\item Lors d'une modification, le site informe les autres
+\item Oracle gère automatiquement les modifications
+\end{itemize}
+
+\subsubsection{Réplication par vue matérialisée}
+
+\paragraph{Vue matérialisée}
+\subparagraph{Définition} est une vue dont le résultat est stocké physiquement. Le résultat peut-être traité comme une table. Une vue matérialisée répliquée est une copie d'un objet que l'on appelle Maître sur un site distant. Le Maître peut-être une table ou une vue matérialisée. Une vue matérialisée peut-être :
+\begin{itemize}
+\item read-only
+\item updatable
+\item writeable
+\end{itemize}
+
+\subparagraph{Exemple de syntaxe}
+\begin{minted}{SQL}
+CREATE MATERIALIZED VIEW ... AS SFW;
+\end{minted}
+
+\subparagraph{Quelques contraintes :} La requête qui définit une vue matérialisée doit référencer la clé primaire de la relation maître. Une vue matérialisée ne peut-être définie sur une table qui contient des données cryptées en utilisant un cryptage transparent.
+
+\paragraph{Le rafraîchissement}
+\subparagraph{Quand rafraîchir ?}
+\begin{itemize}
+\item Asynchrone (par défaut)
+\begin{itemize}
+\item Un changement local sur un objet est stocké dans la file d'attente locale des modifications.
+\item Régulièrement, les éléments de cette file sont communiqués aux autres sites
+\end{itemize}
+\item Synchrone
+\begin{itemize}
+\item Tout changement doit être communiqué à tous et validé par tous pour appliqué en local
+\item Bloquant tant que l'on n'a pas la réponse de tous
+\end{itemize}
+\end{itemize}
+
+\subparagraph{Comment rafraîchir ?}
+\begin{itemize}
+\item Transmettre toutes les données
+\item Méthode incrémentale : ne transmettre que les modifications
+\end{itemize}
+
+\subparagraph{Types de rafraîchissement asynchrone :}
+\begin{itemize}
+\item Complete Refresh
+\begin{itemize}
+\item Toutes les données sont supprimées de la réplique
+\item Toutes les données sont transmises par le maître et insérées dans la réplique
+\item Recommandé lorsque le nombre le nombre de tuples à modifier/inséré dépasse 50\% de la cardinalité de la table.
+\end{itemize}
+\item Fast Refresh
+\begin{itemize}
+\item Le maître transmet les modifications à apporter à la réplique.
+\item Nécessite l'usage d'un log pour mémoriser les modifications effectuées sur le maître et les appliquer sur la réplique
+\end{itemize}
+\item Force Refresh
+\begin{itemize}
+\item Oracle tente un fast refresh si c'est possible, sinon il fait un fast refresh.
+\end{itemize}
+\end{itemize}
+
+\subsubsection{Les conflits}
+
+\paragraph{Types de conflits :}
+\begin{itemize}
+\item Conflits en mise à jour
+\item Unicité (violation de contrainte d'intégrité)
+\item Conflits en suppression
+\end{itemize}
+
+\paragraph{Détection des conflits :}
+\begin{itemize}
+\item Sur un site maître
+\item Utilisation des clés primaires des tables pour identifier chaque ligne de manière unique
+\item Les applications ne sont pas autorisées à faire des mises à jour sur une clé primaire
+\end{itemize}
+
+\paragraph{Résolution des conflits :} Oracle ne cherche pas à savoir qui a tord ou raison. Plusieurs méthodes dont latest timestamps (priorité au plus récent), overwrite et 6 autres.
+
+\paragraph{Limites :} Les mécanismes d'Oracle ne permettent de régler qu'une partie des conflits. Pour les autres, ils sont déclarés en 'Unresolved Conflicts' et sont stockés dans une file d'attente d'erreurs. C'est un rôle de l'administrateur de données que de résoudre manuellement ces conflits.
+
+
+\end{document}

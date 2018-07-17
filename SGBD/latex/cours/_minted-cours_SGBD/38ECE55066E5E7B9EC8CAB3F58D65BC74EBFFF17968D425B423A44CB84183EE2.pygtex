@@ -1,0 +1,7 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{CREATE} \PYG{k}{TABLE} \PYG{o}{\PYGZlt{}}\PYG{k}{table}\PYG{o}{\PYGZgt{}}
+\PYG{k}{AS}
+    \PYG{k}{SELECT}
+    \PYG{k}{FROM}
+    \PYG{k}{WHERE}
+\end{Verbatim}

@@ -1,0 +1,5 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{ALTER} \PYG{k}{TRIGGER} \PYG{o}{\PYGZlt{}}\PYG{n}{NomDeclencheur}\PYG{o}{\PYGZgt{}} \PYG{err}{\PYGZob{}}\PYG{n}{ENABLE}\PYG{o}{|}\PYG{n}{DISABLE}\PYG{err}{\PYGZcb{}}\PYG{p}{;}
+
+\PYG{k}{ALTER} \PYG{k}{TABLE} \PYG{o}{\PYGZlt{}}\PYG{n}{NomTable}\PYG{o}{\PYGZgt{}} \PYG{n}{DISABLE} \PYG{k}{ALL} \PYG{n}{TRIGGERS}\PYG{p}{;}
+\end{Verbatim}

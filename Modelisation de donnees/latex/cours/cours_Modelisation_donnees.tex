@@ -1,0 +1,301 @@
+\documentclass[10pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[francais]{babel}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+
+\author{Victor Lezaud}
+\title{Modélisation de données - 3IF}
+
+
+\begin{document}
+\maketitle
+\renewcommand{\contentsname}{Sommaire}
+\tableofcontents
+
+\newpage
+
+\section{Modèle Relationnel}
+\subsection{Théorie}
+Dans cette partie on cherche à modéliser les données d'employés avec leurs prénoms, noms, âges dans différents départements ainsi que leurs activités\\
+
+Le but du modèle relationnel est de stocker dans des tableaux en deux dimensions des données décrivant un ensemble d'attributs nommé univers. Dans notre exemple l'univers est $U=\{nss, nom, prenom, age, dep, adresse, activite\}$\\
+
+\paragraph{Définition de symbole de relation :} Un symbole de relation $SdeR$ représente la première ligne d'un tableau. On définit les fonctions suivantes
+
+\begin{itemize}
+\item $schema(SdeR)$ est l'ensemble des attributs de $SdeR$
+\item $type(SdeR)$ est le nombre d'attributs de $SdeR$
+\item $attr_{i}(SdeR)$ est le i\up{ième} attribut de $SdeR$
+\end{itemize}
+
+\paragraph*{Définition de tuple :} Un tuple correspond à une ligne dans un tableau à double entrée. Un tuple sur $SdeR$ est une liste de valeurs pour tous les attributs de $SdeR$. Par exemple (1, "INFORMATIQUE", "Bâtiment Blaise Pascal") est un tuple sur $DEPT$.\\
+
+\paragraph*{Définition de relation :} Une relation sur un symbole de $SdeR$ est un ensemble de tuple sur $SdeR$. ATTENTION : ne pas confondre relation est symbole de relation !! La relation est l'ensemble des valeurs qui sont dans le tableau tandis que le symbole de de relation est le squelette\\
+
+\paragraph*{Définition de domaine et domaine actif :} Le domaine d'un attribut est l'ensemble des valeurs que peut prendre un attribut. Le domaine actif d'un attribut $A$ appartenant à $schema(SdeR)$ dans la relation $r$ noté $ADOM(A,r)$, est l'ensemble des valeurs prises par $A$ dans $r$. On a $ADOM(A,r)=\pi_{A}(r)$.\\
+
+\paragraph*{Définition de base de données :} Un symbole de base de données est un ensemble de symbole de relation et une base de données est un ensemble de relation.\\
+ 
+\paragraph*{Hypothèse de nommage :} Universal Relation Schema Assumption (URSA) : si un attribut apparait dans plusieurs schémas de relation, alors cet attribut représente les même données.
+
+\subsection{Exemple}
+Soit le symbole de bd $BD=\{PERSONNE, DEPT, TRAVAILLENT\}$ avec $schema(PERSONNE)=\{nss, nom, prenom, age\}$, $schema(DEPT)=\{dep, adresse\}$ et $schema(TRAVAILLENT)=\{nss, dep, activite\}$.\\
+
+La base de données $bd$ sur $BD$ avec les relations Personnes sur $PERSONNE$, $Departements$ sur $DEP$ et $Travaillent$ sur $TRAVAILLENT$ avec quelques tuples.
+
+\medskip
+
+\begin{tabular}{c|cccc}
+Personnes & nss & nom & prenom & age \\ 
+\hline 
+ & 12 & Aymard & Serge & 45 \\ 
+ & 45 & Fenouil & Solange & 35 \\ 
+\end{tabular} 
+
+\medskip
+
+\begin{tabular}{c|cc}
+Departements & dep & adresse \\ 
+\hline 
+& Math & Carnot \\ 
+& Info & Cézeaux \\ 
+\end{tabular} 
+
+\medskip
+
+\begin{tabular}{c|ccc}
+Travaillent & nss & dep & activite \\ 
+\hline 
+ & 12 & Math & Prof\\ 
+ & 45 & Math & MdC\\
+ & 45 & Info & MdC\\ 
+\end{tabular} 
+
+\section{Langages de requêtes}
+\subsection{Les différents langages}
+
+Il existe deux approches pour les requêtes sur les bases de données relationnelles
+
+\paragraph*{Approche algébrique : Algèbre relationnelle}
+Effectue des transformation de relation (opération unaire et binaire), impose un ordre d'exécution de la requête
+
+\paragraph*{Approche logique : Calcul relationnel}
+Sélectionne les tuples vérifiant des formules logique à partir de l'ensemble des possibles (produit cartésien des domaines des attributs)
+
+\paragraph*{Langage SGBD : SQL}
+Mélange des deux approches, sucre syntaxique
+
+\subsection{La projection}
+La projection est une coupe verticale dans la relation. Soient $r$ une relation sur $R$ et $Y \subseteq schema(R)$.
+La projection de $r$ sur $Y$, notée $\pi_{Y}(r)$, est définie par : 
+$$ \pi_{Y}(r)  = \{ t[Y] | t\in r \}$$
+
+\subsection{La sélection}
+La sélection ne garde que les tuples qui vérifient une formule de sélection, qui est formée par une combinaison d'opérateurs (et, ou, non) logiques et de formule simple (comparaison).\\
+Soient $r$ une relation sur $R$ et $F$ une formule de sélection sur $R$. La sélection des tuples de $r$ par rapport à $F$, notée $\sigma_{F}(r)$, est définie par :
+$$ \sigma_{F}(r) = \{t \in r | t \models F\} $$
+
+\subsection{Opérations ensemblistes}
+\paragraph*{Union :} $r1\cup r2 = \{t|t \in r1 \ \vee \  t \in r2 \}$
+\paragraph*{Différence :} $r1 - r2 = \{t|t \in r1 \ \wedge \ t \notin r2 \}$
+\paragraph*{Intersection :} $r1 \cap r2 = \{t|t \in r1 \ \wedge \ t \in r2 \}$
+
+\subsection{La jointure}
+
+Soient $r_{1}$ et $r_{2}$ deux relations sur $R_{1}$ et $R_{2}$ respectivement\\
+
+La jointure naturelle de $r_{1}$ et $r_{2}$, notée $r_{1} \bowtie r_{2}$, est une relation sur un symbole de relation R, avec $schema(R) = schema(R_{1}) \cup schema(R_{2})$, définie par :
+$$ r_{1} \bowtie r_{2} = \{t \ | \  \exists t_{1} \in r_{1} \ \exists t_{2} \in r_{2} \ tq \ t[schema(R_{1})]=t_{1} \  et \   t[schema(R_{2})]=t_{2} \}$$
+
+\subsection{Le renommage}
+Le renommage n'a d'intérêt qu'en algèbre relationnelle pour réaliser les jointures souhaitées. Soit $r$ une relation sur $R$ avec $A \in schema(R)$ et $B \notin schema(R)$. \\
+Le renommage de $A$ en $B$ dans $r$, noté $\rho_{A \rightarrow B}$, est une relation sur $S$ avec $schema(S) = (schema(R) - \{A\}) \cup \{B\}$.
+
+\subsection{La division}
+\paragraph{But :} La division permet de sélectionner les tuples associés à un autre ensemble de tuples, par exemple elle permet de répondre à la question : "Quels sont les étudiants qui sont inscrits dans tous les départements".
+
+\paragraph{Définition de la division :} Soient $r$ une relation sur $R$ avec $schema(R)=\{X,Y\}$ et $s$ une relation sur $S$ avec $schema(S)=\{Y\}$. La division de $r$ par $s$, notée $r \div s$, est une relation sur un symbole de relation $R_{1}$, avec $schema(R_{1})=\{X\}$, définie par :
+$$r \div s = \{t[X] | t \in r\ et\ s \subseteq \pi_{Y}(\sigma_{F(t)}(r))\}$$
+avec $X=\{A_{1}, \cdots, A_{q}\}$ et $F(t)=(A_{1} = t[A_{1}])\wedge \cdots \wedge (A_{q} = t[A_{q}])$
+
+\paragraph{Équivalence avec les autres opérateurs :} 
+$$r \div s = \pi_{X}(r)-\pi_{X}((\pi_{X}(r) \times s)-r)$$
+
+\paragraph{Division en calcul relationnel}
+$$r \div s = Ans(Q,\{r,s\} avec Q=\{<x:X>|\forall y:S(R(x,y) \vee \neg S(y))\}$$
+\subsection{Variables positives et négatives}
+Une variable est positive si elle a un nombre fini de valeur possible. Une variable est négative si elle peut prendre un nombre infinie de valeur.x
+
+\paragraph{Variable positive \\}
+Une variable $x$ est positive dans les formules atomiques suivantes :
+\begin{itemize}
+\item $R(y_{1},\cdots,x,\cdots,y_{k})$
+\item $x=cte$
+\end{itemize}
+
+Les opérateurs rendent $x$ positives si:
+\begin{itemize}
+\item $\neg F$, si $F$ est atomique et $x$ négative dans $F$
+\item $F_{1} \wedge F_{2}$, si $x$ est positive dans $F_{1}$ OU $F_{2}$
+\item $F_{1} \vee F_{2}$, si $x$ est positive dans $F_{1}$ ET $F_{2}$
+\item $\exists y : A(F)$, si $x \neq y$ et x positive dans $F$
+\end{itemize}
+
+\paragraph{Variable négative \\}
+Une variable $x$ est négative dans les formules atomiques suivantes :
+\begin{itemize}
+\item $x=y$ avec $y$ une variable négative
+\end{itemize}
+
+Les opérateurs rendent $x$ négative si:
+\begin{itemize}
+\item $\neg F$, si $F$ est atomique et $x$ positive dans $F$
+\item $F_{1} \wedge F_{2}$, si $x$ est négative dans $F_{1}$ ET $F_{2}$
+\item $F_{1} \vee F_{2}$, si $x$ est négative dans $F_{1}$ OU $F_{2}$
+\item $\forall y : A(F)$, si $x \neq y$ et x négative dans $F$
+\item si $x$ n’apparaît pas dans $F$
+\end{itemize}
+
+\subsection{Formule de calcul autorisée}
+
+Une formule de calcul $F$ est autorisée si:
+\begin{itemize}
+\item Chaque variable libre de $F$ est positive dans $F$
+\item Pour chaque sous-formule $\exists x : A(G)$ de $F$, $x$ est positive dans $G$
+\item Pour chaque sous-formule $\forall x : A(G)$ de $F$, $x$ est négative dans $G$
+\end{itemize}
+
+\section{Les dépendances}
+
+Dans cette partie nous allons voir comment contraindre la base de données afin de n'avoir que des données valides.
+
+\subsection{Dépendances Fonctionnelles}
+
+\paragraph{Principe des DF :} Les DF permettent de forcer une base de données à suivre une logique d'implication et d'éviter par exemple que deux personnes aient un même numéro de sécurité sociale ou qu'une même personne ait deux moyennes pour un même cours. Les DF sont liés au principe de clés.
+
+\paragraph{Définition d'une DF :} Soit $R$ un symbole de relation. Une DF sur $R$ est une déclaration de la forme : $R : X \rightarrow Y$, où $X,Y \subseteq schema(R)$\\
+
+\paragraph{Satisfaction d'une DF :} Soit $r$ une relation sur $R$. La satisfaction de la DF $R : X \rightarrow Y$ par $r$ est notée $r \models X \rightarrow Y$ et vérifie : 
+$$r \models X \rightarrow Y \Leftrightarrow \forall t_{1},t_{2} \in r, \ si \ t_{1}[X]=t_{2}[X] \ alors \  t_{1}[Y]=t_{2}[Y]$$
+
+\paragraph{Définition d'une clé :} Une superclé est un ens. d'attributs $X \subseteq schema(R)$ qui vérifie la DF $X \rightarrow schema(R)$. Une clé (ou clé minimale) est une superclé vérifiant $ \not\exists Y \subset X$, $Y$ superclé de $R$.
+
+
+
+\subsection{Dépendances d'Inclusion}
+
+\paragraph{Principe des DI :} Les DI permettent de forcer les attributs d'une relation à avoir des valeurs présentent dans une autre relation de la base de données. Cela permet d'éviter que l'on donne une note à un élève pour un cours totalement inconnu de la base de données.
+
+\paragraph{Définition des DI :} Soit $R$ un symbole de base de données avec $R_{1}$ et $R_{2}$ deux symboles de relations de $R$. Une DI sur $R$ est de la forme $R_{1}[X] \subseteq R_{2}[Y]$, avec $X$ et $Y$ des séquences d'attributs appartenant respectivement à $schema(R_{1})$ et $schema(R_{2})$.
+
+\paragraph{Satisfaction des DI :} Soient $d$ une base de données sur $R$ et $r_{1},r_{2} \in d$ définies respectivement sur $R_{1},R_{2} \in R$. La satisfaction de la DI $R_{1}[X] \subseteq R_{2}[Y]$ par $d$ est notée $d \models R_{1}[X] \subseteq R_{2}[Y]$ et vérifie : 
+$$d \models R_{1}[X] \subseteq R_{2}[Y] \Leftrightarrow \forall t_{1} \in r_{1}, \exists t_{2} \in r_{2} \ tq \ t_{1}[X]=t_{2}[Y]$$
+
+\paragraph{Définition d'une clé étrangère :} Une clé étrangère est un ensemble d'attributs $X$ de $R_{1}$ intervenant dans une DI $R_{1}[X] \subseteq R_{2}[Y]$ avec $Y$ une superclé de $R_{2}$.
+
+\subsection{Projection de F sur un sous-ensemble d'attributs}
+Soient $U$ l'univers, $F$ un ensemble de DF sur $U$ et $S \subset U$. La projection de $F$ sur $S$, notée $F[S]$, est définie par :
+$$F[S] = \{X \rightarrow Y \ | \ F \models X \rightarrow Y, \ X \cup Y \subseteq S \}$$
+
+
+\subsection{Fermeture et fermé}
+Soit $F$ un ensemble de DF sur $R$ et $X \subseteq schema(R)$ 
+
+\paragraph{Définition de fermeture :} La fermeture de $X$ par rapport à $F$, notée $X_{F}^{+}$, est l'ensemble des attributs fixés quand $X$ est fixé soit:
+$$X_{F}^{+} = \{A \in schema(R) | F \models X \rightarrow A\}$$
+
+\paragraph{Définition de fermé :} $X$ est un fermé de $F$ si $X=X_{F}^{+}$, autrement-dit si il n'implique que lui-même.
+
+\paragraph{CL(F) et IRR(F) :} On note $CL(F)$ l'ensemble des fermés de $F$ et $IRR(F)$ ses éléments irréductibles par intersection (que l'on ne peut pas obtenir par intersection des autres). 
+$$CL(F) = \{X|X=X_{F}^{+}\}$$
+$$IRR(F)=\{X \in CL(F) | \forall Y,Z \in CL(F) \ (X = Y \cap Z) \Rightarrow (X=Y \ ou \ X=Z)\}$$
+
+\subsection{Relation d'Armstrong}
+
+\paragraph{Définition de la relation d'Armstrong :} Soit $r$ une relation sur $R$, $F$ un ensemble de DF sur $R$. $r$ est une relation d'Armstrong par rapport à $F$ si elle vérifie l'équivalence suivante :
+$$(r \models X \rightarrow Y) \Leftrightarrow (F \vdash X \rightarrow Y)$$
+
+\paragraph{Construction d'une relation d'Armstrong :}
+\begin{enumerate}
+\item calculer $CL(F)$
+\item Créer la relation $r$ avec un tuple ne contenant que des 0
+\item (étape i) pour chaque élément $X$ de $CL(F)$, ajouter un tuple $t_{i}$ à $r$ tq :
+\begin{itemize}
+\item $t_{i}[A]=0$ si $A \in X$
+\item $t_{i}[B]=i$ si $B \not\in X$
+\end{itemize}
+\end{enumerate}
+
+\subsection{Couverture d'ensemble de DF}
+
+\paragraph{Définition de la couverture :} Une couverture $F$ (ou base) d'un ensemble $K$ de DF est un ensemble de DF équivalent à $K$, noté $K^{+} = F^{+}$.
+
+\paragraph{Caractéristique d'unes d'une couverture :} Une couverture $F$ de $K$ est dite :
+\begin{itemize}
+\item non redondante si $F \subseteq K$, $\not\exists G \subset F$ tel que $G^{+} = F^{+}$
+\item minimale si $\not\exists G\ tel\ que\ G^{+}=F^{+}\ et\ |G|<|F|$
+\end{itemize}
+
+\section{Problème d'implication}
+\subsection{Introduction}
+Deux ensembles de DF peuvent être écrit différemment mais parfaitement équivalent. On va donc se demander dans ce chapitre si un ensemble $F$ de DF sur $R$ implique une DF $X \rightarrow Y$ ou non. Autrement dit, peut on déduire ou prouver $X \rightarrow Y$ à partir de $F$. Pour cela il existe trois approches totalement équivalentes : la théorie des modèles et la théorie de la preuve.
+
+\subsection{Théorie des modèles}
+
+\paragraph{Concept :} La théorie des modèles travaille au niveau des relations, elle consiste à observer toutes les relations sur $R$ qui vérifient $F$ et tester si elles vérifient $X \rightarrow Y$.\\
+
+\paragraph{Exprimé mathématiquement :} Soient $F$ un ensemble de DF sur $R$ et $X \rightarrow Y$ une DF sur $R$ alors on a l'équivalence suivante :
+$$F \models X \rightarrow Y \Leftrightarrow (\forall r\  sur\ R,\ r \models F \Rightarrow r\models X \rightarrow Y)$$
+
+
+\subsection{Théorie de la preuve}
+\paragraph{Concept :} La théorie de la preuve ne travaille qu'avec l'ensemble de Dépendances Fonctionnelles et le symbole de relation, elle consiste à créer une preuve à partir des différentes DF et des règles d'inférence d'Armstrong
+
+\paragraph{Règles d'inférence d'Armstrong}
+\begin{itemize}
+\item[\textbf{Réflexivité :}] si $Y \subseteq X \subseteq schema(R) $, alors $F \vdash X \rightarrow Y$
+\item[\textbf{Augmentat\up{o} :}] si $F \vdash X \rightarrow Y$ et $W \subseteq schema(R)$, alors $F \vdash XW \rightarrow YW$
+\item[\textbf{Transitivité :}] si $F \vdash X \rightarrow Y$ et $F \vdash Y \rightarrow Z$, alors $F \vdash X \rightarrow Z$
+\end{itemize}
+
+\subsection*{Bonus : propriété des fermetures}
+Cette propriété est peu utilisé car on a souvent besoin de résoudre les problèmes avant de trouver les fermetures de F, mais elle reste bonne à savoir car très simple:
+$$(F \models X \rightarrow Y) \Leftrightarrow (Y \subseteq X_{F}^{+})$$
+
+\section{Conception de Base de données}
+\subsection{Les Formes Normales}
+
+\paragraph{Principe des Formes Normales :} Les FN permettent de spécifier formellement la notion intuitive de bon schéma. Plusieurs FN existe : 1FN (moins restrictive), 2FN, 3FN, FN de Boyce-Codd (FNBC) (plus restrictive).
+
+\paragraph{Définition de la Forme Normale de Boyce-Codd :} Un symbole de relation $R$ est en FNBC par rapport à un ensemble $F$ de DF si et seulement si pour toutes les dépendances de F, leurs parties gauches sont des superclés. Le but est de ne représenter l'information qu'une seule fois.
+
+\subsection{Algorithme de synthèse}
+\paragraph{But :} L'algorithme de synthèse permet de créer un schéma de base de données à partir des dépendances fonctionnels sur l'univers. Les schémas ainsi créés sont en 3FN.
+
+\paragraph{Algorithme :}
+\begin{enumerate}
+\item Déterminer une couverture minimale $G$ de $F$
+\item Réduire les parties gauches et droites des DF de $G$
+\item Créer un symbole de relation pour chaque DF de $G$ avec les attributs impliqués dans cette DF
+\end{enumerate}
+
+\subsection{Algorithme de décomposition}
+\paragraph{But :} L'algorithme de décomposition permet de créer un schéma de base de données à partir des dépendances fonctionnels sur l'univers. Les schémas ainsi créés sont en FNBC.
+
+\paragraph{Algorithme :} L'algorithme de décomposition est un algorithme récursif qui prend en entrée un ensemble $R$ d'attributs et un ensemble $F$ de DF. Si on est en FNBC alors l'algorithme s'arrête. Sinon on prend une DF sans superclé dans la partie gauche, on crée un symbole de relation avec les attributs de cette DF. Puis on appelle l'algorithme avec ce nouveau symbole de relation et la projection de $F$ sur ce symbole de relation. On appelle aussi l'algorithme avec le reste du symbole de relation et la projection de $F$ sur ce reste.\\
+\paragraph{Algorithme Décompose($R,F$)}
+\begin{itemize}
+\item[] SI $R$ est en FNBC par rapport à $F$ ALORS
+\item[] -----retourne $R$
+\item[] SINON
+\item[] -----Soit $X \rightarrow Y$ une DF non triviale de $F$ tel que $X_{F}^{+} \neq R$
+\item[] -----Décompose($XY$,$F[XY]$)
+\item[] -----Décompose($R-(Y-X)$, $F[R-(Y-X)]$)
+
+\end{itemize}
+
+
+
+\end{document}

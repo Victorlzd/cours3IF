@@ -1,0 +1,6 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{CREATE} \PYG{k}{OR} \PYG{k}{REPLACE} \PYG{k}{TRIGGER} \PYG{o}{\PYGZlt{}}\PYG{n}{nomTrigger}\PYG{o}{\PYGZgt{}}
+\PYG{err}{\PYGZob{}}\PYG{k}{BEFORE}\PYG{o}{|}\PYG{k}{AFTER}\PYG{err}{\PYGZcb{}} \PYG{o}{\PYGZlt{}}\PYG{n}{evt}\PYG{o}{\PYGZgt{}} \PYG{p}{[}\PYG{k}{OR} \PYG{o}{\PYGZlt{}}\PYG{n}{evt}\PYG{o}{\PYGZgt{}}\PYG{p}{]}\PYG{o}{*} \PYG{k}{ON} \PYG{o}{\PYGZlt{}}\PYG{n}{NomTable}\PYG{o}{\PYGZgt{}}
+\PYG{p}{[}\PYG{k}{FOR} \PYG{k}{EACH} \PYG{k}{ROW} \PYG{p}{[}\PYG{k}{WHEN} \PYG{o}{\PYGZlt{}}\PYG{n}{condition}\PYG{o}{\PYGZgt{}}\PYG{p}{]]}
+    \PYG{o}{\PYGZlt{}}\PYG{n}{Bloc} \PYG{n}{PL}\PYG{o}{/}\PYG{k}{SQL}\PYG{o}{\PYGZgt{}}
+\end{Verbatim}

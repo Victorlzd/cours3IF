@@ -1,0 +1,45 @@
+\beamer@endinputifotherversion {3.36pt}
+\headcommand {\slideentry {0}{0}{1}{1/1}{}{0}}
+\headcommand {\beamer@framepages {1}{1}}
+\headcommand {\sectionentry {1}{Mod\IeC {\`e}le Relationnel}{4}{Mod\IeC {\`e}le Relationnel}{0}}
+\headcommand {\beamer@sectionpages {1}{3}}
+\headcommand {\beamer@subsectionpages {1}{3}}
+\headcommand {\beamer@subsectionentry {0}{1}{1}{4}{Th\IeC {\'e}orie}}\headcommand {\beamer@subsectionpages {4}{3}}
+\headcommand {\beamer@subsectionentry {0}{1}{2}{6}{Exemple}}\headcommand {\beamer@subsectionpages {4}{5}}
+\headcommand {\sectionentry {2}{Langages de requ\IeC {\^e}tes}{6}{Langages de requ\IeC {\^e}tes}{0}}
+\headcommand {\beamer@sectionpages {4}{5}}
+\headcommand {\beamer@subsectionpages {6}{5}}
+\headcommand {\beamer@subsectionentry {0}{2}{1}{6}{Les diff\IeC {\'e}rents langages}}\headcommand {\beamer@subsectionpages {6}{5}}
+\headcommand {\beamer@subsectionentry {0}{2}{2}{7}{La projection}}\headcommand {\beamer@subsectionpages {6}{6}}
+\headcommand {\beamer@subsectionentry {0}{2}{3}{7}{La s\IeC {\'e}lection}}\headcommand {\beamer@subsectionpages {7}{6}}
+\headcommand {\beamer@subsectionentry {0}{2}{4}{8}{Op\IeC {\'e}rations ensemblistes}}\headcommand {\beamer@subsectionpages {7}{7}}
+\headcommand {\beamer@subsectionentry {0}{2}{5}{8}{La jointure}}\headcommand {\beamer@subsectionpages {8}{7}}
+\headcommand {\beamer@subsectionentry {0}{2}{6}{8}{Le renommage}}\headcommand {\beamer@subsectionpages {8}{7}}
+\headcommand {\beamer@subsectionentry {0}{2}{7}{8}{Variables positives et n\IeC {\'e}gatives}}\headcommand {\beamer@subsectionpages {8}{7}}
+\headcommand {\beamer@subsectionentry {0}{2}{8}{9}{Formule de calcul autoris\IeC {\'e}e}}\headcommand {\beamer@subsectionpages {8}{8}}
+\headcommand {\sectionentry {3}{Les d\IeC {\'e}pendances}{9}{Les d\IeC {\'e}pendances}{0}}
+\headcommand {\beamer@sectionpages {6}{8}}
+\headcommand {\beamer@subsectionpages {9}{8}}
+\headcommand {\beamer@subsectionentry {0}{3}{1}{9}{D\IeC {\'e}pendances Fonctionnelles}}\headcommand {\beamer@subsectionpages {9}{8}}
+\headcommand {\beamer@subsectionentry {0}{3}{2}{10}{D\IeC {\'e}pendances d'Inclusion}}\headcommand {\beamer@subsectionpages {9}{9}}
+\headcommand {\beamer@subsectionentry {0}{3}{3}{11}{Projection de F sur un sous-ensemble d'attributs}}\headcommand {\beamer@subsectionpages {10}{10}}
+\headcommand {\beamer@subsectionentry {0}{3}{4}{11}{Fermeture et ferm\IeC {\'e}}}\headcommand {\beamer@subsectionpages {11}{10}}
+\headcommand {\beamer@subsectionentry {0}{3}{5}{12}{Relation d'Armstrong}}\headcommand {\beamer@subsectionpages {11}{11}}
+\headcommand {\beamer@subsectionentry {0}{3}{6}{12}{Couverture d'ensemble de DF}}\headcommand {\beamer@subsectionpages {12}{11}}
+\headcommand {\sectionentry {4}{Probl\IeC {\`e}me d'implication}{13}{Probl\IeC {\`e}me d'implication}{0}}
+\headcommand {\beamer@sectionpages {9}{12}}
+\headcommand {\beamer@subsectionpages {12}{12}}
+\headcommand {\beamer@subsectionentry {0}{4}{1}{13}{Introduction}}\headcommand {\beamer@subsectionpages {13}{12}}
+\headcommand {\beamer@subsectionentry {0}{4}{2}{13}{Th\IeC {\'e}orie des mod\IeC {\`e}les}}\headcommand {\beamer@subsectionpages {13}{12}}
+\headcommand {\beamer@subsectionentry {0}{4}{3}{13}{Th\IeC {\'e}orie de la preuve}}\headcommand {\beamer@subsectionpages {13}{12}}
+\headcommand {\beamer@subsectionentry {0}{4}{4}{14}{Bonus : propri\IeC {\'e}t\IeC {\'e} des fermetures}}\headcommand {\beamer@subsectionpages {13}{13}}
+\headcommand {\sectionentry {5}{Conception de Base de donn\IeC {\'e}es}{14}{Conception de Base de donn\IeC {\'e}es}{0}}
+\headcommand {\beamer@sectionpages {13}{13}}
+\headcommand {\beamer@subsectionpages {14}{13}}
+\headcommand {\beamer@subsectionentry {0}{5}{1}{14}{Algorithme de synth\IeC {\`e}se}}\headcommand {\beamer@subsectionpages {14}{13}}
+\headcommand {\beamer@subsectionentry {0}{5}{2}{14}{Algorithme de d\IeC {\'e}composition}}\headcommand {\beamer@subsectionpages {14}{13}}
+\headcommand {\beamer@partpages {1}{15}}
+\headcommand {\beamer@subsectionpages {14}{15}}
+\headcommand {\beamer@sectionpages {14}{15}}
+\headcommand {\beamer@documentpages {15}}
+\headcommand {\def \inserttotalframenumber {1}}

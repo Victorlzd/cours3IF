@@ -1,0 +1,27 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{template} \PYG{o}{\PYGZlt{}} \PYG{k}{typename} \PYG{n}{T} \PYG{o}{\PYGZgt{}}
+\PYG{k}{class} \PYG{n+nc}{Point}
+\PYG{p}{\PYGZob{}}
+	\PYG{k}{public} \PYG{o}{:}
+		\PYG{k+kt}{void} \PYG{n}{Deplacer}\PYG{p}{(}\PYG{k}{const} \PYG{n}{Point} \PYG{o}{\PYGZlt{}} \PYG{n}{T} \PYG{o}{\PYGZgt{}} \PYG{o}{\PYGZam{}} \PYG{n}{delta}\PYG{p}{);}
+		\PYG{n}{Point} \PYG{p}{(} \PYG{k}{const} \PYG{n}{Point} \PYG{o}{\PYGZlt{}} \PYG{n}{T} \PYG{o}{\PYGZgt{}} \PYG{o}{\PYGZam{}} \PYG{n}{unPoint}\PYG{p}{);}
+		\PYG{n}{Point} \PYG{p}{(} \PYG{n}{T} \PYG{n}{abs} \PYG{o}{=} \PYG{n}{T} \PYG{p}{(} \PYG{p}{),} \PYG{n}{T} \PYG{n}{ord} \PYG{o}{=} \PYG{n}{T} \PYG{p}{(} \PYG{p}{)} \PYG{p}{);}
+		\PYG{o}{\PYGZti{}}\PYG{n}{Point} \PYG{p}{(} \PYG{p}{);}
+
+	\PYG{k}{protected}\PYG{o}{:}
+		\PYG{n}{T} \PYG{n}{x}\PYG{p}{;}
+		\PYG{n}{T} \PYG{n}{y}\PYG{p}{;}
+\PYG{p}{\PYGZcb{}}
+
+\PYG{k}{template} \PYG{o}{\PYGZlt{}} \PYG{k}{typename} \PYG{n}{T} \PYG{o}{\PYGZgt{}}
+\PYG{k+kt}{void} \PYG{n}{Point} \PYG{o}{\PYGZlt{}} \PYG{n}{T} \PYG{o}{\PYGZgt{}::}\PYG{n}{Deplacer} \PYG{p}{(}\PYG{k}{const} \PYG{n}{Point} \PYG{o}{\PYGZlt{}} \PYG{n}{T} \PYG{o}{\PYGZgt{}} \PYG{o}{\PYGZam{}} \PYG{n}{delta}\PYG{p}{)}
+\PYG{p}{\PYGZob{}}
+	\PYG{p}{...}
+\PYG{p}{\PYGZcb{}}
+\PYG{k}{template} \PYG{o}{\PYGZlt{}} \PYG{k}{typename} \PYG{n}{T} \PYG{o}{\PYGZgt{}}
+\PYG{n}{Point} \PYG{o}{\PYGZlt{}} \PYG{n}{T} \PYG{o}{\PYGZgt{}::}\PYG{n}{Point} \PYG{p}{(}\PYG{n}{T} \PYG{n}{abs}\PYG{p}{,} \PYG{n}{T} \PYG{n}{ord}\PYG{p}{)}
+\PYG{p}{\PYGZob{}}
+	\PYG{p}{...}
+\PYG{p}{\PYGZcb{}}
+\PYG{p}{...}
+\end{Verbatim}

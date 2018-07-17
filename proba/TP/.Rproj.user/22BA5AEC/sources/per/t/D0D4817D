@@ -1,0 +1,23 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1525090465863.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "16|1|35|0|\n60|1|64|0|\n67|1|72|0|\n75|1|108|0|\n111|1|122|0|\n125|1|142|0|\n145|1|153|0|\n156|1|166|0|\n169|1|206|0|\n209|1|211|0|\n214|1|251|0|\n",
+    "hash" : "1052292254",
+    "id" : "D0D4817D",
+    "lastKnownWriteTime" : 1526401165,
+    "last_content_update" : 1526401165804,
+    "path" : "~/Documents/INSA/cours/proba/TP/seance1.R",
+    "project_path" : "seance1.R",
+    "properties" : {
+        "cursorPosition" : "54,10",
+        "scrollLine" : "11",
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

@@ -1,0 +1,8 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{p}{[}\PYG{k}{Constraint} \PYG{o}{\PYGZlt{}}\PYG{n}{NomContrainte}\PYG{o}{\PYGZgt{}}\PYG{p}{]} \PYG{k}{PRIMARY} \PYG{k}{KEY} \PYG{p}{(}\PYG{o}{\PYGZlt{}}\PYG{n}{attr1}\PYG{o}{\PYGZgt{}}\PYG{p}{[,}\PYG{o}{\PYGZlt{}}\PYG{n}{attr2}\PYG{o}{\PYGZgt{}}\PYG{p}{]}\PYG{o}{*}\PYG{p}{)}
+
+\PYG{k}{CREATE} \PYG{k}{TABLE} \PYG{n}{Licencie} \PYG{p}{(}
+    \PYG{p}{[...]}
+    \PYG{k}{Constraint} \PYG{n}{ClePrimaire} \PYG{k}{PRIMARY} \PYG{k}{KEY} \PYG{p}{(}\PYG{n}{NumLic}\PYG{p}{)}
+\PYG{p}{);}
+\end{Verbatim}

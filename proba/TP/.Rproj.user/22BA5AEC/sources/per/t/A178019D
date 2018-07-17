@@ -1,0 +1,24 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1525094307144.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "19|39|410|0|\n20|61|47|0|\n24|6|46|0|\n48|14|74|0|\n52|6|62|0|\n66|6|72|0|\n75|29|95|0|\n130|6|137|0|\n139|6|147|0|\n151|6|187|0|\n195|20|202|0|\n196|25|198|0|\n199|31|202|0|\n219|6|233|0|\n401|43|410|0|\n411|48|505|0|\n506|49|658|0|\n",
+    "hash" : "2161848182",
+    "id" : "A178019D",
+    "lastKnownWriteTime" : 1526401086,
+    "last_content_update" : 1526401223869,
+    "path" : "~/Documents/INSA/cours/proba/TP/TP.Rmd",
+    "project_path" : "TP.Rmd",
+    "properties" : {
+        "cursorPosition" : "339,94",
+        "last_setup_crc32" : "AEE7B639abd972f2",
+        "scrollLine" : "306",
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 4,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_markdown"
+}

@@ -1,0 +1,724 @@
+\documentclass[10pt,a4paper,twoside]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[francais]{babel}
+\usepackage{amsmath}
+\usepackage[T1]{fontenc}
+\author{Victor Lezaud}
+\title{Compte rendu TP2}
+\begin{document}
+
+\maketitle
+\renewcommand{\contentsname}{Sommaire}
+\tableofcontents
+
+\newpage
+\part{Rappel rapide du contexte et des objectifs du TP}
+\section{Présentation}
+Dans ce TP, nous considérons une entreprise qui est implanté sur plusieurs continents nommée "Ryori". Cette entreprise possède une base de données centralisée. Dans le cadre de ce TP, nous allons proposer une solution distribuée sur les différents sites.
+
+\section{Les applications}
+L'entreprise utilise plusieurs applications:
+\begin{itemize}
+\item L'application MakeIt : gère la fabrication des produits 'maison'. Accès fréquent à la table FOURNISSEURS et au stock allemand. Déployée en Europe du Nord.
+\item L'application DesignIt : bureau d'étude. Accès fréquent et unique modificateur des tables PRODUITS et CATEGORIES. Déployée en Europe du Sud.
+\item l'application SellIt : gère la vente. Accès fréquent aux clients, stock et commandes locaux. Déployée sur tous les sites.
+\item L'application RH : gère les Ressources Humaines. Accès fréquent à la table EMPLOYES. Déployée en Amérique.
+\end{itemize}
+
+\section{Les pays gérés par les différents sites}
+\begin{itemize}
+\item Europe du Nord : Norvège, Suède, Danemark, Islande, Finlande, Royaume-Uni, Irlande, Belgique, Luxembourg, Pays-Bas, Allemagne, Pologne
+\item Europe du Sud : Espagne, Portugal, Andorre, France, Gibraltar, Italie, Saint-Marin, Vatican, Malte, Albanie, Bosnie-Herzégovine, Croatie, Grèce, Macédoine, Monténégro, Serbie, Slovénie, Bulgarie
+\item Antigua-et-Barbuda, Argentine, Bahamas, Barbade, Belize, Bolivie, Brésil, Canada, Chili, Colombie, Costa Rica, Cuba, République dominicaine, Dominique, Equateur, Etats-Unis, Grenade, Guatemala, Guyana, Haïti, Honduras, Jamaïque, Mexique, Nicaragua, Panama, Paraguay, Pérou, Saint-Christophe-et-Niévès, Sainte-Lucie, Saint-Vincent-et-les-Grenadines, Salvador, Suriname, Trinité-et-Tobago, Uruguay, Venezuela
+\end{itemize}
+
+\newpage
+\part{Présentation du groupe de travail et des rôles de chacun}
+\section{Présentation du groupe de travail et des rôles de chacun}
+\subsection{Membre du groupe}
+Le groupe est composé de  :
+\begin{itemize}
+\item CHALLAL Mohamed
+\item FLORANT Clément
+\item GALY ADAM Marah
+\item LERAL Mathieu
+\item LEZAUD Victor
+\item RASOLDIER Aïna
+\end{itemize}
+Le chef de projet est Aïna Rasoldier.
+
+\subsection{Répartition des sites}
+\begin{tabular}{|c|c|}
+\hline 
+Binôme & Site \\ 
+\hline 
+Marah GALY ADAM, Aina RASOLDIER & Amérique \\ 
+\hline 
+Clément FLORANT, Victor LEZAUD & Europe du Nord \\ 
+\hline 
+Mohamed CHALAL, Mathieu LE RAL & Europe du Sud \\ 
+\hline 
+\end{tabular}
+
+\section{Identification des tâches à réaliser et répartition}
+
+\newpage
+\part{Fragmentation}
+\section{Détermination des fragments}
+\subsection{Fragmentation horizontale}
+\subsubsection{Fragmentation horizontale de STOCK}
+\paragraph{Prédicats discriminants}
+L'application SellIt a besoin pour fonctionner du stock local. La définition de local est donné par la liste de pays donnée en introduction. Les accès fréquents sont définis par les prédicats suivants:
+\begin{itemize}
+\item $STOCK.PAYS \in PaysEN$
+\item $STOCK.PAYS \in PaysES$
+\item $STOCK.PAYS \in PaysA$
+\end{itemize}
+
+\paragraph{Prédicats complexe}
+On peut former les prédicats complexes suivants :
+\begin{itemize}
+\item $STOCK.PAYS \in PaysEN\ and\ STOCK.PAYS \in PaysEN\ and\ STOCK.PAYS \in PaysEN$
+\item $STOCK.PAYS \not\in PaysEN\ and\ STOCK.PAYS \in PaysEN\ and\ STOCK.PAYS \in PaysEN$
+\item $STOCK.PAYS \in PaysEN\ and\ STOCK.PAYS \not\in PaysEN\ and\ STOCK.PAYS \in PaysEN$
+\item $STOCK.PAYS \in PaysEN\ and\ STOCK.PAYS \in PaysEN\ and\ STOCK.PAYS \not\in PaysEN$
+\item $STOCK.PAYS \not\in PaysEN\ and\ STOCK.PAYS \not\in PaysEN\ and\ STOCK.PAYS \in PaysEN$
+\item $STOCK.PAYS \not\in PaysEN\ and\ STOCK.PAYS \in PaysEN\ and\ STOCK.PAYS \not\in PaysEN$
+\item $STOCK.PAYS \in PaysEN\ and\ STOCK.PAYS \not\in PaysEN\ and\ STOCK.PAYS \not\in PaysEN$
+\item $STOCK.PAYS \not\in PaysEN\ and\ STOCK.PAYS \not\in PaysEN\ and\ STOCK.PAYS \not\in PaysEN$
+\end{itemize}
+Aucun pays n'appartient à plus d'une liste, ainsi l'appartenance à l'une d'elle implique l’absence des autres. On peut donc supprimer les prédicats impossibles et en simplifier d'autres. On obtient ainsi :
+\begin{itemize}
+\item $STOCK.PAYS \in PaysEN$
+\item $STOCK.PAYS \in PaysES$
+\item $STOCK.PAYS \in PaysA$
+\item $STOCK.PAYS \not\in PaysEN\ and\ STOCK.PAYS \not\in PaysEN\ and\ STOCK.PAYS \not\in PaysEN$
+\end{itemize}
+On obtient donc quatre fragments pour la table STOCK
+
+\subsubsection{Fragmentation horizontale de CLIENTS}
+La fragmentation de CLIENTS est réalisé comme STOCK.
+
+\subsection{Fragmentation dérivée}
+\subsubsection{Fragmentation dérivée de COMMANDES}
+\paragraph{Principe}
+Il paraît évident que si un client est lié à une application ses commandes seront gérés par cette application. On réalise donc une fragmentation dérivée de COMMANDES à partir de la fragmentation de CLIENTS
+
+\paragraph{Les fragments}
+On obtient donc autant de fragment que pour CLIENTS et formés de la manière suivante pour chaque fragment i :
+$$COMMANDES_{i} = \pi_{COMMANDES}(CLIENTS_{i} \bowtie  COMMANDES)$$
+
+\subsubsection{Fragmentation dérivée de DETAILS\_COMMANDES}
+La fragmentation dérivée de DETAILS\_COMMANDES par rapport à COMMANDES est exactement comme la fragmentation de COMMANDES par rapport à CLIENTS.
+
+\subsection{Fragmentation verticale}
+Il n'y a aucune fragmentation verticale car rien dans les usages ne nous permet d'identifier des attributs particulièrement utilisés par une application.
+\subsection{Fragmentation mixte}
+En absence de fragmentation verticale il ne peut y avoir de fragmentation mixte.
+
+\section{Bilan de la Fragmentation}
+\begin{itemize}
+\item FOURNISSEURS : 1 fragment
+\item PRODUITS : 1 fragment
+\item CATEGORIES : 1 fragment
+\item EMPLOYES : 1 fragment
+\item FOURNISSEURS : 1 fragment
+\item CLIENTS : 4 fragments
+\begin{itemize}
+\item CLIENTS.PaysEN : $\sigma_{PAYS \in PaysEN}(CLIENTS)$
+\item CLIENTS.PaysES : $\sigma_{PAYS \in PaysES}(CLIENTS)$
+\item CLIENTS.PaysA : $\sigma_{PAYS \in PaysA}(CLIENTS)$
+\item CLIENTS.PaysRM : $\sigma_{PAYS \not\in PaysEN \cup PaysES \cup PaysA}(CLIENTS)$
+\end{itemize}
+\item STOCK : 4 fragments
+\begin{itemize}
+\item STOCK.PaysEN : $\sigma_{PAYS \in PaysEN}(STOCK)$
+\item STOCK.PaysES : $\sigma_{PAYS \in PaysES}(STOCK)$
+\item STOCK.PaysA : $\sigma_{PAYS \in PaysA}(STOCK)$
+\item STOCK.PaysRM : $\sigma_{PAYS \not\in PaysEN \cup PaysES \cup PaysA}(STOCK)$
+\end{itemize}
+\item COMMANDES : 4 fragments
+\begin{itemize}
+\item COMMANDES.PaysEN : $\pi_{COMMANDES}(CLIENTS.PaysEN \bowtie$\\
+ $COMMANDES)$
+\item COMMANDES.PaysES : $\pi_{COMMANDES}(CLIENTS.PaysES \bowtie$\\
+ $COMMANDES)$
+\item COMMANDES.PaysA : $\pi_{COMMANDES}(CLIENTS.PaysA \bowtie$\\
+ $COMMANDES)$
+\item COMMANDES.PaysRM : $\pi_{COMMANDES}(CLIENTS.PaysRM \bowtie$\\
+ $COMMANDES)$
+\end{itemize}
+\item DETAILS\_COMMANDES : 4 fragments
+\begin{itemize}
+\item DETAILS\_COMMANDES.PaysEN : $\pi_{DETAILS\_COMMANDES}$\\
+$(COMMANDES.PaysEN \bowtie DETAILS\_COMMANDES)$
+\item DETAILS\_COMMANDES.PaysES : $\pi_{DETAILS\_COMMANDES}$\\
+$(COMMANDES.PaysES \bowtie DETAILS\_COMMANDES)$
+\item DETAILS\_COMMANDES.PaysA : $\pi_{DETAILS\_COMMANDES}$\\
+$(COMMANDES.PaysA \bowtie DETAILS\_COMMANDES)$
+\item DETAILS\_COMMANDES.PaysRM : $\pi_{DETAILS\_COMMANDES}$\\
+$(COMMANDES.PaysRM \bowtie DETAILS\_COMMANDES)$
+\end{itemize}
+\end{itemize}
+
+\section{Placement des fragments sur les sites (sans réplication)}
+\subsection{Analyse}
+Les tables non fragmentées sont chacune particulièrement utilisées par une des applications. La table FOURNISSEURS est liée à MakeIt, EMPLOYES à RH et PRODUITS et CATEGORIES à DesignIt. L'application SellIt a des usages différents selon la localité. On définit donc quatre sous-application SellIt.EN, SellIt.ES, SellIt.A et SellIt.RM. Logiquement les fragments de CLIENTS et STOCK sont liés aux sous-applications de la même localité. Par fragmentation dérivée les fragments de COMMANDES (et donc DETAILS\_COMMANDES) sont liés à la même sous-application que le fragment de CLIENTS auquel il est associé.
+\subsection{Bilan}
+\subsubsection{Par application}
+\begin{itemize}
+\item MakeIt : $FOURNISSEURS$
+\item DesignIt : $PRODUITS$, $CATEGORIES$
+\item RH : $EMPLOYES$
+\item SellIt :
+\begin{itemize}
+\item SellIt.EN :
+\begin{itemize}
+\item CLIENTS.PaysEN
+\item STOCK.PaysEN
+\item COMMANDES.PaysEN
+\item DETAILS\_COMMANDES.PaysEN
+\end{itemize}
+\item SellIt.ES :
+\begin{itemize}
+\item CLIENTS.PaysES
+\item STOCK.PaysES
+\item COMMANDES.PaysES
+\item DETAILS\_COMMANDES.PaysES
+\end{itemize}
+\item SellIt.A :
+\begin{itemize}
+\item CLIENTS.PaysA
+\item STOCK.PaysA
+\item COMMANDES.PaysA
+\item DETAILS\_COMMANDES.PaysA
+\end{itemize}
+\item Sellit.RM
+\begin{itemize}
+\item CLIENTS.PaysRM
+\item STOCK.PaysRM
+\item COMMANDES.PaysRM
+\item DETAILS\_COMMANDES.PaysRM
+\end{itemize}
+\end{itemize}
+\end{itemize}
+
+\subsubsection{Par site}
+\begin{itemize}
+\item Europe du Nord : MakeIt, SellIt.EN et SellIt.RM
+\item Europe du Sud : DesignIt et SellIt.ES
+\item Amérique : RH et SellIt.A
+\end{itemize}
+
+\section{Mise en oeuvre de la base sans réplication}
+\subsection{Site Europe du Nord}
+\subsubsection{Binôme responsable}
+Le binôme responsable du site Europe du Nord est composé de FLORANT Clément et LEZAUD Victor
+\subsubsection{Création des liens entre les bases}
+La préparation en amont a déjà été faite par le Data Base Adminstrator. Ainsi chacune des bases des bases de données possède un nom global unique et connaît celui des autres et chaque utilisateur a un compte pour accéder à chacune des tables avec le même mot de passe. On peut créer des liens vers les autres base de données de cette manière :
+\begin{verbatim}
+CREATE DATABASE LINK Centrale CONNECT TO CURRENT USER USING 'DB11';
+CREATE DATABASE LINK EuropeSud CONNECT TO CURRENT USER USING 'DB13';
+CREATE DATABASE LINK America CONNECT TO CURRENT USER USING 'DB14';
+\end{verbatim}
+
+\subsubsection{Création des tables}
+\paragraph{Préparation :} dans un but de simplification des modifications des pays gérés par le site et des écritures ci-dessous nous avons réalisé la table et la vue suivante :
+\begin{verbatim}
+-- creation table
+create table PaysEuropeNord (
+  pays varchar2(15 BYTE) Primary KEY);
+-- insert value
+INSERT INTO PaysEuropeNord VALUES ('Norvege');
+INSERT INTO PaysEuropeNord VALUES ('Suede');
+INSERT INTO PaysEuropeNord VALUES ('Danemark');
+INSERT INTO PaysEuropeNord VALUES ('Islande');
+INSERT INTO PaysEuropeNord VALUES ('Finlande');
+INSERT INTO PaysEuropeNord VALUES ('Royaume-Uni');
+INSERT INTO PaysEuropeNord VALUES ('Irlande');
+INSERT INTO PaysEuropeNord VALUES ('Belgique');
+INSERT INTO PaysEuropeNord VALUES ('Luxembourg');
+INSERT INTO PaysEuropeNord VALUES ('Allemagne');
+INSERT INTO PaysEuropeNord VALUES ('Pologne');
+INSERT INTO PaysEuropeNord VALUES ('Pays-Bas');
+INSERT INTO PaysEuropeNord VALUES ('Autriche');
+INSERT INTO PaysEuropeNord VALUES ('Suisse');
+
+CREATE OR REPLACE VIEW PaysGere AS 
+Select pays as pays
+from PaysEuropeNord
+union all
+select nom_pays as pays
+from arasoldier.pays_a@america
+union all
+select nom AS pays
+from mleral.pays_es@europeSud;
+\end{verbatim} 
+
+\paragraph{Table FOURNISSEURS}
+\begin{verbatim}
+create table Fournisseurs as
+Select * from ryori.fournisseurs@centrale;
+\end{verbatim}
+
+\paragraph{Table STOCK\_EN}
+\begin{verbatim}
+create table STOCK_EN as
+Select * from ryori.STOCK@centrale
+where pays in (Select * from PaysEuropeNord);
+\end{verbatim}
+
+\paragraph{Table STOCK\_OTH}
+\begin{verbatim}
+create table STOCK_EN as
+Select * from ryori.STOCK@centrale
+where pays not in (Select * from PAYSGERE);
+\end{verbatim}
+
+\paragraph{Table CLIENTS\_EN}
+\begin{verbatim}
+create table Clients_EN as
+Select * from ryori.clients@centrale
+where pays in (Select * from PaysEuropeNord);
+\end{verbatim}
+
+\paragraph{Table CLIENTS\_OTH}
+\begin{verbatim}
+create table Clients_Oth as
+Select * from ryori.clients@centrale
+where pays not in (Select * from PAYSGERE);
+\end{verbatim}
+
+\paragraph{Table COMMANDES\_EN}
+\begin{verbatim}
+create table Commandes_EN as
+Select * from ryori.Commandes@centrale
+where RyoriCommandes.code_client 
+in (Select Code_Client from Clients_EN);
+\end{verbatim}
+
+\paragraph{Table COMMANDES\_OTH}
+\begin{verbatim}
+create table Commandes_OTH as
+Select * from ryori.Commandes@centrale	
+where RyoriCommandes.code_client 
+in (Select Code_Client from Clients_OTH);
+\end{verbatim}
+
+\paragraph{Table DETAILS\_COMMANDES\_EN}
+\begin{verbatim}
+create table Details_Commandes_EN as
+Select * from ryori.Details_Commandes@centrale
+where RyoriDetails_Commandes.NO_Commande 
+in (Select NO_Commande from Commandes_EN);
+\end{verbatim}
+
+\paragraph{DETAILS\_COMMANDES\_OTH}
+\begin{verbatim}
+create table Details_Commandes_OTH as
+Select * from ryori.Details_Commandes@centrale
+where RyoriDetails_Commandes.NO_Commande 
+in (Select NO_Commande from Commandes_OTH);
+\end{verbatim}
+\subsubsection{Peuplement des tables}
+Le peuplement a été réalisés en même temps que leur création.
+\subsubsection{Contraintes d'intégrité}
+\paragraph{Table FOURNISSEURS}
+\begin{verbatim}
+ALTER TABLE Fournisseurs ADD CONSTRAINT pkFour 
+PRIMARY KEY (NO_FOURNISSEUR);
+\end{verbatim}
+
+\paragraph{Table STOCK\_EN}
+\begin{verbatim}
+ALTER TABLE STOCK_EN ADD CONSTRAINT pkSTOCKEn 
+PRIMARY KEY (REF_PRODUIT, PAYS);
+
+ALTER TABLE STOCK_EN ADD CONSTRAINT checkStockEN 
+CHECK (Pays in (
+'Allemagne','Autriche','Belgique','Danemark',
+'Finlande','Irlande','Islande','Luxembourg','Norvege',
+'Pays-Bas','Pologne','Royaume-Uni','Suede','Suisse');
+\end{verbatim}
+
+\paragraph{Table STOCK\_OTH}
+\begin{verbatim}
+ALTER TABLE STOCK_OTH ADD CONSTRAINT pkSTOCKoth 
+PRIMARY KEY (REF_PRODUIT, PAYS);
+
+ALTER TABLE STOCK_OTH ADD CONSTRAINT checkStockoth 
+CHECK (Pays not in (
+'Albanie','Allemagne','Andorre','Antigua-et-Barbuda',
+'Argentine','Autriche','Bahamas','Barbade','Belgique','Belize','Bolivie',
+'Bosnie-Herzégovine','Bresil','Bulgarie','Canada','Chili','Colombie',
+'Costa Rica','Croatie','Cuba','Danemark','Dominique','Equateur','Espagne',
+'Etats-Unis','Finlande','France','Gibraltar','Grenade','Grèce','Guatemala',
+'Guyana','Haiti','Honduras','Irlande','Islande','Italie','Jamaique',
+'Luxembourg','Macédoine','Malte','Mexique','Monténégro','Nicaragua',
+'Norvege','Panama','Paraguay','Pays-Bas','Pologne','Portugal','Pérou',
+'Royaume-Uni','République dominicaine','Saint-Christophe-et-Nieves',
+'Saint-Marin','Saint-Vincent-et-les Grenadines','Sainte-Lucie','Salvador',
+'Serbie','Slovénie','Suede','Suisse','Suriname','Trinite-et-Tobago',
+'Uruguay','Vatican','Venezuela');
+\end{verbatim}
+
+\paragraph{Table CLIENTS\_EN}
+\begin{verbatim}
+ALTER TABLE Clients_EN ADD CONSTRAINT pkClientsEn 
+PRIMARY KEY (CODE_CLIENT);
+
+ALTER TABLE Clients_EN ADD CONSTRAINT 
+checkClientsEN CHECK (Pays in (
+'Allemagne','Autriche','Belgique','Danemark',
+'Finlande','Irlande','Islande','Luxembourg','Norvege',
+'Pays-Bas','Pologne','Royaume-Uni','Suede','Suisse');
+\end{verbatim}
+
+\paragraph{Table CLIENTS\_OTH}
+\begin{verbatim}
+ALTER TABLE Clients_Oth ADD CONSTRAINT 
+pkClientsOth PRIMARY KEY (CODE_CLIENT);
+
+ALTER TABLE Clients_Oth ADD CONSTRAINT checkClientsOth 
+check (pays not in (
+'Albanie','Allemagne','Andorre','Antigua-et-Barbuda',
+'Argentine','Autriche','Bahamas','Barbade','Belgique','Belize','Bolivie',
+'Bosnie-Herzégovine','Bresil','Bulgarie','Canada','Chili','Colombie',
+'Costa Rica','Croatie','Cuba','Danemark','Dominique','Equateur','Espagne',
+'Etats-Unis','Finlande','France','Gibraltar','Grenade','Grèce','Guatemala',
+'Guyana','Haiti','Honduras','Irlande','Islande','Italie','Jamaique',
+'Luxembourg','Macédoine','Malte','Mexique','Monténégro','Nicaragua',
+'Norvege','Panama','Paraguay','Pays-Bas','Pologne','Portugal','Pérou',
+'Royaume-Uni','République dominicaine','Saint-Christophe-et-Nieves',
+'Saint-Marin','Saint-Vincent-et-les Grenadines','Sainte-Lucie','Salvador',
+'Serbie','Slovénie','Suede','Suisse','Suriname','Trinite-et-Tobago',
+'Uruguay','Vatican','Venezuela');
+\end{verbatim}
+
+\paragraph{Table COMMANDES\_EN}
+\begin{verbatim}
+-- primary key
+ALTER TABLE Commandes_OTH ADD CONSTRAINT pkCommandesOTH 
+PRIMARY KEY (NO_Commande);
+-- foreign key
+ALTER TABLE Commandes_OTH ADD CONSTRAINT fkCommandesOTHCommandeClient 
+FOREIGN KEY (Code_Client) REFERENCES Clients_OTH(Code_Client);
+\end{verbatim}
+
+\paragraph{Table COMMANDES\_OTH}
+\begin{verbatim}
+-- primary key
+ALTER TABLE Details_Commandes_EN ADD CONSTRAINT pkDetails_CommandesEn 
+PRIMARY KEY (NO_Commande, Ref_Produit);
+-- foreign key
+ALTER TABLE Details_Commandes_EN ADD CONSTRAINT fkDetailsCommandes 
+FOREIGN KEY (NO_Commande) REFERENCES Commandes_EN(NO_Commande);
+\end{verbatim}
+
+\paragraph{Table DETAILS\_COMMANDES\_EN}
+\begin{verbatim}
+-- primary key
+ALTER TABLE Details_Commandes_EN ADD CONSTRAINT pkDetails_CommandesEn 
+PRIMARY KEY (NO_Commande, Ref_Produit);
+-- foreign key
+ALTER TABLE Details_Commandes_EN ADD CONSTRAINT fkDetailsCommandes FOREIGN KEY (NO_Commande) REFERENCES Commandes_EN(NO_Commande);
+\end{verbatim}
+
+\paragraph{DETAILS\_COMMANDES\_OTH}
+\begin{verbatim}
+-- primary key
+ALTER TABLE Details_Commandes_OTH ADD CONSTRAINT pkDetails_CommandesOTH 
+PRIMARY KEY (NO_Commande, Ref_Produit);
+-- foreign key
+ALTER TABLE Details_Commandes_OTH ADD CONSTRAINT fkDetailsCommandesOTH 
+FOREIGN KEY (NO_Commande) REFERENCES Commandes_OTH(NO_Commande);
+\end{verbatim}
+
+\subsubsection{Droit d'accès}
+Tous les sites doivent pouvoir lire les données comme si la base était resté centralisée. Les utilisateurs des sites distants doivent avoir les droits en lecture sur ces tables 
+\begin{verbatim}
+GRANT SELECT on FOURNISSEURS to arasoldier;
+GRANT SELECT on STOCK_EN to arasoldier;
+GRANT SELECT on Details_Commandes_EN to arasoldier;
+GRANT SELECT on Commandes_EN to arasoldier;
+GRANT SELECT on Clients_EN to arasoldier;
+GRANT SELECT on PaysEuropeNord to arasoldier;
+GRANT SELECT on PaysGere to arasoldier;
+GRANT SELECT on Clients_OTH to arasoldier;
+GRANT SELECT on Commandes_OTH to arasoldier;
+GRANT SELECT on Details_Commandes_OTH to arasoldier;
+
+GRANT SELECT on FOURNISSEURS to mleral;
+GRANT SELECT on STOCK_EN to mleral;
+GRANT SELECT on Details_Commandes_EN to mleral;
+GRANT SELECT on Commandes_EN to mleral;
+GRANT SELECT on Clients_EN to mleral;
+GRANT SELECT on PaysEuropeNord to mleral;
+GRANT SELECT on PaysGere to mleral;
+GRANT SELECT on Clients_OTH to mleral;
+GRANT SELECT on Commandes_OTH to mleral;
+GRANT SELECT on Details_Commandes_OTH to mleral;
+\end{verbatim}
+
+\subsubsection{Transparence}
+\paragraph{But :} La distribution de la table doit être parfaitement transparente. Toutes les requêtes effectuées sur la base centralisée doivent avoir la réponse sur la requête distribué
+
+\paragraph{Synonymes :} Pour les tables entièrement stockés sur un site distant, on utilise un synonyme pour rendre transparent l'accès à la base distante. On le réalise de la manière suivante :
+\begin{verbatim}
+-- Employe
+CREATE SYNONYM Employes FOR arasoldier.Employes@AMERICA;
+DROP SYNONYM Employes;
+-- Produits
+CREATE SYNONYM Produits FOR mleral.Produits@EUROPESUD;
+DROP SYNONYM Produits;
+-- Categories
+CREATE SYNONYM Categories FOR mleral.Categories@EUROPESUD;
+DROP SYNONYM Categories;
+\end{verbatim}
+
+\paragraph{Vues : } Pour les tables fragmentés, il faut utiliser une vue pour reformer la table
+\begin{verbatim}
+-- CLIENTS
+CREATE VIEW clients AS 
+SELECT * FROM clients_EN
+UNION ALL
+SELECT * FROM mleral.clients_ES@EUROPESUD
+UNION ALL
+SELECT * FROM arasoldier.clients_A@AMERICA
+UNION ALL
+SELECT * FROM clients_OTH
+-- Commandes
+CREATE VIEW Commandes AS 
+SELECT * FROM Commandes_EN
+UNION ALL
+SELECT * FROM mleral.Commandes_ES@EUROPESUD
+UNION ALL
+SELECT * FROM arasoldier.Commandes_A@AMERICA
+UNION ALL
+SELECT * FROM Commandes_OTH;
+-- Details_Commandes
+CREATE VIEW Details_Commandes AS 
+SELECT * FROM Details_Commandes_EN
+UNION ALL
+SELECT * FROM mleral.Details_Commandes_ES@EUROPESUD
+UNION ALL
+SELECT * FROM arasoldier.Details_Commandes_A@AMERICA
+UNION ALL
+SELECT * FROM Details_Commandes_OTH;
+-- STOCK
+CREATE VIEW STOCK AS 
+SELECT * FROM STOCK_EN
+WHERE Pays IN (SELECT * from PaysEuropeNord)
+UNION ALL
+SELECT * FROM mleral.STOCK_ES@EUROPESUD
+WHERE Pays IN (SELECT * from mleral.pays_es@europeSud)
+UNION ALL
+SELECT * FROM arasoldier.STOCK_A@AMERICA
+WHERE Pays IN (SELECT * from arasoldier.pays_a@america);
+\end{verbatim}
+\subsubsection{Nettoyages éventuels}
+Une fois toutes ces opérations réalisés on peut supprimer :
+\begin{itemize}
+\item le lien vers la base de données centralisée
+\end{itemize}
+\subsubsection{Tests de vérification du bon fonctionnement}
+
+\subsection{Site Europe du Sud}
+\subsubsection{Binôme responsable}
+Le binôme responsable du site Europe du Sud est composé de Mohamed CHALAL et Mathieu LE RAL.
+\subsubsection{Création des liens entre les bases}
+\subsubsection{Création des tables}
+\subsubsection{Peuplement des tables}
+\subsubsection{Contraintes d'intégrité}
+\subsubsection{Droit d'accès}
+\subsubsection{Transparence}
+\subsubsection{Nettoyages éventuels}
+\subsubsection{Tests de vérification du bon fonctionnement}
+
+\subsection{Site Amérique}
+\subsubsection{Binôme responsable}
+Le binôme responsable du site Europe du Sud est composé de Marah GALY ADAM et Aina RASOLDIER.
+\subsubsection{Création des liens entre les bases}
+\subsubsection{Création des tables}
+\subsubsection{Peuplement des tables}
+\subsubsection{Contraintes d'intégrité}
+\subsubsection{Droit d'accès}
+\subsubsection{Transparence}
+\subsubsection{Nettoyages éventuels}
+\subsubsection{Tests de vérification du bon fonctionnement}
+
+\newpage
+\part{Test de requête distribués et optimisations}
+\section{Europe du Nord}
+\subsection{Requete 1}
+\subsubsection{Code de la requête}
+\begin{verbatim}
+SELECT *
+FROM clients
+WHERE pays = 'France';
+\end{verbatim}
+\subsubsection{Résultat d'exécution}
+
+\subsubsection{Analyse du plan d'exécution}
+\paragraph{Description du plan d'exécution :}
+%IMAGE ARBRE
+L'exécution de cette requête entraine une opération de sélection sur tous les fragments de clients sur leurs machines respectives puis une union des résultats de toutes ces sélections
+
+\paragraph{Problème d'optimisation :} Cet exemple montre une limite de l'optimiseur ORACLE. En effet ne connaissant pas les critères de la fragmentation il réalise la sélection sur tous les fragments alors que nous savons par définition des fragments Clients\_A, Clients\_EN et Clients\_RM qu'il ne possède aucun tuple vérifiant la requête ci-dessus.
+\subsubsection{Autre écriture possible}
+Pour permettre à l'optimiseur ORACLE de régler ce problème et d'optimiser correctement la requête il faut modifier notre définition de la vue CLIENTS. On redéfinie de la vue de la manière suivante
+\begin{verbatim}
+-- CLIENTS
+CREATE or replace VIEW clients AS 
+SELECT * FROM clients_EN
+WHERE Pays in ('Allemagne','Autriche','Belgique','Danemark',
+'Finlande','Irlande','Islande','Luxembourg','Norvege',
+'Pays-Bas','Pologne','Royaume-Uni','Suede','Suisse')
+UNION ALL
+SELECT * FROM mleral.clients_ES@EUROPESUD
+WHERE Pays in ('Espagne','France','Portugal','Italie','Andorre',
+'Gibraltar','Saint-Marin','Vatican','Malte','Albanie',
+'Bosnie-Herzégovine','Croatie','Grèce','Macédoine','Monténégro',
+'Serbie','Slovénie','Bulgarie')
+UNION ALL
+SELECT * FROM arasoldier.clients_A@AMERICA
+WHERE Pays in ('Antigua-et-Barbuda','Argentine','Bahamas','Barbade',
+'Belize','Bolivie','Bresil','Canada','Chili','Colombie','Costa Rica',
+'Cuba','Dominique','Equateur','Etats-Unis','Grenade','Guatemala',
+'Guyana','Haiti','Honduras','Jamaique','Mexique','Nicaragua','Panama',
+'Paraguay','Pérou','République dominicaine','Saint-Christophe-et-Nieves',
+'Saint-Vincent-et-les Grenadines','Sainte-Lucie','Salvador','Suriname',
+'Trinite-et-Tobago','Uruguay','Venezuela')
+UNION ALL
+SELECT * FROM clients_OTH
+WHERE Pays not in ('Albanie','Allemagne','Andorre','Antigua-et-Barbuda',
+'Argentine','Autriche','Bahamas','Barbade','Belgique','Belize','Bolivie',
+'Bosnie-Herzégovine','Bresil','Bulgarie','Canada','Chili','Colombie',
+'Costa Rica','Croatie','Cuba','Danemark','Dominique','Equateur','Espagne',
+'Etats-Unis','Finlande','France','Gibraltar','Grenade','Grèce','Guatemala',
+'Guyana','Haiti','Honduras','Irlande','Islande','Italie','Jamaique',                  'Luxembourg','Macédoine','Malte','Mexique','Monténégro','Nicaragua',
+'Norvege','Panama','Paraguay','Pays-Bas','Pologne','Portugal','Pérou',
+'Royaume-Uni','République dominicaine','Saint-Christophe-et-Nieves',
+'Saint-Marin','Saint-Vincent-et-les Grenadines','Sainte-Lucie','Salvador',
+'Serbie','Slovénie','Suede','Suisse','Suriname','Trinite-et-Tobago',
+'Uruguay','Vatican','Venezuela');
+\end{verbatim}
+De cette façon l'optimiseur va détecter l'antinomie entre la sélection et la définition des fragments et donc on évite trois sélections et une union inutile. La même optimisation peut-être réalisée sur la table STOCK
+
+\section{Europe du Sud}
+\subsection{Requete 1}
+\subsubsection{Résultat d'exécution}
+\subsubsection{Analyse du plan d'exécution}
+\subsubsection{Autre écriture possible}
+\section{Amérique}
+\subsection{Requete 1}
+\subsubsection{Résultat d'exécution}
+\subsubsection{Analyse du plan d'exécution}
+\subsubsection{Autre écriture possible}
+
+\newpage
+\part{Réplications}
+\section{Sur le site Europe du Nord}
+\subsection{Rappel binôme responsable}
+Le binôme responsable du site Europe du Nord est FLORANT Clément et LEZAUD Victor
+\subsection{Objectifs}
+L'application SellIt, qui est déployée sur tous les sites, ne modifie pas les tables PRODUITS et CATEGORIES mais y a souvent accès. De plus il serait pratique d'avoir un accès rapide aux données du personnel du site. Nous allons donc mettre en place des réplicats mono-maître de ces tables.
+\subsection{Liste des réplications prévues}
+\begin{itemize}
+\item Table PRODUITS
+\item Table CATEGORIES
+\item Table EMPLOYES
+\end{itemize}
+\subsection{Analyse}
+\subsubsection{EMPLOYES}
+La table EMPLOYES comporte peu de tuples et on ne connaît pas sa fréquence de mise à jour. On réalise donc une réplication COMPLETE REFRESH.
+\subsection{Mise en oeuvre des réplications}
+\subsubsection{Réplicat du fragment EMPLOYES}
+\paragraph{Opérations réalisées localement :}
+\begin{verbatim}
+CREATE MATERIALIZED VIEW EMPLOYES 
+REFRESH COMPLETE
+NEXT  (SYSDATE+1/1440)
+AS(
+SELECT * 
+FROM arasoldier.Employes@AMERICA);
+\end{verbatim}
+\paragraph{Message émis au site maître :}
+\begin{verbatim}
+Cher collègues, 
+Nous vous informons que nous allons créé une vue-matérialisée read-only, 
+complete refresh de votre table Employes. 
+Cordialement, 
+Lezaud Victor
+Ryori site Europe du Nord
+\end{verbatim}
+\paragraph{Réponse du site maître}
+\paragraph{Test de vérification de bon fonctionnement de la réplication}
+\paragraph{Evolutions éventuelles des contraintes d'intégrité}
+La vue étant réalisée en read-only, nous avons une réplication mono-maître. La table ne peut donc être modifié que la par le maître comme précédemment il n'y a pas donc d'évolution des contraintes d'intégrité.
+\paragraph{Evolutions éventuelles des vues et des synonymes}
+\subsection{Demandes d'autres sites}
+\subsubsection{Fragment FOURNISSEURS}
+\paragraph{Demande du site Europe du Sud}
+\subparagraph{Description de la demande et suivi}
+Le site d'Europe du Sud souhaite réaliser une réplication mono-maître de la table FOURNISSEURS en mode FAST REFRESH
+\subparagraph{Analyse de la demande}
+Pour permettre cette réplication il nous faut créer un log sur la table FOURNISSEURS et leur donner les droit d'accès en lecture sur la table FOURNISSEURS et sur le log. Les droits d'accès en lecture ont déjà été donné sur FOURNISSEURS.
+\subparagraph{Opérations réalisées en local}
+\begin{verbatim}
+CREATE MATERIALIZED VIEW LOG ON FOURNISSEURS;
+GRANT SELECT ON MLOG$_FOURNISSEURS TO mleral;
+\end{verbatim}
+\subparagraph{Tests de bon fonctionnement}
+
+\section{Sur le site Europe du Sud}
+\subsection{Rappel binôme responsable}
+Le binôme responsable du site Europe du Sud est composé de Mohamed CHALAL et Mathieu LE RAL.
+\subsection{Objectifs}
+\subsection{Liste des réplications prévues}
+\subsection{Analyse}
+\subsection{Mise en oeuvre des réplications}
+\subsubsection{Réplicat du fragment xxx}
+\paragraph{Opérations réalisées localement}
+\paragraph{Message émis au site maître}
+\paragraph{Réponse du site maître}
+\paragraph{Test de vérification de bon fonctionnement de la réplication}
+\paragraph{Evolutions éventuelles des contraintes d'intégrité}
+\paragraph{Evolutions éventuelles des vues et des synonymes}
+\subsection{Demandes d'autres sites}
+\subsubsection{Fragment xxx}
+\paragraph{Demande du site xxx}
+\subparagraph{Description de la demande et suivi}
+\subparagraph{Analyse de la demande}
+\subparagraph{Opérations réalisées en local}
+\subparagraph{Tests de bon fonctionnement}
+\section{Sur le site Amérique}
+\subsection{Rappel binôme responsable}
+Le binôme responsable du site Europe du Sud est composé de Marah GALY ADAM et Aina RASOLDIER.
+\subsection{Objectifs}
+\subsection{Liste des réplications prévues}
+\subsection{Analyse}
+\subsection{Mise en oeuvre des réplications}
+\subsubsection{Réplicat du fragment xxx}
+\paragraph{Opérations réalisées localement}
+\paragraph{Message émis au site maître}
+\paragraph{Réponse du site maître}
+\paragraph{Test de vérification de bon fonctionnement de la réplication}
+\paragraph{Evolutions éventuelles des contraintes d'intégrité}
+\paragraph{Evolutions éventuelles des vues et des synonymes}
+\subsection{Demandes d'autres sites}
+\subsubsection{Fragment xxx}
+\paragraph{Demande du site xxx}
+\subparagraph{Description de la demande et suivi}
+\subparagraph{Analyse de la demande}
+\subparagraph{Opérations réalisées en local}
+\subparagraph{Tests de bon fonctionnement}
+\section{Bilan global des réplications}
+
+\newpage
+\part{Requêtes distribuées : tests et optimisations}
+\section{Site Europe du Nord}
+\section{Site Europe du Sud}
+\section{Site Amérique}
+
+\end{document}

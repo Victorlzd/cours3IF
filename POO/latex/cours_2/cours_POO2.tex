@@ -1,0 +1,504 @@
+\documentclass[10pt,a4paper,twoside]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[francais]{babel}
+\usepackage{minted}
+\usepackage[T1]{fontenc}
+\author{Victor Lezaud}
+\title{POO2}
+\begin{document}
+
+\maketitle
+\renewcommand{\contentsname}{Sommaire}
+\tableofcontents
+
+\newpage
+\section{Amitié}
+\subsection{Principe}
+La relation d'amitié permet de contourner l'encapsulation en permettant l'accès à des attributs privés à l'extérieur de la classe. Cela permet d'améliorer les performances en évitant d'utiliser les services de la classe, mais il ne faut pas en abuser car cela viole le principe d'encapsulation. On peut déclarer une relation d'amitié avec le mot \verb=friend= entre une classe et :
+\begin{itemize}
+\item une fonction ordinaire
+\item une méthode d'une autre classe
+\item une classe complète.
+\end{itemize}
+
+\subsection{Mise en oeuvre}
+\begin{minted}[tabsize=3]{cpp}
+// Interface de la classe <C1> (fichier C1.h)
+#define C1_H
+class C2;
+class C1
+{
+	public :
+		// amitié de la fonction non-membre operator <<
+		friend std::ostream & operator << (std::ostream & out, const C1 & o);
+		
+		// amitié de la méthode m de la classe C2
+		friend const char * C2::m(const C1 & o);
+		
+		// amitié d'une classe C3
+		friend class C3;
+	
+	private :
+		int x;
+}
+\end{minted}
+
+\subsection{Limite de la Relation d'Amitié}
+La relation d'amitié n'est présente que si elle est déclaré explicitement. Il n'y a :
+\begin{itemize}
+\item ni symétrie
+\item ni transitivité
+\item ni héritage
+\end{itemize}
+
+
+\section{La surcharge}
+\subsection{Principe}
+\subsubsection{But}
+La surcharge permet de définir plusieurs fonctions/méthodes avec le même nom. Il suffit que les différentes versions n'aient pas la même signature.
+
+\subsubsection{Signature d'une fonction}
+La signature d'une fonction est composée de son nom et du nombre, l'ordre et le type de ses paramètres formels. Le type de retour ne fait pas partie de la signature
+
+\subsubsection{Paramètres par défaut}
+\begin{minted}{cpp}
+int f(int n=0, int d=1);
+\end{minted}
+La fonction f ci-dessus a 3 signatures différentes :
+\begin{itemize}
+\item f(int,int)
+\item f(int)
+\item f()
+\end{itemize}
+On ne peut donc pas définir une nouvelle fonction f sans paramètres car cela créerait une ambiguïté
+
+\subsection{Subtilités de la surcharge}
+\begin{minted}{cpp}
+void f (int x){}
+void f (const int x){} // ERREUR : le const ne permet 
+                       //  pas de faire la différence
+void f (int* x){}
+void f (const int* x){} // CORRECTE : le const permet 
+                       // de faire la diff avec les pt
+void f (int & x){}
+void f (const int & x){} // CORRECTE : comme les pointeurs
+\end{minted}
+
+\subsection{Choix de la fonction/méthode par le compilateur}
+\subsubsection{Règle 1}
+On appelle prioritairement la fonction/méthode dont les paramètres correspondent parfaitement (liste, ordre et type)
+
+\subsubsection{Règle 2}
+Si aucune fonction/méthode ne satisfait la règle 1, on utilise des conversions de types. Cette règle est très pratique mais source de nombreux problèmes
+
+\subsection{Surcharge des Opérateurs}
+\subsubsection{Généralités}
+Permet de remplacer une écriture fonctionnelle par une représentation algébrique. L'arité, la priorité et l’associativité sont les mêmes que pour les opérateurs d'origine. Cette technique rend le code plus lisible mais peut-être moins performante (dû aux nombreuses copies d'objet). Il faut garder l'esprit de l'opérateur. Les opérateurs suivants ne peuvent être surchargés:
+\begin{itemize}
+\item ::
+\item .
+\item .*
+\item ?:
+\end{itemize}
+
+\subsubsection{Opérateur interne : fonction memebre}
+\paragraph{Principe}
+\begin{minted}{cpp}
+class c1{
+...
+   type operator Op (parametres);
+...
+}
+\end{minted}
+
+Le premier opérande est l'objet appelant la fonction. S'il y a d'autres opérandes, ils sont passés en paramètre de la fonction. Le type de retour est très souvent le type de l'appelant, on utilise pour cela le pointeur this. L'opérateur interne est efficace pour les opérateurs modifiant l'appelant.
+
+\paragraph{Exemple : +=}
+\begin{minted}{cpp}
+class type{
+...
+   type operator += (type op2); // déclaration de la surcharge
+...
+}
+// les deux lignes ci-dessous sont équivalentes :
+x.operator += (y);
+x += y;
+\end{minted}
+
+\subsubsection{Opérateur externe : fonction ordinaire}
+\begin{minted}{cpp}
+type operator Op (parametres);
+\end{minted}
+
+Les paramètres sont les opérandes. Retour par valeur ou par référence d'un objet. On déclare souvent les opérateurs amis des classes pour faciliter l'accès aux attributs.
+
+\paragraph{Exemple : +}
+\begin{minted}{cpp}
+type operator + (type op1, type op2); // déclaration de la surcharge
+
+// les deux lignes ci-dessous sont équivalentes :
+operator + (x,y);
+x + y;
+\end{minted}
+
+\subsubsection{L'affectation}
+L'operator = est comme le constructeur de copie : le compilateur en crée un par défaut en cas d'absence mais cette version par défaut ne réalise q'une copie en surface. Il faut donc surcharger cette opérateur dés lors que l'on utilise un pointeur dans la classe.
+
+\subsubsection{Surcharge des opérateurs d'E/S}
+Permet d'insérer ou d'extraire des données selon des règles standard du langage C++. On retourne par référence le flux manipulé pour permettre les enchaînements
+\begin{minted}{cpp}
+istream & operator >> ( istream & flux, const T & valeur );
+//istream désigne la classe flux en entrée
+ostream & operator << ( ostream & flux, const T & valeur );
+//ostream désigne la classe flux en sortie
+\end{minted}
+
+\subsubsection{Opérateur ++ et --}
+Ces opérateurs définissent à la fois la post-incrémentation et la pré-incrémentation (x++,++x). On ajoute donc un paramètre fictif int (non-utilisé) pour la post-incrémentation. Le retour diffère pour les deux :
+\begin{itemize}
+\item pré : référence de l'objet
+\item post: valeur de l'objet
+\end{itemize}
+
+\subsection{Généricité}
+\subsubsection{Généralités}
+Un template est une entité qui peut définir un ensemble de classe ou de fonctions. La programmation générique permet de réduire la taille du code et de factoriser le travail.
+
+\subsubsection{Fonction générique}
+
+\begin{minted}{cpp}
+template <parametres_template>
+type nomFonction (parametres_fonction);
+\end{minted}
+
+\paragraph{Exemple :}
+\begin{minted}{cpp}
+template <typename T >
+T Minimum ( const T & x, const T & y )
+{
+	return x < y ? x : y;
+}
+double prix(14.99);
+cout << Minimum(prix,7.43) << endl;
+// Déduction automatique de la fonction générique
+cout << Minimum<int>(prix,5) << endl;
+// Il faut préciser car il y a ambiguïté
+cout << Minimum(int(prix),5) << endl;
+// Ici on a supprimé l'ambiguïté
+\end{minted}
+Les fonctions génériques doivent être déclarées et définies dans une interface (.h). Les opérations effectuées doivent exister pour tous les types passés en paramètres.
+\paragraph{Spécialisation :} On peut réaliser des spécialisations des fonctions génériques, cela revient à définir un comportement particulier de la fonction pour une certaine valeur de paramètre template. Dans ce cas la spécialisation doit être écrite après la fonction générique.
+\begin{minted}{cpp}
+template < >
+Point Minimum < Point > (const Point & p1, const Point & p2)
+{
+	...
+}
+\end{minted}
+
+\subsubsection{Classe Générique}
+\begin{minted}{cpp}
+template < typename T >
+class Point
+{
+	public :
+		void Deplacer(const Point < T > & delta);
+		Point ( const Point < T > & unPoint);
+		Point ( T abs = T ( ), T ord = T ( ) );
+		~Point ( );
+		
+	protected:
+		T x;
+		T y;
+}
+
+template < typename T >
+void Point < T >::Deplacer (const Point < T > & delta)
+{
+	...
+}
+template < typename T >
+Point < T >::Point (T abs, T ord)
+{
+	...
+}
+...
+\end{minted}
+
+L'ensemble des méthodes et des fonctions liées à une classe template doivent être définies dans le fichier .h où la classe est définie afin d'être sur que le compilateur crée les spécialisations de ces fonctions/méthodes pour toutes les utilisations de la classe.
+
+\subsubsection{Classe Générique et Paramétrage}
+Il est aussi possible de passer des paramètres template autre que des types. On peut par exemple donner un int pour paramétrer la taille d'un tableau statique. Attention du code sera généré pour chaque valeur distincte donnée aux paramètres templates.
+
+\subsubsection{Forme Canonique d'une Classe}
+La forme canonique d'une classe permet d'utiliser celle-ci de façon similaire à un objet de type de base. En cas de non-définition de ces méthodes, le compilateur fournit une version minimaliste et souvent insuffisante en présence d'attributs dynamiques. Elle contient :
+\begin{itemize}
+\item la surcharge de l'affection
+\item le constructeur par défaut
+\item le constructeur de copie
+\item le destructeur
+\end{itemize}
+
+
+\section{Librairies d'entrées sorties en C++}
+\subsection{Généralités}
+Les services d'entrées/sorties sont basés sur les flux. Ils sont définis grâce à un hiérarchie de classes génériques. Le type le plus utilisé étant le char il possède un instanciation spécifique (celle qu'on utilise tout le temps). Il en existe aussi une pour le wchar\_t.
+\subsection{Décomposition des classes de la librairie}
+\subsubsection{Abstraction vs Implémentation}
+Il y a deux catégories de classes :
+\begin{itemize}
+\item Les classes d'abstractions
+\begin{itemize}
+\item définissent une interface capable de fonctionner avec n'importe quel type de flux
+\item ne nécessite pas de connaître la localisation exacte de la donnée (fichier, mémoire, socket, ...) qui est lue ou écrite
+\end{itemize}
+\item Les classes d'implémentations
+\begin{itemize}
+\item Ces classes héritent des classes d'abstraction et définissent une implémentation spécifique pour un type précis de source de données
+\item Disponible dans la librairie standard
+\begin{itemize}
+\item Une implémentation pour les streams basés sur des fichiers
+\item Une implémentation pour les streams basés sur des tempons mémoires (memory buffer)
+\end{itemize}
+\end{itemize}
+\end{itemize}
+
+\subsubsection{Bas niveau vs Haut niveau}
+On peut décomposer les classes de la librairie en 2 groupes :
+\begin{itemize}
+\item Pour les opérations de bas niveau
+\begin{itemize}
+\item Classes streams buffers
+\item Elles agissent sur des caractères sans fournir aucune possibilités de formatage
+\item Elles sont rarement utilisées directement
+\end{itemize}
+\item Pour les opérations de haut niveau
+\begin{itemize}
+\item Classes stream
+\item Elles fournissent de nombreuses possibilités de formatage
+\item Elles s'appuient sur les classes stream buffers
+\end{itemize}
+\end{itemize}
+
+\subsection{Entrées / Sorties basées sur les streams}
+Il y a deux étapes dans une opération d'entrée / sortie en C++ :
+\begin{itemize}
+\item Le formatage des données (à la charge d'une classe stream)
+\item La communication vers/depuis un périphérique externe
+\begin{itemize}
+\item A la charge d'une classe stream buffer, représentation interne su stream dans lequel on lit/écrit.
+\item Toutes les classes gérant un flux possèdent un objet de la classe streambuf.
+\item Récupération possible du pointeur sur le stream buffer courant du flux à l'aide de la méthode ios::rdbuf()
+\item Modification possible de ce pointeur (redirection)
+\end{itemize}
+\end{itemize}
+
+\subsection{Etat d'un flux}
+\subsubsection{Généralités}
+Chaque flux possède un vecteur de bits définissant ses indicateurs d'erreur :
+\begin{itemize}
+\item goodbit : activé, si l'état est correct
+\item eofbit : activé, si la fin de fichier a été atteinte sur le flux d'entrée
+\item failbit : activé, si la dernière opération d'entrée/sortie a échoué
+\item badbit : activé, si la dernière opération d'entrée/sortie est invalide
+\end{itemize}
+Positionné automatiquement par les opérations d'entrée/sortie.
+
+\subsubsection{Manipulation}
+On peut manipuler ces états : 
+\begin{itemize}
+\item Globalement grâce à 3 méthodes publiques de la classe basic\_ios : rdstate, setstate et clear.
+\item Individuellement grâce à 4 méthodes publiques de la classe basic\_ios : good, eof, fail et bad
+\end{itemize}
+
+\subsubsection{Exemple de manipulation}
+\paragraph{Et bit à bit :}
+\begin{minted}{cpp}
+ifstream fic;
+fic.rdstate() & ifstream::failbit // permet de tester le failbit
+\end{minted}
+
+\paragraph{operator bool } renvoie true s'il n'y a pas d'erreur sur le flux et qu'il est prêt.
+\begin{minted}{cpp}
+while(fic.get(carLu)) // utilisation dans une boucle
+	cout << carLu;
+	
+if ( fic )
+{	// lecture du fichier
+}
+else
+{
+	cerr << "Erreur d'ouverture du fichier"<<endl;
+}
+\end{minted}
+
+\paragraph{operator !} renvoit true si failbit ou badbit est positionné.
+
+\subsection{Formatage avec le type fmtflags}
+Les indicateurs de format sont définis avec un type ios\_base::fmtflags. C'est un champ de bits pour représenter les différents indicateurs. On utilise des constantes nommées (de champ de bit) publique de la classe ios\_base. On les manipule avec des fonctions membres:
+\begin{itemize}
+\item fmtflags flags ( ) const;
+\begin{itemize}
+\item Renvoie le formatage actuellement actif sur le flux
+\end{itemize}
+\item fmtflags flags (fmtflags fmtfl)
+\begin{itemize}
+\item Positionne le formatage sur le flux
+\item Les indicateurs non définis par fmtfl sont réinitialisés
+\item Renvoie le formatage actif avant la modification sur le flux
+\end{itemize}
+\item void unsetf ( fmtflags mask );
+\begin{itemize}
+\item Réinitialise les indicateurs de format du flux définis par le paramètre mask
+\item Définition possible de mask avec une combinaison "ou" d'indicateurs de format
+\end{itemize}
+\item fmtflags setf ( fmtflags fmtfl );
+\begin{itemize}
+\item Positionne le formatage sur le flux en laissant les autres inchangés
+\item Renvoie le formatage actif avant la modification (permet une restauration)
+\end{itemize}
+\item fmtflags setf ( fmtflags fmtfl, fmtflags mask );
+\begin{itemize}
+\item Positionne les indicateurs de format dont les bits sont activés à la fois dans fmtfl et dans mask et réinitialise les indicateurs de format dont les bits sont définis dans mask mais pas dans fmtfl
+\item Renvoie le formatage actif avent la modification sur le flux
+\end{itemize}
+\end{itemize}
+
+\subsection{Formatage avec fonction membre}
+\begin{itemize}
+\item width : détermine le nombre minimum de caractères à écrire
+\item precision : détermine la précision des flottants
+\item fill : valeur du caractère de remplissage
+\end{itemize}
+
+\subsection{Manipulateurs}
+\subsubsection{Généralités}
+Les manipulateurs dont des fonctions globales issues de de <iomanip>. On les utilise avec les opérateurs << et >> sur des objets streams iostream. Ils modifient le comportement, les propriétés et les caractéristiques de formatage des streams.
+
+\subsubsection{Syntaxe d'utilisation}
+\begin{minted}{cpp}
+// Appel de fonction
+nomManipulateur ( nomFlux );
+endl ( cout );
+
+// Utilisation de la surcharge de << ou >>
+nomFlux << nomManipulateur;
+cout << endl;
+\end{minted}
+
+\subsubsection{Ecriture de son propre manipulateur}
+\begin{minted}{cpp}
+const char ROUGE [ ] = { 033,'[','3','1','m'};
+ostream & rouge ( ostream & os )
+{
+	os.write ( ROUGE, sizeof ( ROUGE ) );
+	return os;
+}
+\end{minted}
+Un manipulateur est une fonction passée en paramètre aux opérateurs d'insertion et d'extraction dans un flux. Il est appelé par ces opérateurs. Pour passer des paramètres à un manipulateur on crée une classe correspondant au manipulateur. On stocke les valeurs passés au constructeur dans des attributs privés. On définit une sucharge de l'opérateur << ou >> amie de la classe.
+\begin{minted}{cpp}
+class Width
+{
+	public:
+		explicit Width( int x ) : largeur ( x ) { }
+		inline friend ostream & operator << 
+		      ( ostream & os, const Width & manip)
+		{	
+			os.width(largeur);
+			return os;
+		}
+	private:
+		int largeur;
+}
+\end{minted}
+
+\section{Standard Template Library (STL)}
+\subsection{Généralités}
+La STL est une bibliothèque C++, normalisé par l'ISO. Elle est composé de nombreux composants efficaces et réutilisables. Elle est disponible dans divers environnements de développement.
+
+\subsection{Contenu}
+La STL contient :
+\begin{itemize}
+\item Un ensemble de classes conteneurs
+\item Une abstraction des pointeurs : itérateurs
+\item Des algorithmes génériques : insertion, suppression, tri, recherche...
+\item Une classe string
+\item Un mécanisme de bas-niveau pour l'allocation et la libération de mémoire
+\item Une généralisation des fonctions
+\end{itemize}
+
+\subsection{Itérateur}
+\subsubsection{Caractéristiques}
+\begin{itemize}
+\item Objet utilisé pour parcourir les éléments d'un conteneur
+\item Objet utilisé par les algorithmes
+\item S'appuie sur un ensemble d'opérateurs, avec au minimum :
+\begin{itemize}
+\item L'incrémentation
+\item Le déréférencement
+\end{itemize}
+\end{itemize}
+
+\subsubsection{6 catégories d'itérateurs}
+\begin{itemize}
+\item InputIterator et OutputIterator
+\begin{itemize}
+\item Les plus limités : opérations d'entrée et de sortie séquentielles dans un seul sens
+\end{itemize}
+\item ForwardIterator
+\begin{itemize}
+\item Mêmes opérations qu'un itérateur input et s'il n'est pas constant, il possède les mêmes possibilités qu'un itérateur output
+\item Déplacement du début vers la fin (dans un seul sens)
+\item Tous les conteneurs supportent cet itérateur
+\end{itemize}
+\item BiderectionalIterator
+\begin{itemize}
+\item Mêmes fonctionnalités qu'un itérateur forward mais avec des possibilités de déplacement dans les 2 sens
+\end{itemize}
+\item RandomAccessIterator
+\begin{itemize}
+\item Fonctionnalités similaires à un pointeur qui est d'ailleurs un itérateur de cette catégorie
+\item Accès direct à un élément possible sans itérer à travers tous les éléments.
+\end{itemize}
+\item ContiguousIterator (C++17)
+\end{itemize}
+
+\subsubsection{Détails}
+Un itérateur est associé à une séquence d'éléments, il désigne une position dans cette séquence. On désigne le début et la fin de la séquence par des itérateurs (obtenu avec les méthodes begin(), end(), rbegin() et rend() des conteneurs)
+
+\subsubsection{Itérateur d'insertion}
+L'itérateur d'insertion est une sorte de output iterator. Il pertmet d'insérer un élément dans un conteneur :
+\begin{itemize}
+\item A une position donnée : insert\_iterator
+\begin{itemize}
+\item Si ii est un insert\_iterator alors *ii = x réalise l'insertion de l'élément x dans le conteneur c à la position de l'itérateur
+\item Cela correspond à c.insert(p,x)
+\end{itemize}
+\item En début : front\_insert\_iterator
+\item En fin : back\_insert\_iterator
+\end{itemize}
+Les itérateurs d'insertion sont des adaptateurs d'itérateur. Les itérateurs inserter, front\_inserter et back\_inserter construisent automatiquement un itérateur d'insertion à partir de ses arguments (inférence de type)
+
+\subsubsection{Itérateur inversé}
+Les itérateurs inversés sont des adaptateurs d'itérateur. Ils permettent de parcourir un conteneur en sens inverse.
+
+\subsection{Conteneurs}
+\subsubsection{Caractéristiques}
+\begin{itemize}
+\item Objet support qui stocke une collection d'autres objets (ses éléments)
+\item Implémentation sous forme de modèles de classe (template)
+\item Gestion complète de l'espace mémoire alloué aux éléments
+\item Manipulation possible des éléments à partir des services (méthodes)
+\end{itemize}
+
+\subsubsection{Différents conteneurs}
+\begin{itemize}
+\item Séquence
+\item Adaptateur
+\item Associatif
+\item Associatif non ordonné
+\end{itemize}
+
+\subsection{Algorithme}
+
+\end{document}

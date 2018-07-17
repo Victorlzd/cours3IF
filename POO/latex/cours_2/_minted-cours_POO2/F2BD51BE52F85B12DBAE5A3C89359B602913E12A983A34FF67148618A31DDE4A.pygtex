@@ -1,0 +1,8 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{const} \PYG{k+kt}{char} \PYG{n}{ROUGE} \PYG{p}{[} \PYG{p}{]} \PYG{o}{=} \PYG{p}{\PYGZob{}} \PYG{l+m+mo}{033}\PYG{p}{,}\PYG{l+s+sc}{\PYGZsq{}[\PYGZsq{}}\PYG{p}{,}\PYG{l+s+sc}{\PYGZsq{}3\PYGZsq{}}\PYG{p}{,}\PYG{l+s+sc}{\PYGZsq{}1\PYGZsq{}}\PYG{p}{,}\PYG{l+s+sc}{\PYGZsq{}m\PYGZsq{}}\PYG{p}{\PYGZcb{};}
+\PYG{n}{ostream} \PYG{o}{\PYGZam{}} \PYG{n}{rouge} \PYG{p}{(} \PYG{n}{ostream} \PYG{o}{\PYGZam{}} \PYG{n}{os} \PYG{p}{)}
+\PYG{p}{\PYGZob{}}
+	\PYG{n}{os}\PYG{p}{.}\PYG{n}{write} \PYG{p}{(} \PYG{n}{ROUGE}\PYG{p}{,} \PYG{k}{sizeof} \PYG{p}{(} \PYG{n}{ROUGE} \PYG{p}{)} \PYG{p}{);}
+	\PYG{k}{return} \PYG{n}{os}\PYG{p}{;}
+\PYG{p}{\PYGZcb{}}
+\end{Verbatim}

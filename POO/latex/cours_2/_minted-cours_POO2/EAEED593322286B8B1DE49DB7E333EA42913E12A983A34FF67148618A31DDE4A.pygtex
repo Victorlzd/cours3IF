@@ -1,0 +1,7 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{class} \PYG{n+nc}{c1}\PYG{p}{\PYGZob{}}
+\PYG{p}{...}
+   \PYG{n}{type} \PYG{k}{operator} \PYG{n}{Op} \PYG{p}{(}\PYG{n}{parametres}\PYG{p}{);}
+\PYG{p}{...}
+\PYG{p}{\PYGZcb{}}
+\end{Verbatim}

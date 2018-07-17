@@ -1,0 +1,6 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{n}{istream} \PYG{o}{\PYGZam{}} \PYG{k}{operator} \PYG{o}{\PYGZgt{}\PYGZgt{}} \PYG{p}{(} \PYG{n}{istream} \PYG{o}{\PYGZam{}} \PYG{n}{flux}\PYG{p}{,} \PYG{k}{const} \PYG{n}{T} \PYG{o}{\PYGZam{}} \PYG{n}{valeur} \PYG{p}{);}
+\PYG{c+c1}{//istream désigne la classe flux en entrée}
+\PYG{n}{ostream} \PYG{o}{\PYGZam{}} \PYG{k}{operator} \PYG{o}{\PYGZlt{}\PYGZlt{}} \PYG{p}{(} \PYG{n}{ostream} \PYG{o}{\PYGZam{}} \PYG{n}{flux}\PYG{p}{,} \PYG{k}{const} \PYG{n}{T} \PYG{o}{\PYGZam{}} \PYG{n}{valeur} \PYG{p}{);}
+\PYG{c+c1}{//ostream désigne la classe flux en sortie}
+\end{Verbatim}

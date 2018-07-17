@@ -1,0 +1,12 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{while}\PYG{p}{(}\PYG{n}{fic}\PYG{p}{.}\PYG{n}{get}\PYG{p}{(}\PYG{n}{carLu}\PYG{p}{))} \PYG{c+c1}{// utilisation dans une boucle}
+	\PYG{n}{cout} \PYG{o}{\PYGZlt{}\PYGZlt{}} \PYG{n}{carLu}\PYG{p}{;}
+
+\PYG{k}{if} \PYG{p}{(} \PYG{n}{fic} \PYG{p}{)}
+\PYG{p}{\PYGZob{}}	\PYG{c+c1}{// lecture du fichier}
+\PYG{p}{\PYGZcb{}}
+\PYG{k}{else}
+\PYG{p}{\PYGZob{}}
+	\PYG{n}{cerr} \PYG{o}{\PYGZlt{}\PYGZlt{}} \PYG{l+s}{\PYGZdq{}Erreur d\PYGZsq{}ouverture du fichier\PYGZdq{}}\PYG{o}{\PYGZlt{}\PYGZlt{}}\PYG{n}{endl}\PYG{p}{;}
+\PYG{p}{\PYGZcb{}}
+\end{Verbatim}

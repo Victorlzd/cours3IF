@@ -1,0 +1,4 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{n}{ifstream} \PYG{n}{fic}\PYG{p}{;}
+\PYG{n}{fic}\PYG{p}{.}\PYG{n}{rdstate}\PYG{p}{()} \PYG{o}{\PYGZam{}} \PYG{n}{ifstream}\PYG{o}{::}\PYG{n}{failbit} \PYG{c+c1}{// permet de tester le failbit}
+\end{Verbatim}

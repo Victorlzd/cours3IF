@@ -1,0 +1,5 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{ALTER} \PYG{k}{SESSION} \PYG{k}{CLOSE} \PYG{k}{DATABASE} \PYG{n}{LINK} \PYG{n}{nomLien}\PYG{p}{;}
+
+\PYG{k}{DROP} \PYG{k}{DATABASE} \PYG{n}{LINK} \PYG{n}{nomLien}\PYG{p}{;}
+\end{Verbatim}

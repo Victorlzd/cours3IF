@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project source="2.7.1" version="1.0">
+This file is intended to be loaded by Logisim (http://www.cburch.com/logisim/).
+<lib desc="#Wiring" name="0"/>
+  <lib desc="#Gates" name="1"/>
+  <lib desc="#Plexers" name="2">
+    <tool name="Multiplexer">
+      <a name="disabled" val="0"/>
+      <a name="enable" val="false"/>
+    </tool>
+  </lib>
+  <lib desc="#Arithmetic" name="3"/>
+  <lib desc="#Memory" name="4">
+    <tool name="ROM">
+      <a name="contents">addr/data: 8 8
+0
+</a>
+    </tool>
+  </lib>
+  <lib desc="#I/O" name="5"/>
+  <lib desc="#Base" name="6">
+    <tool name="Text Tool">
+      <a name="text" val=""/>
+      <a name="font" val="SansSerif plain 12"/>
+      <a name="halign" val="center"/>
+      <a name="valign" val="base"/>
+    </tool>
+  </lib>
+  <main name="Multiplexeur 2 vers 1"/>
+  <options>
+    <a name="gateUndefined" val="ignore"/>
+    <a name="simlimit" val="1000"/>
+    <a name="simrand" val="0"/>
+  </options>
+  <mappings>
+    <tool lib="6" map="Button2" name="Menu Tool"/>
+    <tool lib="6" map="Button3" name="Menu Tool"/>
+    <tool lib="6" map="Ctrl Button1" name="Menu Tool"/>
+  </mappings>
+  <toolbar>
+    <tool lib="6" name="Poke Tool"/>
+    <tool lib="6" name="Edit Tool"/>
+    <tool lib="6" name="Text Tool">
+      <a name="text" val=""/>
+      <a name="font" val="SansSerif plain 12"/>
+      <a name="halign" val="center"/>
+      <a name="valign" val="base"/>
+    </tool>
+    <sep/>
+    <tool lib="0" name="Pin">
+      <a name="tristate" val="false"/>
+    </tool>
+    <tool lib="0" name="Pin">
+      <a name="facing" val="west"/>
+      <a name="output" val="true"/>
+      <a name="labelloc" val="east"/>
+    </tool>
+    <tool lib="1" name="NOT Gate"/>
+    <tool lib="1" name="AND Gate">
+      <a name="inputs" val="2"/>
+    </tool>
+    <tool lib="1" name="OR Gate">
+      <a name="inputs" val="2"/>
+    </tool>
+  </toolbar>
+  <circuit name="Multiplexeur 2 vers 1">
+    <a name="circuit" val="Multiplexeur 2 vers 1"/>
+    <a name="clabel" val=""/>
+    <a name="clabelup" val="east"/>
+    <a name="clabelfont" val="SansSerif plain 12"/>
+    <wire from="(380,70)" to="(400,70)"/>
+    <wire from="(380,90)" to="(400,90)"/>
+    <wire from="(430,80)" to="(450,80)"/>
+    <wire from="(60,100)" to="(80,100)"/>
+    <wire from="(40,80)" to="(60,80)"/>
+    <wire from="(410,100)" to="(410,110)"/>
+    <wire from="(130,40)" to="(150,40)"/>
+    <wire from="(130,120)" to="(150,120)"/>
+    <wire from="(150,100)" to="(170,100)"/>
+    <wire from="(150,60)" to="(170,60)"/>
+    <wire from="(220,80)" to="(240,80)"/>
+    <wire from="(60,60)" to="(60,80)"/>
+    <wire from="(60,80)" to="(60,100)"/>
+    <wire from="(60,60)" to="(70,60)"/>
+    <wire from="(150,40)" to="(150,60)"/>
+    <wire from="(150,100)" to="(150,120)"/>
+    <wire from="(40,140)" to="(80,140)"/>
+    <wire from="(40,20)" to="(80,20)"/>
+    <comp lib="6" loc="(411,127)" name="Text">
+      <a name="text" val="c"/>
+      <a name="font" val="SansSerif plain 16"/>
+    </comp>
+    <comp lib="6" loc="(463,84)" name="Text">
+      <a name="text" val="S"/>
+      <a name="font" val="SansSerif plain 16"/>
+    </comp>
+    <comp lib="2" loc="(430,80)" name="Multiplexer">
+      <a name="disabled" val="0"/>
+      <a name="enable" val="false"/>
+    </comp>
+    <comp lib="6" loc="(364,74)" name="Text">
+      <a name="text" val="E0"/>
+      <a name="font" val="SansSerif plain 16"/>
+    </comp>
+    <comp lib="1" loc="(130,40)" name="AND Gate">
+      <a name="inputs" val="2"/>
+      <a name="negate1" val="true"/>
+    </comp>
+    <comp lib="6" loc="(301,85)" name="Text">
+      <a name="text" val="&lt;=&gt;"/>
+      <a name="font" val="SansSerif plain 20"/>
+    </comp>
+    <comp lib="6" loc="(20,27)" name="Text">
+      <a name="text" val="E0"/>
+      <a name="font" val="SansSerif plain 16"/>
+    </comp>
+    <comp lib="1" loc="(220,80)" name="OR Gate">
+      <a name="inputs" val="2"/>
+    </comp>
+    <comp lib="1" loc="(130,120)" name="AND Gate">
+      <a name="inputs" val="2"/>
+    </comp>
+    <comp lib="6" loc="(26,146)" name="Text">
+      <a name="text" val="E1"/>
+      <a name="font" val="SansSerif plain 16"/>
+    </comp>
+    <comp lib="6" loc="(364,98)" name="Text">
+      <a name="text" val="E1"/>
+      <a name="font" val="SansSerif plain 16"/>
+    </comp>
+    <comp lib="6" loc="(27,84)" name="Text">
+      <a name="text" val="c"/>
+      <a name="font" val="SansSerif plain 16"/>
+    </comp>
+    <comp lib="6" loc="(251,85)" name="Text">
+      <a name="text" val="S"/>
+      <a name="font" val="SansSerif plain 16"/>
+    </comp>
+  </circuit>
+  <circuit name="Multiplexeur 1 vers 2">
+    <a name="circuit" val="Multiplexeur 1 vers 2"/>
+    <a name="clabel" val=""/>
+    <a name="clabelup" val="east"/>
+    <a name="clabelfont" val="SansSerif plain 12"/>
+    <wire from="(340,80)" to="(360,80)"/>
+    <wire from="(390,90)" to="(410,90)"/>
+    <wire from="(390,70)" to="(410,70)"/>
+    <wire from="(70,100)" to="(90,100)"/>
+    <wire from="(40,140)" to="(90,140)"/>
+    <wire from="(40,20)" to="(90,20)"/>
+    <wire from="(380,100)" to="(380,110)"/>
+    <wire from="(70,60)" to="(70,80)"/>
+    <wire from="(70,80)" to="(70,100)"/>
+    <wire from="(60,80)" to="(70,80)"/>
+    <wire from="(30,80)" to="(40,80)"/>
+    <wire from="(70,60)" to="(80,60)"/>
+    <wire from="(140,40)" to="(180,40)"/>
+    <wire from="(140,120)" to="(180,120)"/>
+    <wire from="(40,20)" to="(40,80)"/>
+    <wire from="(40,80)" to="(40,140)"/>
+    <comp lib="6" loc="(261,85)" name="Text">
+      <a name="text" val="&lt;=&gt;"/>
+      <a name="font" val="SansSerif plain 20"/>
+    </comp>
+    <comp lib="2" loc="(360,80)" name="Demultiplexer">
+      <a name="disabled" val="0"/>
+      <a name="enable" val="false"/>
+    </comp>
+    <comp lib="1" loc="(140,40)" name="AND Gate">
+      <a name="inputs" val="2"/>
+      <a name="negate1" val="true"/>
+    </comp>
+    <comp lib="6" loc="(15,86)" name="Text">
+      <a name="text" val="E"/>
+      <a name="font" val="SansSerif plain 16"/>
+    </comp>
+    <comp lib="6" loc="(196,126)" name="Text">
+      <a name="text" val="S1"/>
+      <a name="font" val="SansSerif plain 16"/>
+    </comp>
+    <comp lib="6" loc="(326,87)" name="Text">
+      <a name="text" val="E"/>
+      <a name="font" val="SansSerif plain 16"/>
+    </comp>
+    <comp lib="6" loc="(424,77)" name="Text">
+      <a name="text" val="S0"/>
+      <a name="font" val="SansSerif plain 16"/>
+    </comp>
+    <comp lib="6" loc="(379,130)" name="Text">
+      <a name="text" val="c"/>
+      <a name="font" val="SansSerif plain 16"/>
+    </comp>
+    <comp lib="6" loc="(50,85)" name="Text">
+      <a name="text" val="c"/>
+      <a name="font" val="SansSerif plain 16"/>
+    </comp>
+    <comp lib="1" loc="(140,120)" name="AND Gate">
+      <a name="inputs" val="2"/>
+    </comp>
+    <comp lib="6" loc="(196,47)" name="Text">
+      <a name="text" val="S0"/>
+      <a name="font" val="SansSerif plain 16"/>
+    </comp>
+    <comp lib="6" loc="(425,97)" name="Text">
+      <a name="text" val="S1"/>
+      <a name="font" val="SansSerif plain 16"/>
+    </comp>
+  </circuit>
+</project>

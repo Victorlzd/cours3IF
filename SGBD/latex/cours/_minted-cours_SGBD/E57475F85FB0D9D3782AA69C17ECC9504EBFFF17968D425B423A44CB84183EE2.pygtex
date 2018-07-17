@@ -1,0 +1,14 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{WITH} \PYG{n}{Descendants}\PYG{p}{(}\PYG{n}{p}\PYG{p}{,} \PYG{n}{d}\PYG{p}{)} \PYG{k}{as} \PYG{p}{(}
+     \PYG{k}{SELECT} \PYG{n}{Parents} \PYG{n}{ad} \PYG{n}{p}\PYG{p}{,} \PYG{n}{Enfants} \PYG{k}{as} \PYG{n}{d}
+     \PYG{k}{FROM} \PYG{n}{ParentsEnfants} \PYG{k}{as} \PYG{n}{PE}
+     \PYG{k}{UNION} \PYG{k}{ALL}
+     \PYG{k}{SELECT} \PYG{n}{D}\PYG{p}{.}\PYG{n}{p}\PYG{p}{,} \PYG{n}{PE}\PYG{p}{.}\PYG{n}{Enfants} \PYG{k}{as} \PYG{n}{d}
+     \PYG{k}{FROM} \PYG{n}{Descendants} \PYG{k}{as} \PYG{n}{D}\PYG{p}{,} \PYG{n}{ParentsEnfants} \PYG{k}{as} \PYG{n}{PE}
+     \PYG{k}{WHERE} \PYG{n}{D}\PYG{p}{.}\PYG{n}{d} \PYG{o}{=} \PYG{n}{PE}\PYG{p}{.}\PYG{n}{Parents}
+\PYG{p}{)}
+
+\PYG{k}{SELECT} \PYG{o}{*}
+\PYG{k}{FROM} \PYG{n}{Descendants}
+\PYG{k}{WHERE} \PYG{n}{p}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}Jean\PYGZsq{}}
+\end{Verbatim}

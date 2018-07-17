@@ -1,0 +1,10 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{CREATE} \PYG{k}{OR} \PYG{k}{REPLACE} \PYG{k}{FUNCTION} \PYG{o}{\PYGZlt{}}\PYG{n}{NomFct}\PYG{o}{\PYGZgt{}}
+   \PYG{p}{[(}\PYG{o}{\PYGZlt{}}\PYG{n}{nomParam}\PYG{o}{\PYGZgt{}} \PYG{err}{\PYGZob{}}\PYG{k}{IN}\PYG{o}{|}\PYG{k}{OUT}\PYG{o}{|}\PYG{k}{IN} \PYG{k}{OUT}\PYG{err}{\PYGZcb{}} \PYG{o}{\PYGZlt{}}\PYG{k}{Type}\PYG{o}{\PYGZgt{}} \PYG{p}{[}\PYG{n}{NOCOPY}\PYG{p}{])]} \PYG{k}{RETURN} \PYG{o}{\PYGZlt{}}\PYG{k}{Type}\PYG{o}{\PYGZgt{}}
+\PYG{k}{IS}
+    \PYG{p}{[}\PYG{n}{DECLARATION}\PYG{p}{]}
+\PYG{k}{BEGIN}
+    \PYG{p}{[}\PYG{n}{CORPS}\PYG{p}{]}
+    \PYG{k}{RETURN}\PYG{p}{(}\PYG{o}{\PYGZlt{}}\PYG{n}{valeur}\PYG{o}{\PYGZgt{}}\PYG{p}{)}
+\PYG{k}{END}\PYG{p}{;}
+\end{Verbatim}

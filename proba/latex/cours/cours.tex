@@ -1,0 +1,594 @@
+\documentclass[10pt,a4paper,twoside]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[francais]{babel}
+\usepackage[T1]{fontenc}
+
+%\usepackage{minted}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+%\usepackage{graphicx}
+%\usepackage{placeins}
+%\usepackage{lscape}
+
+
+\author{Victor Lezaud}
+\title{Cours de probabilité - 3IF}
+\begin{document}
+
+\maketitle
+\renewcommand{\contentsname}{Sommaire}
+\tableofcontents
+\newpage
+
+\section{Notions de dénombrement}
+Dans cette partie on traite la combinatoire de $p$ éléments pris parmi $n$ éléments d'un ensemble $E$ (sauf pour les permutations).
+\subsection{Permutations}
+On appelle \textbf{permutation} des $n$ éléments l'ensemble $E$ toute disposition ordonnée de ces $n$ éléments. Il existe $n!$ permutations.
+
+\subsection{Arrangements sans répétition}
+On appelle \textbf{arrangement sans répétition} toute disposition \textbf{ordonnée} de $p$ éléments pris parmi les $n$ éléments de $E$. Il existe $A_{n}^{p}$ arrangements sans répétition.
+$$A_{n}^{p}=\frac{n!}{(n-p)!}$$
+
+\subsection{Combinaisons sans répétition}
+On appelle \textbf{combinaisons sans répétition} toute disposition \textbf{non ordonnée} de $p$ éléments pris parmi les $n$ éléments de $E$. Il existe $C^{p}_{n}$ combinaisons sans répétition.
+$$C^{p}_{n}=\frac{n!}{p!(n-p)!}$$
+
+
+\subsection{Arrangements avec répétition}
+On appelle \textbf{arrangements avec répétition} toute disposition \textbf{ordonnée} de $p$ éléments, \textbf{non nécessairement distincts}, pris parmi les $n$ éléments de $E$. Il existe $n^{p}$ arrangements avec répétition.
+
+\subsection{Combinaisons avec répétition}
+On appelle \textbf{combinaisons avec répétition} toute disposition \textbf{non ordonnée} de $p$ éléments, \textbf{non nécessairement distincts}, pris parmi les $n$ éléments de $E$. Il existe $C^{p}_{n+p-1}$ combinaisons sans répétition.
+$$C^{p}_{n+p-1}=\frac{(n+p-1)!}{p!(n-1)!}$$
+
+\subsection{Permutations avec répétitions}
+Supposons que les éléments $n$ éléments de l'ensemble $E$, se répartissent en $l$ catégories avec $n_{i}$ le nombre d'éléments du type $i$ et $n=\sum n_{i}$. On appelle permutation avec répétition de $n$ élémens de l'ensemble E toute disposition ordonnée de $n$ éléments où figure, pour tout $i$, $n_{i}$ éléments du type $i$. Il en existe :
+$$\frac{n!}{\prod n_{i}!}$$
+
+
+\section{Fondements de la théorie des probabilités}
+\subsection{Espace d'événements}
+\subsubsection{Univers}
+On appelle \textbf{ensemble des possibles}, ou \textbf{ensemble des éventualités}, ou encore \textbf{univers}, l'ensemble $\Omega$ des résultats possibles d'une expérience aléatoire. Les éléments de $\omega$ de $\Omega$ sont appelés \textbf{issues}, ou \textbf{événements élémentaires}, ou encore \textbf{épreuves} de l'expérience aléatoire.
+
+
+\subsubsection{Evénement}
+On appelle événement l'\textbf{ensemble des issues} de l'expérience qui vérifie une \textbf{propriété} donnée. C'est donc une partie $A$ de $\Omega$ ($A\in P(\Omega)$).
+
+\subsubsection{Tribu}
+On associe à l'univers $\Omega$ un ensemble d'événements $T$ appelé \textbf{tribu}. Cet ensemble doit vérifier les propriétés suivantes :
+\begin{itemize}
+\item $\Omega \in T$
+\item $A\in T \rightarrow A^{c}\in T$
+\item $\forall i \in \mathbb{N}, A_{i}\in T \rightarrow \cup_{i\in \mathbb{N}} A_{i}\in T$
+\end{itemize}
+Dans ce cas, alors le couple $(\Omega,T)$ est appelé \textbf{espace d'événements}. Lorsque $\Omega$ est fini et dénombrable on prend pour tribu l'ensemble $P(\Omega)$.
+
+\subsection{Espace probabilisé}
+\subsubsection{Définition}
+Soit $(\Omega,T)$ un espace d'événements. On appelle \textbf{probabilité} sur $(\Omega,T)$ une application $P$ définie sur $T$ vérifiant :
+\begin{enumerate}
+\item $\forall A\in T, P(A)\in [0,1]$
+\item $P(\Omega)=1$
+\item Quelle que soit la suite $(A_{i})_{i\in \mathbb{N}}$ d'éléments de $T$ deux à deux disjoints, on a
+$$P\left(\bigcup_{i\in \mathbb{N}}A_{i}\right)=\sum_{i=1}^{+\infty}P(A_{i})$$
+\end{enumerate}
+Le triplet $(\Omega,T,P)$ est appelé \textbf{espace probabilisé}.
+
+\subsubsection{Propriétés}
+Soit $A$ et $B$ deux événements d'un espace probabilisé $(\Omega,T,P)$. La probabilité $P$ est une application qui vérifie les propriétés suivantes :
+\begin{itemize}
+\item $P(A^{c})=1-P(A)$
+\item $A\subset B \Rightarrow P(A)<P(B)$
+\item $P(A\cup B) = P(A) + P(B) - P(A\cap B)$
+\end{itemize}
+
+\subsection{Probabilités conditionnelles}
+\subsubsection{Définition}
+Soit $(\Omega, T, P)$ un espace probabilisé, $A\in T, B\in T)$ tel que $P(B)\neq 0$. La \textbf{probabilité de $A$ sachant $B$} est définie par
+$$P(A|B)=\frac{P(A\cap B)}{P(B)}$$
+L'application
+$$P_{B} : A\in T \longmapsto P(A|B)$$
+définit une probabilité sur l'espace des événements $(\Omega,T)$. Cette probabilité est appelée \textbf{probabilité conditionnelle sachant $B$}.
+
+\subsubsection{Propriétés}
+Soient $A,B \in T$. On a les relations suivantes :
+\begin{itemize}
+\item $P(A^{c}|B) = 1-P(A|B)$
+\item $P(A\cap B) = P(A|B)\times P(B) = P(B|A)\times P(A)$
+\end{itemize}
+
+
+\subsubsection{Formule de Bayes}
+\paragraph{Une partition }d'un univers est un \textbf{ensemble fini d'événement disjoint} deux à deux et dont l'\textbf{union forme l'univers}.
+
+\paragraph{Théorème :} Soit $(\Omega,T,P)$ un espace probabilisé et soient $A_{1},\ldots,A_{n}$ une \textbf{partition} de $\Omega$. On a les relations suivantes :
+\begin{align*}
+\forall B \in T\ \  P(B)&=\sum_{i=1}^{n}P(B|A_{i})\times P(A_{i})\\
+\forall B \in T\ \  P(A_{k}|B)&=\frac{P(B|A_{k})\times P(A_{k})}{\sum_{i=1}^{n}P(B|A_{i})\times P(A_{i}}
+\end{align*}
+
+\subsubsection{Indépendance}
+\paragraph{Définition :} Soient $(\Omega,T,P)$ un espace probabilisé et $A$ et $B$ deux éléments de $T$. Les événements $A$ et $B$ sont dits \textbf{indépendants} si et seulement si
+\begin{align*}
+P(A\cap B)&= P(A) \times P(B)\\
+P(A|B) &= P(A)
+\end{align*}
+
+\paragraph{Complémentaires :} Si $A$ et $B$ ont \textbf{indépendants}, alors il en est de même pour $A$ et $B^{c}$, $A^{c}$ et $B$ et $A^{c}$ et $B^{c}$.
+
+\paragraph{Indépendance mutuelle :} Les événements $A_{1},\ldots,A_{n}\in T$ sont dits \textbf{mutuellement indépendants} si $\forall k \in \{1,\ldots,n\}$ et $\forall(i_{1},\ldots,i{k})\in \mathbb{N}^{k}$ tel que $1 \leqslant i_{1} < \ldots \leqslant n$, on a :
+$$P(\cap_{j=1}^{k}A_{i_{j}}) = \prod_{j=1}^{k}P(A_{i_{j}})$$
+
+\section{Variables aléatoires réelles}
+\subsection{Définition}
+\subsubsection{Variable aléatoire}
+\paragraph{Variable aléatoire :} Soient $(\Omega,T)$ et $(\Omega',T')$ deux espaces d'événements. On appelle \textbf{variable aléatoire} de l'espace d'événements $(\Omega,T)$ vers $(\Omega',T')$ \textbf{une application} $X:\Omega\mapsto\Omega'$ telle que :
+$$\forall A' \in T',\ X^{-1}(A')\in T$$
+où $X^{-1}(A') = \{\omega \in \Omega, X(\omega) \in A'\}$
+
+\paragraph{Variable aléatoire réelle :} Une application $X:\Omega\mapsto \mathbb{R}$ est une \textbf{variable aléatoire réelle} sur l'espace d'événements $(\Omega,T)$ si :
+$$\forall x\in \mathbb{R},\ X^{-1}\left(]-\infty,x]\right)\in T$$
+
+\subsubsection{Fonction de répartition}
+
+\paragraph{Définition :} Soit $X$ une v.a.r. sur l'espace probabilisé $(\Omega,T,P)$. L'application
+\begin{align*}
+F_{x}: & \mathbb{R}\longmapsto [0,1]\\
+ & x\longmapsto P\left(X^{-1}\left(\left]-\infty,x\right]\right)\right)
+\end{align*}
+est appelé \textbf{fonction de répartition}.
+
+
+\paragraph{Proposition :} Soit $X$ une v.a.r. sur $(\Omega,T,P)$. La \textbf{fonction de répartition} associée à $X$ vérifie les propriétés suivantes :
+\begin{itemize}
+\item $\lim\limits_{x\to-\infty}F_{X}(x)=0$
+\item $\lim\limits_{x\to+\infty}F_{X}(x)=1$
+\item $F_{X}$ est croissante
+\item $F_{X}$ est continue à droite
+\end{itemize}
+
+
+\subsubsection{Variables aléatoires discrètes et variables aléatoires continues}
+
+\paragraph{V.a.r discrète :} Une v.a.r. $X$ est dite \textbf{discrète} si elle ne prend qu'un \textbf{nombre fini ou dénombrable de valeurs} dans $\mathbb{R}$, c'est-à-dire si $X(\Omega)=\{x_{j}\in \mathbb{R}, j\in J\}$ où $J\subset \mathbb{N}$. Dans ce cas la fonction
+\begin{align*}
+p: & J\longmapsto [0,1]\\
+ & j\longmapsto p_{j}
+\end{align*}
+où $p_{j}=P(X=x_{j})$ est appelée \textbf{fonction de masse} de la v.a.r. C.
+
+\paragraph{Proposition :} Si $X$ est une \textbf{v.a.r. discrète} prenant les valeurs $\{x_{i}\in \mathbb{R}, i\in I\}$ avec $I\subset \mathbb{N}$, alors sa \textbf{fonction de répartition} $F_{X}$ est \textbf{constante par morceaux} et a pour points de discontinuités $\{x_{i} \in \mathbb{R}, i \in I\}$.
+
+\paragraph{V.a.r. absolument continue :} Une v.a.r. $X$ est dite \textbf{absolument continue} s'il existe une fonction de $\mathbb{R}$ dans $\mathbb{R}$, telle que la \textbf{fonction de répartition} $F_{X}$ de la v.a.r. $X$ admette la représentation \textbf{intégrale} suivante :
+$$F_{X}(x)=\int_{-\infty}^{x}f_{X}(t)dt$$
+Ceci est équivalent à dire que $F_{X}$ est \textbf{dérivable} sur $\mathbb{R}$, de dérivée $f_{X}$. La fonction $f_{X}$ est appelée \textbf{densité} $X$. On parle aussi de \textbf{v.a.r. à densité} pour désigner une \textbf{v.a.r. absolument continue}.
+
+\subsubsection{Loi d'une variable aléatoire}
+
+Soient $(\Omega,T)$ et $(\Omega',T')$ deux espaces d'événements. Soit $X$ une variable aléatoire de $(\Omega,T)$ vers $(\Omega',T')$ et $P$ une probabilité sur $(\Omega,T)$. L'\textbf{application}
+\begin{align*}
+P_{X}: & T'\longmapsto [0,1]\\
+ & A'\longmapsto P(X^{-1}(A'))
+\end{align*}
+définit une \textbf{probabilité} sur l'espace d'événements $(\Omega'T')$. Cette probabilité est appelée \textbf{loi de la variable aléatoire} $X$.
+
+\subsection{Exemples de lois}
+\subsubsection{Variables aléatoires discrètes}
+\paragraph{Loi de Bernoulli} notée $B(1,p)$, $p\in ]0,1[$, permet de décrire une expérience possédant uniquement \textbf{deux issues} possibles (exemple : pile ou face, succès ou réussite). La loi es définie par :
+$$P(X=1)=p\ \ \ et\ \ \ P(X=0)=1-p$$
+
+\paragraph{Loi binomiale} notée $B(1,p)$, $n\in \mathbb{N}^{*}$, $p\in ]0,1[$ permet de décrire une expérience composée d'une \textbf{suite d'épreuve de Bernoulli} où l'on s'intéresse au \textbf{nombre de réussite} (exemple : nombre de face en $n$ lancers). La loi est définie par :
+$$\forall i\in \{0,\ldots,n\},\ \ P(X=i)=C_{n}^{i}p^{i}(1-p)^{n-i}$$
+
+\paragraph{Loi géométrique} notée $G(p)$, $p\in ]0,1[$ décrit une expérience composée d'une \textbf{suite d'épreuve de Bernoulli} où l'on s'intéresse à la probabilité d'une \textbf{série d'échecs suivie d'une réussite} (Exemple : nombre de piles avant une face). La loi est définie par :
+$$\forall i \in \mathbb{N}^{*},\ \ P(X=i)=p(1-p)^{i-1}$$
+
+\paragraph{Loi uniforme sur $\{1,\ldots,\mathbb{N}\}$} notée $U_{\mathbb{N}}, \mathbb{N}\in \mathbb{N}^{*}$ décrit une expérience possédant \textbf{$\mathbb{N}$ issues possibles, toutes équiprobables} (Exemple: lancer de dé). La loi est définie par :
+$$\forall k \in \{1,\ldots,\mathbb{N}\},\ \ \ P(X=k)=\frac{1}{\mathbb{N}}$$
+
+\paragraph{Loi de Poisson} notée $P(\lambda)$, $\lambda >0$ permet de décrire les \textbf{files d'attentes}. La loi est définie par :
+$$\forall k \in \mathbb{N}, P(X=k)=e^{-\lambda}\frac{\lambda^{k}}{k!}$$
+
+
+\subsubsection{Variables aléatoires continues}
+
+\paragraph{Loi uniforme sur $[a,b]$} notée $U([a,b])$, $a<b$ a pour densité la fonction
+$$f_{X}(t) = \frac{1}{b-a}I_{[a,b]}(t)$$
+et pour fonction de répartition
+$$F_{X}=\left\lbrace 
+\begin{array}{ll}
+0 & \text{si } x\leqslant a \\
+\frac{x-a}{b-a} & \text{si } x\in [a,b]\\
+1 & \text{si } x\geqslant b \\
+\end{array}
+\right.$$
+
+\paragraph{Loi normale} notée $\mathbb{N}(m,\sigma^{2})$, $m \in \mathbb{R}$, $\sigma>0$ a pour densité
+$$f_{X}(t)=\frac{1}{\sqrt{2\pi\sigma^{2}}}\exp\left(-\frac{(t-m)^{2}}{2\sigma^{2}}\right)$$
+
+\paragraph{Loi exponentielle} notée $\varepsilon(\lambda)$, $\lambda>0$ a pour densité :
+$$f_{X}(t) = \left\lbrace
+\begin{array}{ll}
+\lambda e^{-\lambda t} & \text{si } t \geqslant 0\\
+0 & \text{sinon}
+\end{array}\right.$$
+
+\paragraph{Loi de Cauchy} a pour densité
+$$f_{X}(t)=\frac{1}{\pi(1+t^{2})}$$
+
+\paragraph{Loi Gamma} notée $\Gamma(a,b)$, $a>0$, $b>0$ a pour densité sur $\mathbb{R}^{+}$ la fonction
+$$f_{X}(t) = \frac{1}{\Gamma(a)}b^{a}t^{a-1}e^{-bt}$$
+où
+$$\Gamma(a) = \int_{0}^{+\infty}u^{a-1}e^{-u}du,\ \ \forall a >0$$
+
+\subsection{Moments d'une variable aléatoire}
+\subsubsection{Espérance}
+\paragraph{Définition} Soit $X$ une v.a.r. sur l'espace probabilisé $(\Omega,T,P)$.
+\begin{itemize}
+\item Si $X$ est une v.a.r. \textbf{discrète} avec $X(\Omega)=\{x_{j}\in \mathbb{R}, j \in J\}$ où $J\subset \mathbb{N}$, on appelle \textbf{espérance} de $X$ et on note $E(X)$, la \textbf{moyenne des valeurs} prises par X \textbf{pondérés par leurs probabilités} de réalisation, autrement dit, lorsque cette quantité existe
+$$E(X)=\sum_{j\in J}x_{j}\times P(X=x_{j})$$
+\item Si $X$ est une v.a.r. \textbf{continue} de densité $f_{X}$, on appelle \textbf{espérance} de $X$ et on note $E(X)$ la quantité
+$$E(X)=\int_{\mathbb{R}}x\times f_{X}(x) dx$$
+\end{itemize}
+
+\paragraph{Proposition}
+\begin{itemize}
+\item Soit $X$ une \textbf{v.a.r. discrète} sur l'espace probabilisé $(\Omega,T,P)$ avec $X(\Omega)=\{x_{j}\in \mathbb{R}, j\in J\}$ où $J\subset \mathbb{N}$, et $g:X(\Omega)\mapsto \mathbb{R}$ une application. Lorsque cette quantité existe, \textbf{l'espérance de la v.a.r.} $g(X)$ est définie par
+$$E(g(X)) = \sum_{j\in J}g(x_{j})\times P(X=x_{j})$$
+\item Soit $X$ une \textbf{v.a.r. absolument continue} sur l'espace probabilisé $(\Omega,T,P)$ de densité $f_{X}$ et $g:\mathbb{R}\mapsto \mathbb{R}$ une \textbf{application continue par morceaux}. Lorsque cette quantité existe, \textbf{l'espérance de la v.a.r.} $g(X)$ est définie par
+$$E(g(X))=\int_{\mathbb{R}}g(t)\times f_{X}(t) dt$$
+\end{itemize}
+
+\paragraph{Propriété de l'espérance :}
+\begin{enumerate}
+\item[\textbf{Linéarité}] Soient $X$ une \textbf{v.a.r. continue}, $g_{1}$ et $g_{2}$ deux \textbf{fonctions} de $\mathbb{R}$ dans $\mathbb{R}$ \textbf{continues par morceaux} et $\lambda$ un réel. On a
+$$E(g_{1}(X)+\lambda g_{2}(X))=E(g_{1}(X))+\lambda E(g_{2}(X))$$
+\item[\textbf{Positivité}] Soient $X$ une \textbf{v.a.r. continue} et $g$ une fonction de $\mathbb{R}$ dans $\mathbb{R}$ \textbf{positive et continue par morceaux}. On a
+$$E(g(X))\geqslant 0$$
+\item[\textbf{Croissance}] Soient $X$ une \textbf{v.a.r. continue} $g_{1}$ et $g_{2}$ deux fonctions de $\mathbb{R}$ dans $\mathbb{R}$ \textbf{continues par morceaux} vérifiant $g_{1}\leqslant g_{2}$. On a
+$$E(g_{1}(X))\leqslant E(g_{2}(X))$$
+\end{enumerate}
+
+\subsubsection{Variance}
+\paragraph{La variance} de la v.a.r. $X$ est définie, lorsque cette quantité existe, par
+\begin{align*}
+Var(X) & = E\left(\left(X-E\left(X\right)\right)^{2}\right) \\
+ & = E(X^{2}) - E(X)^{2}\\
+\end{align*}
+
+\paragraph{Propriétés de la variance} Soit $X$ une v.a.r. et $\lambda$ un réel
+\begin{itemize}
+\item $Var(X+\lambda) = Var(X)$
+\item $Var(\lambda X) = \lambda^{2}Var(X)$
+\item $Var(X) \geqslant 0$
+\end{itemize}
+
+\paragraph{Variable centrée réduite} Si $X$ est une v.a.r., pour laquelle $E(X)$ et $Var(X)$ existent, alors la v.a.r. $Y$ définie par
+$$Y=\frac{X-E(X)}{\sqrt{Var(X)}}$$
+appelée \textbf{variable centrée réduite associée à la v.a.r.} $\mathbf{X}$, vérifie :
+\begin{align*}
+E(Y) &= 0\\
+Var(Y)&=1
+\end{align*}
+
+
+\paragraph{L'écart-type} d'une v.a.r. $X$ est défini par
+$$\sigma_{X} = \sqrt{Var(X)}$$
+
+
+\subsubsection{Espérance et variance pour les v.a.r. de lois usuelles}
+
+\renewcommand\arraystretch{1.75}
+\begin{tabular}{cccc}
+
+Nom de loi & Notation math & Espérance & Variance \\ 
+\hline 
+Uniforme (discrète) & $U_{N},\ N\in \mathbb{N^{*}}$ & $\frac{N+1}{2}$ & $\frac{N^{2}-1}{12}$ \\ 
+Bernoulli & $B(1,p),\ p\in ]0,1[$ & $p$ & $p(1-p)$\\
+Géométrique & $G(p), p\in ]0,1[$ & $\frac{1}{p}$ & $\frac{1-p}{p^{2}}$\\
+Uniforme (continue) & $U(a,b),\ a<b$ & $\frac{a+b}{2}$ & $\frac{(b-a)^{2}}{12}$\\
+Normale & $N(m,\sigma^{2}),\ m,\sigma \in \mathbb{R}$ & $m$ & $\sigma^{2}$
+\end{tabular} 
+\renewcommand\arraystretch{1}
+
+\subsubsection{Inégalités remarquables}
+\paragraph{Inégalité de Markov} Soit $X$ une v.a.r.. Pour tout réel $a$ \textbf{strictement positif}, on a
+$$P(|X|\geqslant a) \leqslant E(|X|)$$
+
+\paragraph{Inégalité de Bienaymé-Tchébychev} Soit $X$ une v.a.r. et $a$ un réel \textbf{strictement positif}, on a
+$$P(|X-E(X)|\geqslant a) \leqslant \frac{Var(X)}{a^{2}}$$
+
+\subsection{Caractérisation de la loi d'une variable aléatoire}
+La loi d'une v.a.r. est caractérisée par sa fonction de densité (ou masse pour les v.a.r. discrètes). Il existe d'autre manière de caractériser la loi d'une v.a.r..
+\subsubsection{Caractérisation par la fonction de répartition}
+La \textbf{fonction de répartition est suffisante pour caractériser la loi} de la v.a.r. associée.
+
+\subsubsection{Autre caractérisation}
+Soit $X$ une v.a.r. admettant une densité $f_{X}$. S'il existe, \textbf{pour toute fonction $\Phi$ bornée et continue par morceaux} sur $\mathbb{R}$, une fonction $f$ \textbf{ne dépendant pas} de $\Phi$ telle que l'espérance de $\Phi(X)$ admette la formule de représentation intégrale
+$$E(\Phi(X))=\int_{\mathbb{R}} \Phi(x)f(x)dx$$
+alors $f=f_{X}$, autrement dit \textbf{$f$ est la densité de $X$}.
+
+
+\subsubsection{Fonction caractéristique}
+\paragraph{Définition :} On appelle \textbf{fonction caractéristique} de la v.a.r. $X$ la fonction de $\mathbb{R}$ dans $\mathbb{C}$ définie par
+$$\Phi_{X}(t)=E(e^{itX})\ \ \ \ \forall t \in \mathbb{R}$$
+
+\paragraph{Théorème :} Deux v.a.r. définies sur un même espace probabilisé qui ont la \textbf{même fonction caractéristique} ont la \textbf{même loi}.
+
+\paragraph{Propriétés de la fonction caractéristique}
+\begin{itemize}
+\item $\Phi_{X}$ est une \textbf{application continue} à valeurs dans $\{z\in \mathbb{C}, |z|\leqslant 1\}$ et on a $\Phi_{X}(0)=1$
+\item Si $\Phi_{X}$ est \textbf{deux fois dérivable} en $0$, alors $E(X)$ et $E(X^{2})$ existent et
+\begin{align*}
+E(X) &= -i\Phi_{X}'(0)\\
+E(X^{2}) &= -\Phi_{X}''(0)
+\end{align*}
+\item Soient $a$ et $b$ deux réels et $Y$ la v.a.r. définie par $Y=aX+b$. La fonction caractéristique $\Phi_{Y}$ de la v.a.r. $Y$ vérifie
+$$\Phi_{Y}(t) = e^{itb}\Phi_{X}(at)\ \ \ \ \forall t \in \mathbb{R}$$
+\end{itemize}
+
+
+\subsubsection{Fonction génératrice}
+\paragraph{Définition :} Soit $X$ une v.a.r.\textbf{discrète à valeurs entières}. On appelle \textbf{fonction génératrice} de $X$ la fonction définie pour tout $s\in [-1,1]$ par
+\begin{align*}
+G_{X}(s) &= E(s^{X})\\
+ &= \sum_{j\in \mathbb{N}}s^{j}\times P(X=j)
+\end{align*}
+
+\paragraph{Théorème :} Deux v.a.r. entières définies sur un même espace probabilisé qui ont la \textbf{même fonction génératrice} ont la \textbf{même loi}.
+
+\paragraph{Propriétés de la fonction génératrice}
+\begin{itemize}
+\item La série $\sum_{j\in \mathbb{N}} s^{j}\times P(X=j)$ \textbf{converge} pour tout $s\in [-1,1]$
+\item $G_{X}$ est \textbf{continue} sur $[-1,1]$ et \textbf{infiniment dérivable} sur $]-1,1[$
+\item $G_{X}(1)=1$, $G_{X}(0)=P(X=0)$
+\item $G_{X}'(1) = E(X)$
+\item $\forall k \in \mathbb{N^{*}},\ \  G_{X}^{(k)} = E(X\times (X-1) \times \cdots \times (X-k+1)$
+\end{itemize}
+
+\renewcommand\arraystretch{1.75}
+\begin{tabular}{cccc}
+
+Nom de loi & Notation math & fct caractéristique & fct génératrice\\ 
+\hline 
+Binomiale & $B(n,p)$ & $(pe^{it}+(1-p))^{n}$ & $(ps+(1-p))^{n}$\\
+Poisson & $P(\lambda)$ & $e^{\lambda(e^{it}-1)}$ & $e^{\lambda(s-1)}$\\
+Normale & $N(m,\sigma^{2})$ & $e^{itm}e^{-\frac{t^{2}\sigma^{2}}{2}}$ & \\
+\end{tabular} 
+\renewcommand\arraystretch{1}
+
+
+\section{Vecteurs aléatoires}
+\subsection{Couple de variables aléatoires réelles}
+\subsubsection{Couple aléatoire}
+Soient $(\Omega,T,P)$ un espace probabilisé et $X$ l'application
+\begin{align*}
+X :& \Omega \longmapsto \mathbb{R}^{2}\\
+ & \omega \longmapsto (X_{1}(\omega),X_{2}(\omega))
+\end{align*}
+On dit que $X$ est un \textbf{couple aléatoire} si pour tout borélien $B$ de $\mathbb{R}^{2}$, $X^{-1}(B)\in T$.
+
+\subsubsection{Lois d'un couple de variables aléatoires réelles}
+\paragraph{Fonction de répartition :} On appelle \textbf{fonction de répartition} du couple de v.a.r. $X=(X_{1},X_{2})$ l'application $F_{X}:\mathbb{R}^{2}\mapsto \mathbb{R}$ définie par 
+$$F_{X}(x_{1},x_{2}) = P(X_{1}\leqslant x_{1}, X_{2}\leqslant x_{2})\ \ \ \ \forall (x_{1},x_{2})\in \mathbb{R}^{2}$$
+avec
+\begin{align*}
+P\left(X_{1}\leqslant x_{1},X_{2}\leqslant x_{2}\right) &= P\left(\left[X_{1}\leqslant x_{1}\right]\cap \left[X_{2}\leqslant x_{2}\right]\right)\\
+P\left(X_{1}\leqslant x_{1},X_{2}\leqslant x_{2}\right) &= P\left(\left\lbrace\omega \in \Omega, X_{1}(\omega) \leqslant x_{1}, X_{2}(\omega)\leqslant x_{2}\right\rbrace\right)
+\end{align*}
+
+\paragraph{Limite de la fonction de répartition} Si $X=(X_{1},X_{2})$ est un couple de v.a.r. de fonction de répartition $F_{X}$ alors on a 
+\begin{align*}
+\lim\limits_{x\rightarrow -\infty} F_{X}(x,x) = 0 &&et&&  \lim\limits_{x\rightarrow +\infty} F_{X}(x,x) = 1 
+\end{align*}
+
+\paragraph{Couple de v.a.r. discret :} Le couple de v.a.r. $X=(X_{1},X_{2})$ défini sur l'espace probabilisé $(\Omega,T,P)$ est dit \textbf{discret} s'il est à valeurs dans un sous-ensemble $D=X(\Omega)$ \textbf{fini ou dénombrable} de $\mathbb{R}^{2}$. La fonction
+\begin{align*}
+D & \longrightarrow [0,1]\\
+(k_{1},k_{2}) & \longmapsto P(X_{1}=k_{1},X_{2}=k_{2})\\
+\end{align*}
+est alors appelée \textbf{fonction de masse} du couple de v.a.r. $X=(X_{1},X_{2})$.
+
+\paragraph{Couple de v.a.r. absolument continu} Le couple de v.a.r. $X=(X_{1},X_{2})$, est dit \textbf{absolument continu} de densité $f_{X}$ si sa \textbf{fonction de répartition} $F_{X}$ admet la \textbf{représentation intégrale} suivante :
+$$F_{X}(x_{1},x_{2}) = \int_{-\infty}^{x_{1}}\int_{-\infty}^{x_{2}}f_{X}(t_{1},t_{2}) dt_{2} dt_{1}$$
+
+\paragraph{Loi marginale :} On appelle $k^{ieme}$ loi marginale du couple de v.a.r. $X=(X_{1},X_{2})$ la loi de la variable aléatoire réelle $X_{k}$.
+
+
+\subsubsection{Moments d'un couple de variables aléatoires réelles}
+\paragraph{Espérance :} On appelle espérance du couple de v.a.r. $(X_{1},X_{2})$ l'élément de $\mathbb{R}^{2}$ défini par
+$$E(X_{1},X_{2})=(E(X_{1}),E(X_{2}))$$
+
+\paragraph{Covariance :} Soit $(X_{1},X_{2})$ un couple de v.a.r.. Si $E(X_{1})$ et $E(X_{2})$ existent, on appelle \textbf{covariance} du couple de v.a.r. $(X_{1},X_{2})$ le réel
+$$Cov(X_{1},X_{2}) = E\left(\left(X_{1}-E\left(X_{1}\right)\right)\times\left(X_{2}-E\left(X_{2}\right)\right)\right()$$
+
+\paragraph{Propriétés de la covariance :}
+\begin{itemize}
+\item $Cov(X_{1},X_{1}) = Var(X_{1})$
+\item $Cov(X_{1},X_{2}) = E(X_{1},X_{2})-E(X_{1})\times E(X_{2})$
+\item L'application $(X_{1},X_{2})\mapsto Cov(X_{1},X_{2}) \in \mathbb{R}$ est une \textbf{forme bilinéaire symétrique}. Ainsi pour toutes v.a.r. $X_{1},X_{2},Y_{1}$ et pour tout réel $\lambda$ on a:
+\begin{align*}
+Cov(X_{1},X_{2}) &= Cov(X_{2},X_{1})\\
+Cov(X_{1}+\lambda Y_{1}, X_{2} &= Cov(X_{1},X_{2})+\lambda Cov(Y_{1},X{2})
+\end{align*}
+\end{itemize}
+
+\subsubsection{Fonction caractéristique et fonction génératrice}
+\paragraph{Fonction caractéristique :} On appelle \textbf{fonction caractéristique} du couple de v.a.r. $X=(X_{1},X_{2})$ la fonction $\Phi_{X}$ définie de $\mathbb{R}^{2}$ dans $\mathbb{C^{2}}$ par
+$$\Phi_{X}(t_{1},t_{2})=E\left(e^{i(t_{1}X_{1}+t_{2}X_{2})}\right)$$
+
+\paragraph{Fonction génératrice :} On appelle \textbf{fonction génératrice} du couple de v.a.r. $X=(X_{1},X_{2})$ la fonction $G_{X}$ définie de $\mathbb{R}^{2}$ dans $\mathbb{R}$ par
+$$G_{X}(s_{1},s_{2})=E\left(s_{1}^{X_{1}}s_{2}^{X_{2}}\right)$$
+
+\subsubsection{Variables aléatoires conditionnelles}
+\paragraph{Cas discret :} Soient $(X,Y)$ un couple de v.a.r. \textbf{discrètes} à valeurs dans $\mathbb{N}^{2}$ et $j$ un entier tel que $P(Y=j)\neq 0$. On appelle \textbf{loi conditionnelle de $X$ sachant} $[Y=j]$ la loi définie par la \textbf{fonction de masse}
+$$p:i\in \mathbb{N} \longmapsto P(X=i|Y=j)$$
+On appelle \textbf{fonction de répartition conditionnelle de $X$ sachant} $[Y=j]$ l'application $F_{X}^{[Y=j]}$ de $\mathbb{R}$ dans $[0,1]$ définie pour tout $x\in \mathbb{R}$ par
+\begin{align*}
+F_{X}^{[Y=j]}(x)&=P(X\leqslant x|Y=j)\\
+&=\frac{P(X\leqslant x,Y=j)}{P(Y=j)}
+\end{align*}
+
+\paragraph{Cas continu :} Soient $(X,Y)$ un couple de v.a.r. de densité $f_{X,Y}$ et $f_{Y}$ la densité de $Y$. Pour $y\in \mathbb{R}$ fixé tel que $f_{Y}(y)\neq 0$, la fonction $f_{X}^{[Y=y]}$ définie par 
+$$f_{X}^{[Y=y]}(s)=\frac{f_{X,Y}(s,y)}{f_{Y}(y)}$$
+est une densité de probabilité appelée \textbf{densité conditionnelle de $X$ sachant} $[Y=y]$
+
+\subsection{Indépendance de 2 variables aléatoires réelles}
+\subsubsection{Définition}
+Soient $X$ et $Y$ deux v.a.r., $X$ et $Y$ sont dites \textbf{indépendantes} si et seulement si :
+\begin{itemize}
+\item $\forall x\in \mathbb{R}, \forall y\in \mathbb{R}, \ \ P(X\leqslant x, Y\leqslant y) = P(X\leqslant x)\times P(Y\leqslant y)$
+\item Avec les \textbf{fonctions caractéristiques} :
+$$\forall (s,t) \in \mathbb{R}^{2},\ \ \Phi_{X,Y}(s,t)=\Phi_{X}(s)\times\Phi_{Y}(t)$$
+\item Avec les \textbf{fonctions génératrices} :
+$$\forall s,t \in ]-1,1[,\ \ G_{(X,Y)}(s,t)=G_{X}(s)\times G_{Y}(t)$$
+\item Pour des v.a.r. \textbf{discrètes} :
+$$\forall i\in \mathbb{N}, \forall j\in \mathbb{N}, \ \ P(X=i,Y=j)=P(X=i)\times P(X=j)$$
+\item Pour des v.a.r. \textbf{absolument continues} de densités marginales $f_{X}$ et $f_{Y}$ :
+$$\forall s \in \mathbb{R}, \forall t\in \mathbb{R},\ \ f_{X,Y}(s,t)=f_{X}(s)\times f_{Y}(t)$$
+\end{itemize}
+
+\subsubsection{Indépendance et moments}
+Soient $X$ et $Y$ deux v.a.r. \textbf{indépendantes} et $g$ et $h$ deux fonctions de $\mathbb{R}$ dans $\mathbb{R}$. On a :
+\begin{itemize}
+\item $E(XY)=E(X)\times E(Y)$
+\item $Var(X+Y) = Var(X)+Var(Y)$
+\item $E(g(X)h(Y))=E(g(X))\times E(h(Y))$
+\end{itemize}
+
+\subsubsection{Coefficient de corrélation}
+
+\paragraph{Définition :} On appelle \textbf{coefficient de corrélation} de $X$ et $Y$ le réel défini par :
+$$\rho(X,Y)=\frac{Cov(X,Y)}{\sigma_{X}\sigma_{Y}}$$
+\paragraph{Propriétés du coefficient de corrélation :} 
+\begin{itemize}
+\item Pour toutes v.a.r.$X$ et $Y$ on a $|\rho(X,Y)|\leqslant 1$
+\item si $X$ et $Y$ sont indépendantes, alors $\rho(X,Y)=0$
+\item $\exists (a,b)\in \mathbb{R}^{2},\ Y=aX+b \Leftrightarrow |\rho(X,Y)|=1$ 
+\end{itemize}
+
+\subsection{Somme de deux variables aléatoires indépendantes}
+\subsubsection{Loi de la somme de deux variables aléatoires}
+
+\paragraph{Somme de v.a.r :} Soient $X$ et $Y$ deux v.a.r. \textbf{indépendantes}. La loi de la v.a.r. $X+Y$ est obtenue en effectuant le \textbf{produit de convolution} des lois de $X$ et de $Y$, autrement dit,
+\begin{itemize}
+\item si $X$ et $Y$ dont des v.a.r. \textbf{discrètes}, on a $\forall k \in \mathbb{N}$,
+$$P(X+Y=k)=\sum_{i\in\mathbb{N}}P(X=k-i)\times P(Y=i)$$
+\item si $X$ et $Y$ sont des v.a.r. \textbf{continues} de densités respectives $f_{X}$ et $f_{Y}$, on a $\forall x \in \mathbb{R}$,
+$$f_{X+Y}(x)=\int_{\mathbb{R}}f_{X}(x-t)\times f_{Y}(t) dt$$
+\end{itemize}
+
+\paragraph{Fonction de la somme} Soient $X$, $Y$ deux v.a.r. \textbf{continues} de densités respectives $f_{X}$ et $f_{Y}$ et $h$ une fonction \textbf{continue par morceaux}. On a
+$$E(h(X+Y))=\int_{\mathbb{R}} h(t)\times (f_{X}\otimes f_{Y})(t) dt$$
+
+\subsubsection{Fonction caractéristique et génératrice de la somme de deux variables aléatoires indépendantes}
+\paragraph{Fonction caractéristique :} Si $X$ et $Y$ sont deux v.a.r. \textbf{indépendantes} de fonctions caractéristiques $\Phi_{X}$ et $\Phi_{Y}$ alors la fonction caractéristique $\Phi_{X+Y}$ de la v.a.r. $X+Y$ st donnée par
+$$\Phi_{X+Y}(t) = \Phi_{X}(t)\times \Phi_{Y}(t)$$
+
+\paragraph{Fonction générique :} Si $X$ et $Y$ sont deux v.a.r. \textbf{discrètes indépendantes} de fonctions génératrices $G_{X}$ et $G_{Y}$ alors la fonction génératrice $G_{X+Y}$ de $X+Y$ est donnée par
+$$G_{X+Y}(s)=G_{X}(s)\times G_{Y}(s)\ \ \forall s \in ]-1,1[$$
+
+\section{Théorèmes limites}
+\subsection{Convergences stochastiques}
+\subsubsection{Convergence en loi}
+\paragraph{Définition :} Soit $X$ une v.a.r. de \textbf{fonction de répartition} $F_{X}$ et $(X_{n})_{n\in\mathbb{N}}$ une \textbf{suite de v.a.r.} de \textbf{fonctions de répartitions} respectives $(F_{X_{n}})_{n\in\mathbb{N}}$. On dit que la suite $(X_{n})_{n\in\mathbb{N}}$ \textbf{converge en loi} vers $X$ si pour tout réel $x$ tel que $F_{X}$ est continue en $x$, on a
+$$\lim\limits_{n\rightarrow+\infty}F_{X_{n}}(x)=F_{X}(x)$$
+On note alors
+$$X_{n}\overset{l}{\underset{n\rightarrow+\infty}{\longrightarrow}}X$$
+
+\paragraph{Proposition :} La suite $(X_{n})_{n\in\mathbb{N}}$ \textbf{converge en loi} vers $X$ si et seulement si on a la relation suivante entre les \textbf{fonctions caractéristiques} $\Phi_{X}$ et $\Phi_{X_{n}}$ des v.a.r. $X$ et $X_{n}$,
+$$\forall t\in\mathbb{R},\ \ \lim\limits_{n\rightarrow+\infty}\Phi_{X_{n}}(t)=\Phi_{X}(t)$$
+De manière équivalente la suite $(X_{n})_{n\in\mathbb{N}}$ \textbf{converge en loi} vers $X$ si et seulement si pour \textbf{toute fonction} $h$ de $\mathbb{R}$ dans $\mathbb{R}$, \textbf{bornée et continue par morceaux}
+$$\lim\limits_{n\rightarrow+\infty} E(h(X_{n}))=E(h(X))$$
+
+\subsubsection{Convergence en probabilité}
+\paragraph{Définition :} Soient $X$ une v.a.r. et $(X_{n})_{n\in\mathbb{N}}$ une suite de v.a.r. sur un même espace probabilisé $(\Omega,T,P)$. On dit que la suite $(X_{N})_{n\in\mathbb{N}}$ \textbf{converge en probabilité} vers $X$ si
+$$\forall t > 0,\ \ \lim\limits_{n\rightarrow+\infty} P(|X_{n}-X|\geqslant t)=0$$
+On note
+$$X_{n}\underset{n\rightarrow+\infty}{\overset{P}{\longrightarrow}}X$$
+
+\paragraph{Proposition :} \textbf{Si} la suite $(X_{N})_{n\in\mathbb{N}}$ converge vers $X$ \textbf{en probabilité}, \textbf{alors} la suite $(X_{N})_{n\in\mathbb{N}}$ converge vers $X$ \textbf{en loi}.
+
+\subsubsection{Convergence presque sûre}
+\paragraph{Définition} Soient $X$ une v.a.r. et $(X_{N})_{n\in\mathbb{N}}$ une \textbf{suite de v.a.r.} définies sur un même espace probabilisé $(\Omega,T,P)$. Soit $A\in T$ \textbf{l'ensemble des éventualités} $\omega\in\Omega$ telles que la suite numérique $(X_{N}(\omega)_{n\in\mathbb{N}}$ converge vers $X(\omega)$.
+$$A = \{\omega\in\Omega, \lim\limits_{n\rightarrow+\infty}X_{n}(\omega)=X(\omega)\}\ \ \ \text{avec }A\in T$$
+On dit que la suite $(X_{N})_{n\in\mathbb{N}}$ \textbf{converge presque sûrement} vers $X$ si $\mathbf{P(A)=1}$. On note
+$$X_{n}\overset{\text{p.s.}}{\underset{n\rightarrow+\infty}{\longrightarrow}} X$$
+
+\subsection{Loi faible des grands nombres}
+Soient $X_{1},\ldots,X_{n}$ $n$ v.a.r. de \textbf{même loi et non corrélées}. On suppose que ces v.a.r. admettent une \textbf{espérance} $m$ et une \textbf{variance} $\sigma^{2}$ \textbf{finies}. \\
+La v.a.r. $\overline{X_{n}}=\frac{1}{n}\sum_{i=1}^{n}X_{i}$,\textbf{ converge en probabilité} vers $m$, noté 
+$$\overline{X_{n}}\overset{P}{\underset{n\rightarrow+\infty}{\longrightarrow}}m$$
+
+\subsection{Loi forte des grands nombres}
+Soient $X_{1},\ldots,X_{n}$ $n$ v.a.r. de \textbf{même loi et indépendantes}. On suppose que ces v.a.r.admettent une \textbf{espérance finie}.\\
+La v.a.r. $\overline{X_{n}}=\frac{1}{n}\sum_{i=1}^{n}X_{i}$,\textbf{ converge presque sûrement} vers $m$
+
+\subsection{Théorème de la limite centrale}
+\paragraph{Théorème :} Soient $X_{1},\ldots,X_{n}$ $n$ v.a.r. \textbf{indépendantes de même loi}, de moyenne $m$ et de variance $\sigma^{2}$. La v.a.r. $S_{n}=\sum_{i=1}^{n}X_{i}$ vérifie,
+$$\frac{S_{n}-nm}{\sigma\sqrt{n}}\overset{L}{\underset{n\rightarrow+\infty}{\longrightarrow}}Y$$
+où $Y\sim N(0,1)$
+
+\paragraph{Valeurs particulières :}
+\begin{itemize}
+\item[\textbf{Bernoulli} :] Soient $X_{1},\ldots,X_{n}$ $n$ v.a.r. \textbf{indépendantes de loi de Bernoulli} de paramètre $p$. La v.a.r. $S_{n}=\sum_{i=1}^{n}X_{i}$ suit une \textbf{loi binomiale} $B(n,p)$ et la suite $(S_{n})_{n\in\mathbb{N}}$ \textbf{converge en loi} vers une \textbf{loi normale} de paramètres $(np,np(1-p))$.
+\item[\textbf{Poisson} :] Soient $X_{1},\ldots,X_{n}$ $n$ v.a.r. \textbf{indépendantes de loi de Poisson} de paramètre $\lambda$. La v.a.r. $S_{n}=\sum_{i=1}^{n}X_{i}$ suit une \textbf{loi de Poisson} de paramètre $n\lambda$ et \textbf{converge en loi} vers une \textbf{loi normale} de paramètres $(n\lambda,n\lambda)$.
+\end{itemize}
+
+\section{Chaînes de Markov discrètes}
+\subsection{Chaîne de Markov homogène}
+\subsubsection{Chaîne de Markov}
+Une \textbf{chaîne de Markov} sur $(\Omega,T,P)$ à valeurs dans $(E,\varepsilon)$ est une \textbf{suite de v.a.r.} $(X_{k})_{k\in\mathbb{N}}$ définies sur $(\Omega,T,P)$ et à valeurs dans $(E,\varepsilon)$ vérifiant $\forall n\in\mathbb{N}$, $\forall(e_{0},\ldots,e_{n+1})\in E^{n+2}$,
+$$P(X_{n+1}=e_{n+1}|X_{n}=e_{n},\ldots,X_{0}=0)=P(X_{n+1}=e_{n+1}|X_{n}=e_{n})$$
+$$\Leftrightarrow$$
+\begin{align*}
+P(X_{n+1}=e_{n+1},X_{n-1}=e_{n-1},...,X_{0}  &  =0|X_{n}=e_{n})=P(X_{n+1}=e_{n+1}|X_{n}=e_{n})\\
+  &  \times P(X_{n-1}=e_{n-1},\ldots,X_{0}=0|X_{n}=e_{n})
+\end{align*}
+
+\subsubsection{Chaîne de Markov homogène}
+\paragraph{Définition} On dit qu'une chaîne $X=(X_{k})_{k\in\mathbb{N}}$ est une \textbf{chaîne de Markov homogène} si pour tout $l$ les \textbf{probabilités de transitions} en $l$ étapes \textbf{sont les mêmes} indépendamment de l'instant $n$ de la première transition. Autrement-dit si $\forall (n,l) \in \mathbb{N}^{2}, l<n,\forall(i,j)\in E^{2}$
+\[ P(X_{n}=j|X_{n-l}=i)=P(X_{l}=j|X_{0}=i) \]
+
+\paragraph{Matrice de transition :} On appelle \textbf{matrice de transition} d'une \textbf{chaîne de Markov homogène} $X$ la matrice $G=(G_{i,j})_{i,j\in E} \in M_{N}(\mathbb{R})$  d'éléments
+\[ G_{i,j}=P(X_{1}=j|X_{0}=i)  \]
+
+\paragraph{Propriétés de la matrice de transition :} La \textbf{matrice de transition} est une matrice \textbf{stochastique}, elle vérifie donc :
+\begin{itemize}
+\item $G_{i,j} \geqslant 0\ \ \forall(i,j)\in E^{2}$
+\item $\forall i\in E, \sum_{j\in E} G_{ij} = 1$
+\end{itemize}
+
+\paragraph{Transition en $\mathbf{n}$ étapes :} Soit $X=(X_{n})_{n\in \mathbb{N}}$ une chaîne de Markov homogène de matrice de transition $G$. La \textbf{probabilité de transition en} $\mathbf{n}$ \textbf{étapes} de l'état $i$ à l'état $j$ est donnée par,
+\[  P(X_{n}=j|X_{0}=i) = (G^{n})_{ij} \]
+
+\paragraph{Caractérisation d'une chaîne de Markov}
+\paragraph{Equation de Chapman-Kolmogorov :}  Soit $X=(X_{n})_{n\in \mathbb{N}}$ une \textbf{chaîne de Markov homogène} d'espace d'états $E$. $\forall i,j \in E, \forall n,m\in\mathbb{N}$, on a 
+\[  P(X_{m+n}=j|X_{0}=i)=\sum_{k\in E}P(X_{m}=j|X_{0}=k)\times P(X_{n}=k|X_{0}=i) \]
+
+\paragraph{Fonction de masse} Soit $X=(X_{n})_{n\in\mathbb{N}}$ une chaîne de Markov \textbf{homogène} de matrice de transition $G$. Pour tout entier $n$, la \textbf{fonction de masse de la v.a.r. discrète} $\mathbf{X_{n}}$ est l'application $\Pi^{(n)}$ définie par :
+\begin{align*}
+\Pi^{(n)} : & E \longrightarrow [0,1]\\
+            & k \longmapsto \pi^{(n)}_{k}
+\end{align*}
+où $\pi^{(n)}_{k}$ est la $k^{e}$ composante du vecteur ligne $\pi^{(n)}$ obtenu en effectuant le produit du vecteur ligne $\pi$ par la matrice $G^{n}$. Autrement-dit $\pi^{(n)}=\pi G^{n}$, et $\pi^{(0)} = \pi$
+
+\paragraph{Proposition :} Soit $X=(X_{n})_{n\in\mathbb{N}}$ une chaîne de Markov \textbf{homogène} sur un espace d'états $E$, de matrice de transition $G$ et de condition initiale $X_{0}$ ayant pour fonction de masse $\Pi$ de $E$ dans $[0,1]$. Pour tout entier $n$ et pour tout $(e_{0},\ldots,e_{n})\in E^{n+1}$, on a 
+\[ P(X_{0}=e_{0},\ldots,X_{n}=e_{n}) = \pi_{e_{0}}G_{e_{0},e_{1}}\ldots G_{e_{n-1},e_{n}} \]
+
+\subsection{Comportement asymptotique d'une chaîne de Markov}
+\paragraph{Loi de probabilité invariante :} On appelle \textbf{loi de probabilité invariante} de la chaîne de Markov \textbf{homogène} $X=(X_{n})_{n\in\mathbb{N}}$ une \textbf{fonction de masse} $\Xi : k \in E \mapsto \xi_{k} \in [0,1]$ où le vecteur $\xi=(\xi_{0},\ldots,\xi_{N})$ est solution du système linéaire
+\[ \xi=\xi G  \]
+
+\paragraph{Théorème :} Soit $X=(X_{n})_{n\in\mathbb{N}}$ une chaîne de Markov \textbf{homogène, irréductible et apériodique}, sur un espace d'états $E$, de matrice de transition $G$.
+\begin{itemize}
+\item Il existe une \textbf{unique loi de probabilité} $\Xi$ invariante et $\forall i\in E, \xi_{i}>0$.
+\item Pour tout $(i,j)\in E^{2}$, on a
+\[ \lim\limits_{n\rightarrow+\infty} (G^{n})_{ij} = \xi_{j} \]
+\item Quelle que soit la loi de $X_{0}$, la suite de v.a.r. $(X_{n})_{n\in\mathbb{N}}$ \textbf{converge en loi} vers la \textbf{loi de probabilité invariante} $\Xi$.
+\end{itemize}
+
+
+\end{document}

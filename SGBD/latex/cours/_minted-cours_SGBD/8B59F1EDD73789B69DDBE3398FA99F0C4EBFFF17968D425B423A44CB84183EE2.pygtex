@@ -1,0 +1,9 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{SELECT} \PYG{p}{...}
+\PYG{k}{FROM} \PYG{p}{...}
+\PYG{k}{WHERE} \PYG{p}{...}
+\PYG{k}{UNION} \PYG{o}{/} \PYG{n}{MINUS} \PYG{o}{/} \PYG{k}{INTERSECT}
+\PYG{k}{SELECT} \PYG{p}{...}
+\PYG{k}{FROM} \PYG{p}{...}
+\PYG{k}{WHERE} \PYG{p}{...}
+\end{Verbatim}

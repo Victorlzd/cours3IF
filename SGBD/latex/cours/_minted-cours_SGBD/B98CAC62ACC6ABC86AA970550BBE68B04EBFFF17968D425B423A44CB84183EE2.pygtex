@@ -1,0 +1,4 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{CREATE} \PYG{p}{[}\PYG{n}{SHARED}\PYG{p}{]} \PYG{k}{DATABASE} \PYG{n}{LINK} \PYG{n}{nomLien} \PYG{k}{CONNECT} \PYG{k}{TO} \PYG{err}{\PYGZob{}}\PYG{k}{user} \PYG{n}{IDENTIFIED}
+\PYG{k}{BY} \PYG{n}{password} \PYG{o}{|} \PYG{k}{CURRENT} \PYG{k}{USER}\PYG{err}{\PYGZcb{}} \PYG{k}{USING} \PYG{l+s+s1}{\PYGZsq{}nomBD\PYGZsq{}}\PYG{p}{;}
+\end{Verbatim}

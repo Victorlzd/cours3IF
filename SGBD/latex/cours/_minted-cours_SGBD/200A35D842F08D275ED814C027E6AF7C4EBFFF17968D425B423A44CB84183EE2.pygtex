@@ -1,0 +1,15 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{CREATE} \PYG{k}{TABLE} \PYG{n}{audit\PYGZus{}table}\PYG{p}{(}\PYG{n}{code} \PYG{n+nb}{NUMBER}\PYG{p}{,} \PYG{n}{message} \PYG{n}{VARCHAR2}\PYG{p}{(}\PYG{l+m+mi}{64}\PYG{p}{),} \PYG{n+nb}{date} \PYG{k}{TIMESTAMP}\PYG{p}{)}
+
+\PYG{k}{DECLARE}
+     \PYG{p}{...}
+\PYG{k}{BEGIN}
+     \PYG{p}{...}
+\PYG{k}{EXCEPTION}
+     \PYG{k}{WHEN} \PYG{n}{OTHERS} \PYG{k}{THEN}
+          \PYG{n}{code} \PYG{p}{:}\PYG{o}{=} \PYG{k}{SQLCODE}\PYG{p}{;}
+          \PYG{n}{msg} \PYG{p}{:}\PYG{o}{=} \PYG{n}{SQLERRM}\PYG{p}{;}
+          \PYG{k}{INSERT} \PYG{k}{INTO} \PYG{n}{audit\PYGZus{}table}
+          \PYG{k}{VALUES}\PYG{p}{(}\PYG{n}{code}\PYG{p}{,} \PYG{n}{msg}\PYG{p}{,} \PYG{n}{SYSTIMESTAMP}\PYG{p}{)}
+\PYG{k}{END}
+\end{Verbatim}

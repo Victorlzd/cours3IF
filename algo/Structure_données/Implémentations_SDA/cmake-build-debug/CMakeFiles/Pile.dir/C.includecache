@@ -1,0 +1,40 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/duazel/Documents/INSA/cours/algo/Structure_données/Implémentations_SDA/file.c
+file.h
+/home/duazel/Documents/INSA/cours/algo/Structure_données/Implémentations_SDA/file.h
+malloc.h
+/home/duazel/Documents/INSA/cours/algo/Structure_données/Implémentations_SDA/malloc.h
+
+/home/duazel/Documents/INSA/cours/algo/Structure_données/Implémentations_SDA/file.h
+
+/home/duazel/Documents/INSA/cours/algo/Structure_données/Implémentations_SDA/liste.c
+malloc.h
+-
+liste.h
+/home/duazel/Documents/INSA/cours/algo/Structure_données/Implémentations_SDA/liste.h
+
+/home/duazel/Documents/INSA/cours/algo/Structure_données/Implémentations_SDA/liste.h
+
+/home/duazel/Documents/INSA/cours/algo/Structure_données/Implémentations_SDA/main.c
+stdio.h
+-
+pile.h
+/home/duazel/Documents/INSA/cours/algo/Structure_données/Implémentations_SDA/pile.h
+file.h
+/home/duazel/Documents/INSA/cours/algo/Structure_données/Implémentations_SDA/file.h
+
+/home/duazel/Documents/INSA/cours/algo/Structure_données/Implémentations_SDA/pile.c
+pile.h
+/home/duazel/Documents/INSA/cours/algo/Structure_données/Implémentations_SDA/pile.h
+malloc.h
+/home/duazel/Documents/INSA/cours/algo/Structure_données/Implémentations_SDA/malloc.h
+
+/home/duazel/Documents/INSA/cours/algo/Structure_données/Implémentations_SDA/pile.h
+

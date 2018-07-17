@@ -1,0 +1,4 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{CREATE} \PYG{k}{USER} \PYG{p}{...;}
+\PYG{k}{DROP} \PYG{k}{USER} \PYG{p}{...;}
+\end{Verbatim}
